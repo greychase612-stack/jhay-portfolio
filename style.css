@@ -314,7 +314,7 @@ img {
 /* Portrait */
 .hero-portrait-ref {
   position: absolute;
-  top: 28vh;
+  top: 22vh;
   left: 70%;
   transform: translateX(-50%);
   width: 30vw;
