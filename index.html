@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jhay Castro — Network Engineer & BSIT Graduate</title>
+  <meta name="description" content="Personal portfolio of Jhay Castro, a Network Engineer and BSIT Graduate specializing in network infrastructure, IT solutions, and modern technology." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+  <!-- Topographic Background -->
+  <canvas id="topo-canvas"></canvas>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar" class="navbar-ref">
+    <a href="#" class="nav-logo-ref">JHAY<br/>CASTRO</a>
+    <div class="nav-right-ref">
+      <span class="nav-location">B A S E D  I N  P H I L I P P I N E S</span>
+      <a href="#contact" class="nav-arrow-btn">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section id="hero-scroll-wrapper" class="hero-scroll-wrapper">
+    <div class="hero-sticky">
+      <!-- The moving cards background -->
+      <div class="hero-cards-bg">
+        <div class="card-column-wrapper">
+          <div class="card-column col-fast">
+            <div class="anim-card card-orange">UI/UX</div>
+            <div class="anim-card card-white">HTML</div>
+            <div class="anim-card card-orange">CSS</div>
+            <div class="anim-card card-white">JAVASCRIPT</div>
+            <div class="anim-card card-orange">REACT</div>
+            <!-- Duplicate -->
+            <div class="anim-card card-orange">UI/UX</div>
+            <div class="anim-card card-white">HTML</div>
+            <div class="anim-card card-orange">CSS</div>
+            <div class="anim-card card-white">JAVASCRIPT</div>
+            <div class="anim-card card-orange">REACT</div>
+          </div>
+        </div>
+        <div class="card-column-wrapper">
+          <div class="card-column col-slow">
+            <div class="anim-card card-white">NODE.JS</div>
+            <div class="anim-card card-orange">PYTHON</div>
+            <div class="anim-card card-white">ARCHITECTURE</div>
+            <div class="anim-card card-orange">NETWORK</div>
+            <div class="anim-card card-white">FULLSTACK</div>
+            <!-- Duplicate -->
+            <div class="anim-card card-white">NODE.JS</div>
+            <div class="anim-card card-orange">PYTHON</div>
+            <div class="anim-card card-white">ARCHITECTURE</div>
+            <div class="anim-card card-orange">NETWORK</div>
+            <div class="anim-card card-white">FULLSTACK</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- The actual shrinking hero -->
+      <div id="home" class="hero">
+    <!-- Background video -->
+    <video class="hero-video" id="hero-bg-video" autoplay loop muted playsinline>
+      <source src="Profile/bg.mp4" type="video/mp4">
+    </video>
+    <!-- Dark overlay for contrast -->
+    <div class="hero-overlay"></div>
+
+    <div class="hero-container-ref">
+      
+      <!-- HUGE Text -->
+      <div class="hero-massive-text">
+        <div class="massive-line">NETWORK</div>
+        <div class="massive-line">ENGINEER</div>
+      </div>
+
+      <!-- Bottom Layout -->
+      <div class="hero-bottom-ref">
+        <div class="hero-bottom-left">
+          <ul class="hero-skills-list">
+            <li>/ WEB DESIGN (UI/UX)</li>
+            <li>/ ARCHITECTURE</li>
+            <li>/ FULLSTACK DEV.</li>
+          </ul>
+          
+          <div class="hero-ideas">
+            <div class="line-dec"></div>
+            <p>I D E A S<br/>I N T O<br/>I N T E R F A C E S</p>
+          </div>
+        </div>
+
+        <div class="hero-bottom-right">
+          <div class="vert-line"></div>
+          <p>B U I L D<br/>D E S I G N<br/>S O L V E<br/>R E P E A T</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Big Portrait at the bottom rightish -->
+    <div class="hero-portrait-ref">
+      <img
+        src="Profile/no_background.png"
+        alt="Jhay Castro"
+        class="portrait-img"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">SCROLL</span>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section id="about" class="section about-section scroll-animation-section">
+    <div class="about-sticky-wrapper">
+      <div class="container">
+      <h2 class="section-label">ABOUT ME</h2>
+      <h3 class="section-title">Get to Know Me</h3>
+      <div class="about-grid">
+        <div class="about-image-wrap">
+          <div class="about-image-frame">
+            <img
+              src="Profile/unnamed.jpg"
+              alt="Jhay Castro"
+              class="about-image"
+            />
+          </div>
+          <div class="about-image-accent"></div>
+        </div>
+        <div class="about-text">
+          <p class="about-desc">
+            I am a BSIT graduate specializing in network infrastructure. My core technical skills include networking, TCP/IP configurations, and managing routers, switches, and firewalls. I am passionate about building reliable, scalable systems and am actively pursuing a career as a Network Engineer. I thrive on solving complex technical challenges and continuous learning.
+          </p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number" data-count="10">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Projects Completed</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="5">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Certifications</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="3">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS SECTION ===== -->
+  <section id="skills" class="section skills-section">
+    <div class="container">
+      <h2 class="section-label">MY SKILLS</h2>
+      <h3 class="section-title">What I Do Best</h3>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          </div>
+          <h4 class="skill-name">Network Engineering</h4>
+          <p class="skill-desc">TCP/IP, Router &amp; Switch Configuration, Subnetting.</p>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4 class="skill-name">Cybersecurity</h4>
+          <p class="skill-desc">Firewall Management, Vulnerability awareness (SQLi prevention).</p>
+          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h4 class="skill-name">IT Troubleshooting</h4>
+          <p class="skill-desc">Hardware/software diagnostics, DHCP/DNS resolution.</p>
+          <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><path d="M8 6l-6 6 6 6"/></svg>
+          </div>
+          <h4 class="skill-name">Development &amp; Tools</h4>
+          <p class="skill-desc">Git, GitHub, SQL, Excel/Google Sheets for data analysis.</p>
+          <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS SECTION ===== -->
+  <section id="projects" class="section projects-section">
+    <div class="container">
+      <h2 class="section-label">PORTFOLIO</h2>
+      <h3 class="section-title">Featured Projects</h3>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop" alt="AI Repair System" />
+            <div class="project-overlay" style="display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center;">
+              <a href="projects/repair-system.html" class="project-link-btn" target="_blank" style="width: 160px; text-align: center;">Launch App</a>
+              <a href="#" class="project-link-btn" style="width: 160px; text-align: center; background: rgba(10,10,15,0.7); border: 1px solid var(--color-accent); color: var(--color-accent);">View Docs</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags">
+              <span class="tag">Web App</span>
+              <span class="tag">AI</span>
+            </div>
+            <h4 class="project-title">AI-Assisted Computer Repair Shop Management System</h4>
+            <p class="project-desc">A full-stack system tracking repair tickets with built-in CRUD operations, database management, validation, and AI-assisted troubleshooting logs.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-image">
+            <img src="Profile/data-dashboard.png" alt="Data Analysis Dashboard" />
+            <div class="project-overlay" style="display: flex; flex-direction: column; gap: 12px; justify-content: center; align-items: center; text-align: center;">
+              <span style="color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">Project Details</span>
+              <a href="projects/data-analysis.html" target="_blank" class="project-link-btn" style="width: 180px;">View Full Analysis</a>
+              <a href="Profile/CASE_2_DATA_ANALYSIS_CASTRO.xlsx" download="Data_Analysis_Castro.xlsx" class="project-link-btn" style="width: 180px; background: rgba(10,10,15,0.7); border: 1px solid var(--color-accent); color: var(--color-accent);">Download Excel Data</a>
+            </div>
+          </div>
+          <div class="project-info">
+            <div class="project-tags">
+              <span class="tag">Data Analysis</span>
+              <span class="tag">Excel</span>
+            </div>
+            <h4 class="project-title">Online Store Sales & Performance Analysis</h4>
+            <p class="project-desc">A comprehensive case study extracting insights from e-commerce data. Analyzed customer loyalty, discount efficiency, and top-performing products to formulate evidence-based business recommendations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESUME SECTION ===== -->
+  <section id="resume" class="section resume-section">
+    <div class="container">
+      <h2 class="section-label">RESUME</h2>
+      <h3 class="section-title">Education & Experience</h3>
+      <div class="resume-grid">
+        <!-- Education -->
+        <div class="resume-col">
+          <h4 class="resume-col-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+            Education
+          </h4>
+          <div class="timeline">
+            <div class="timeline-item">
+              <span class="timeline-date">Expected Jul 2027</span>
+              <h5 class="timeline-title">BS Information Technology</h5>
+              <p class="timeline-place">Datamex College of Saint Adeline</p>
+              <p class="timeline-desc">Consistent Dean's Lister (1.20 - 1.80 GWA). Coursework includes Database Systems (SQL), Information Management, and Computer Systems Maintenance. Hold a National Certificate II (NC II) in Computer Systems Servicing.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Experience -->
+        <div class="resume-col">
+          <h4 class="resume-col-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Experience
+          </h4>
+          <div class="timeline">
+            <div class="timeline-item">
+              <span class="timeline-date">Apr 2026 — Present</span>
+              <h5 class="timeline-title">Technical Project Lead</h5>
+              <p class="timeline-place">Datamex College of Saint Adeline</p>
+              <p class="timeline-desc">Developed and deployed an automated student enrollment system using Google Forms and AutoCrat, significantly streamlining administrative workflows and data entry.</p>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-date">Dec 2025 — Present</span>
+              <h5 class="timeline-title">Official Event Photographer</h5>
+              <p class="timeline-place">Datamex College of Saint Adeline</p>
+              <p class="timeline-desc">Managed official photography for school functions, ensuring high-quality visual documentation and organizing digital assets for publications.</p>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-date">Aug 2024 — Present</span>
+              <h5 class="timeline-title">Student Assistant</h5>
+              <p class="timeline-place">Datamex College of Saint Adeline</p>
+              <p class="timeline-desc">Managed administrative records, performed routine PC hardware maintenance, and designed promotional visual assets for school events and pageants.</p>
+            </div>
+          </div>
+          
+          <h4 class="resume-col-title" style="margin-top: 48px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Career Development Plan
+          </h4>
+          <div class="timeline">
+            <div class="timeline-item">
+              <span class="timeline-date">Next 6 Months</span>
+              <h5 class="timeline-title">Target: Administrative Assistant</h5>
+              <p class="timeline-place">Career Goal</p>
+              <p class="timeline-desc">Secure a remote or flexible Administrative Assistant role to leverage my technical IT skills and process automation experience to improve office efficiency and workflow management.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="resume-download">
+        <a href="Profile/Jhay_Castro_Harvard_Resume.pdf" download="Jhay_Castro_Resume.pdf" class="btn btn-primary">
+          <span class="btn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </span>
+          DOWNLOAD FULL RESUME
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICATES SECTION ===== -->
+  <section id="certificates" class="section cert-scroll-section" style="background-color: var(--color-bg);">
+    <div class="cert-sticky-wrapper">
+      
+      <div class="cert-track">
+        
+        <!-- Intro Slide -->
+        <div class="cert-intro-slide">
+          <div class="cert-intro-content">
+            <p class="cert-intro-eyebrow">ACHIEVEMENTS</p>
+            <h2 class="cert-intro-title">My Certificates</h2>
+            <p class="cert-intro-desc">A showcase of my continuous learning and professional development.</p>
+            <span class="cert-intro-arrow">&darr;</span>
+          </div>
+        </div>
+
+        <!-- The timeline line that scrolls with the track -->
+        <div class="cert-timeline-line"></div>
+
+        <div class="cert-item">
+          <div class="cert-node"></div>
+          <div class="cert-content">
+            <h4 class="cert-title">Cyber Awareness</h4>
+            <p class="cert-desc">Cyber Threats in 2026 and How to Stay Safe</p>
+            <img src="Profile/cert/jhay-1.png" alt="Certificate 1" class="cert-img" loading="lazy" />
+          </div>
+        </div>
+        
+        <div class="cert-item">
+          <div class="cert-node"></div>
+          <div class="cert-content">
+            <h4 class="cert-title">Web Dev 101</h4>
+            <p class="cert-desc">System Integration &amp; Connecting Apps via API</p>
+            <img src="Profile/cert/jhay-2.png" alt="Certificate 2" class="cert-img" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-node"></div>
+          <div class="cert-content">
+            <h4 class="cert-title">QA 101</h4>
+            <p class="cert-desc">Software Quality, Bug Tracking and Manual Testing</p>
+            <img src="Profile/cert/jhay-3.png" alt="Certificate 3" class="cert-img" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-node"></div>
+          <div class="cert-content">
+            <h4 class="cert-title">Arduino 101</h4>
+            <p class="cert-desc">Coding Meets Hardware</p>
+            <img src="Profile/cert/jhay-4.png" alt="Certificate 4" class="cert-img" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="cert-item">
+          <div class="cert-node"></div>
+          <div class="cert-content">
+            <h4 class="cert-title">Pro Skills</h4>
+            <p class="cert-desc">21st Century Soft Skills for Tech Pros</p>
+            <img src="Profile/cert/jhay-5.png" alt="Certificate 5" class="cert-img" loading="lazy" />
+          </div>
+        </div>
+        
+        <!-- End padding so the last item reaches the center before scroll ends -->
+        <div class="cert-end-padding"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CASES SECTION ===== -->
+  <section id="cases" class="section cases-section">
+    <div class="container">
+      <h2 class="section-label">CASE STUDIES</h2>
+      <h3 class="section-title">Problem-Solving &amp; Security</h3>
+      <div class="cases-grid">
+        <div class="case-card">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h4 class="case-title">IT Troubleshooting Cases Documented</h4>
+          <ul class="case-list">
+            <li><strong>IP Address Conflict &amp; DHCP Failure:</strong> Diagnostics using ipconfig and adapter resets.</li>
+            <li><strong>DNS Resolution Failure:</strong> Identifying and resolving hostname resolution issues.</li>
+            <li><strong>Slow Network Speed &amp; Packet Loss:</strong> Isolating bandwidth bottlenecks and packet drops.</li>
+            <li><strong>Physical Switch / Port Failure:</strong> Layer 1/2 troubleshooting and hardware replacement.</li>
+            <li><strong>Default Gateway Unreachable:</strong> Routing and connectivity resolution.</li>
+          </ul>
+        </div>
+        <div class="case-card">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4 class="case-title">Cybersecurity Case Study</h4>
+          <div class="case-details">
+            <p><strong>Topic:</strong> SQL Injection (SQLi) Vulnerability</p>
+            <p><strong>Focus:</strong> Anatomy of the attack, data breach risks, and defensive programming using Parameterized Queries and input validation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EMPLOYABILITY SECTION ===== -->
+  <section id="employability" class="section employability-section">
+    <div class="container">
+      <h2 class="section-label">EMPLOYABILITY</h2>
+      <h3 class="section-title">Professional Readiness Evidence</h3>
+      <div class="cases-grid">
+        <div class="case-card">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h4 class="case-title">Interviews & Defense</h4>
+          <div class="case-details" style="margin-bottom: 15px;">
+            <p>Evidence of my professional communication and technical articulation skills.</p>
+          </div>
+          <ul class="case-list">
+            <li><strong>Mock Job Interview:</strong> <a href="#" style="color: var(--color-accent);">View Recording</a></li>
+            <li><strong>Technical Interview:</strong> <a href="#" style="color: var(--color-accent);">View Recording</a></li>
+            <li><strong>Project Defense:</strong> <a href="#" style="color: var(--color-accent);">View Presentation</a></li>
+          </ul>
+        </div>
+        <div class="case-card">
+          <div class="case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </div>
+          <h4 class="case-title">AI Literacy Evidence</h4>
+          <div class="case-details">
+            <p>Documented logs of how I utilized AI tools responsibly throughout my capstone development.</p>
+          </div>
+          <a href="#" class="btn btn-outline" style="margin-top: 15px; display: inline-flex; width: 100%; justify-content: center;">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </span>
+            View AI Usage Log
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GITHUB SECTION ===== -->
+  <section id="github" class="section github-section" style="background-color: var(--color-surface);">
+    <div class="container">
+      <h2 class="section-label">VERSION CONTROL</h2>
+      <h3 class="section-title">My GitHub Repository</h3>
+      <div class="github-container" style="display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--color-white-10); border-radius: 16px; padding: 40px;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 60px; height: 60px; color: var(--color-white); margin-bottom: 20px;"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <h4 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">@greychase612-stack</h4>
+        <p style="color: var(--color-white-70); margin-bottom: 24px; font-size: 1rem; line-height: 1.6;">Explore my source code, version control history, and technical documentation. All my major projects and portfolio source files are hosted here.</p>
+        <a href="https://github.com/greychase612-stack" target="_blank" class="btn btn-primary">
+          <span class="btn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </span>
+          VISIT MY GITHUB
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REFLECTION SECTION ===== -->
+  <section id="reflection" class="section reflection-section">
+    <div class="container">
+      <h2 class="section-label">MY JOURNEY</h2>
+      <h3 class="section-title">Final Reflection</h3>
+      <div class="reflection-content" style="max-width: 900px; margin: 0 auto; background: rgba(10, 10, 15, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--color-white-10); border-radius: 12px; padding: 40px; color: var(--color-white-70); font-size: 1.05rem; line-height: 1.8;">
+        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Looking Back at My BSIT Journey</h4>
+        <p style="margin-bottom: 20px;">
+          Before entering the BSIT program, my knowledge of Information Technology was limited to basic computer operations and a general fascination with how systems connected. Today, I am proud to have transformed that curiosity into a robust foundation in network infrastructure, troubleshooting, and web development. The most important things I learned extend beyond technical syntax—I learned how to think analytically, how to securely manage data, and how to rapidly adapt to new technologies.
+        </p>
+        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Projects, Challenges, and Growth</h4>
+        <p style="margin-bottom: 20px;">
+          The project that taught me the most was the <strong>AI-Assisted Computer Repair Shop Management System</strong>. It pushed me out of my comfort zone by forcing me to integrate front-end user interfaces with real-time cloud databases (Firebase) and AI diagnostic logic. The most significant technical challenge I faced was ensuring seamless, asynchronous communication between the client and the cloud while maintaining strict UI responsiveness. Overcoming these hurdles significantly sharpened my problem-solving skills and deepened my understanding of system architecture.
+        </p>
+        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Moving Forward as an IT Professional</h4>
+        <p>
+          Throughout this program, my IT skills have evolved from theoretical concepts into practical, deployable capabilities. While I have built a strong foundation, I recognize the need to continuously improve my proficiency in advanced cloud deployments and cybersecurity automation. My ultimate goal is to become a specialized Network Engineer who builds and secures scalable infrastructures. I am now ready to begin my career in IT because I possess not only the technical skills to build systems, but the resilience and analytical mindset required to solve complex problems in the real world.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SECTION ===== -->
+  <section id="contact" class="section contact-section">
+    <div class="container">
+      <h2 class="section-label">GET IN TOUCH</h2>
+      <h3 class="section-title">Contact Me</h3>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p class="contact-intro">Have a project in mind or want to discuss opportunities? I'd love to hear from you. Feel free to reach out through any of the channels below.</p>
+          <div class="contact-items">
+            <a href="mailto:jhay.castro@gmail.com" class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <span class="contact-item-label">Email</span>
+                <span class="contact-item-value">jhay.castro@gmail.com</span>
+              </div>
+            </a>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <span class="contact-item-label">Location</span>
+                <span class="contact-item-value">Parañaque, Metro Manila, Philippines</span>
+              </div>
+            </div>
+          </div>
+          <!-- Social links -->
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://github.com/greychase612-stack" class="social-link" aria-label="GitHub" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+        <!-- Contact Form -->
+        <form class="contact-form" id="contact-form">
+          <div class="form-group">
+            <input type="text" id="form-name" class="form-input" placeholder=" " required />
+            <label for="form-name" class="form-label">Your Name</label>
+          </div>
+          <div class="form-group">
+            <input type="email" id="form-email" class="form-input" placeholder=" " required />
+            <label for="form-email" class="form-label">Your Email</label>
+          </div>
+          <div class="form-group">
+            <input type="text" id="form-subject" class="form-input" placeholder=" " />
+            <label for="form-subject" class="form-label">Subject</label>
+          </div>
+          <div class="form-group">
+            <textarea id="form-message" class="form-input form-textarea" rows="5" placeholder=" " required></textarea>
+            <label for="form-message" class="form-label">Your Message</label>
+          </div>
+          <button type="submit" id="btn-send" class="btn btn-primary btn-submit">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </span>
+            SEND MESSAGE
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <a href="#home" class="footer-logo">JC</a>
+        <p class="footer-text">&copy; 2024 Jhay Castro. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script>
+    // WebGL Topography Background Effect from 21st.dev
+    const topoCanvas = document.getElementById('topo-canvas');
+    if (topoCanvas) {
+      const gl = topoCanvas.getContext('webgl', { alpha: false, antialias: false, depth: false });
+      if (gl) {
+          const vsSource = `
+              attribute vec2 a_position;
+              void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+          `;
+
+          const fsSource = `
+              precision highp float;
+              uniform vec2 u_resolution;
+              uniform float u_time;
+              uniform float u_dpr;
+
+              vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+              float snoise(vec2 v){
+                  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                  vec2 i  = floor(v + dot(v, C.yy) );
+                  vec2 x0 = v -   i + dot(i, C.xx);
+                  vec2 i1; i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                  vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+                  i = mod(i, 289.0);
+                  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                  m = m*m; m = m*m;
+                  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                  vec3 h = abs(x) - 0.5; vec3 ox = floor(x + 0.5);
+                  vec3 a0 = x - ox; m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                  vec3 g; g.x  = a0.x  * x0.x  + h.x  * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                  return 130.0 * dot(m, g);
+              }
+
+              void main() {
+                  vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                  st.x *= u_resolution.x / u_resolution.y;
+
+                  // 1px physical grid rendering
+                  float gridSize = 48.0 * u_dpr;
+                  vec2 gridSt = gl_FragCoord.xy / gridSize;
+                  vec2 gridFract = fract(gridSt);
+                  float lineThickness = 1.0 / gridSize;
+                  float gridLines = step(1.0 - lineThickness, gridFract.x) + step(1.0 - lineThickness, gridFract.y);
+                  gridLines = clamp(gridLines, 0.0, 1.0) * 0.12; 
+
+                  // Ultra-thin Topographic Lines
+                  float noiseScale = 1.4;
+                  vec2 noisePos = st * noiseScale + vec2(u_time * 0.015, u_time * 0.025);
+                  float n = snoise(noisePos) * 0.5 + 0.5;
+                  float numBands = 10.0;
+                  float bandVal = n * numBands;
+                  float triangleWave = abs(fract(bandVal) - 0.5) * 2.0; 
+                  
+                  // Thinner smoothstep constraint for fine industrial aesthetic
+                  float topoLines = smoothstep(0.02, 0.00, triangleWave) * 0.45;
+
+                  vec3 color = vec3(0.0);
+                  color += vec3(1.0) * gridLines;
+                  color += vec3(1.0) * topoLines;
+
+                  // Neon cyan glow
+                  vec3 accent = vec3(0.36, 0.88, 0.90);
+                  gl_FragColor = vec4(color * mix(vec3(1.0), accent, 0.3), 1.0);
+              }
+          `;
+
+          function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              return shader;
+          }
+
+          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          gl.useProgram(program);
+
+          const positionBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+          const positionLocation = gl.getAttribLocation(program, "a_position");
+          gl.enableVertexAttribArray(positionLocation);
+          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+          const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+          const timeLocation = gl.getUniformLocation(program, "u_time");
+          const dprLocation = gl.getUniformLocation(program, "u_dpr");
+
+          function resizeCanvas() {
+              const dpr = window.devicePixelRatio || 1;
+              topoCanvas.width = window.innerWidth * dpr;
+              topoCanvas.height = window.innerHeight * dpr;
+              gl.viewport(0, 0, topoCanvas.width, topoCanvas.height);
+              gl.uniform2f(resolutionLocation, topoCanvas.width, topoCanvas.height);
+              gl.uniform1f(dprLocation, dpr);
+          }
+
+          window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
+
+          let startTime = performance.now();
+          function render(time) {
+              gl.uniform1f(timeLocation, (time - startTime) * 0.001);
+              gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+              requestAnimationFrame(render);
+          }
+          requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+</html>

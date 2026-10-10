@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online Store Analysis | Jhay Castro Portfolio</title>
+  <meta name="description" content="Data analysis case study showcasing Excel dashboarding, data interpretation, and business insights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-white-90);
+      padding-top: var(--nav-height);
+      position: relative;
+    }
+    
+    #topo-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .report-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 40px;
+      background: rgba(10, 10, 15, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--color-white-10);
+      border-radius: 16px;
+    }
+
+    .report-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .report-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      color: var(--color-white);
+      margin-bottom: 15px;
+    }
+
+    .report-header p {
+      font-size: 1.1rem;
+      color: var(--color-white-70);
+      line-height: 1.6;
+    }
+
+    .dashboard-img-container {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      border: 1px solid var(--color-white-10);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .dashboard-img-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .report-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-white-10);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .report-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      color: var(--color-accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .insight-card {
+      background: rgba(255,255,255,0.02);
+      border-left: 4px solid var(--color-accent);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .insight-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--color-white);
+      margin-bottom: 8px;
+    }
+
+    .insight-card p {
+      color: var(--color-white-70);
+      line-height: 1.6;
+    }
+
+    .actions-footer {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topographic Background -->
+  <canvas id="topo-canvas"></canvas>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header id="navbar" class="navbar">
+    <a href="../index.html" class="nav-logo" style="font-size: 1rem; display: flex; align-items: center; gap: 8px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Back to Portfolio
+    </a>
+  </header>
+
+  <main class="report-container">
+    
+    <div class="report-header">
+      <h1>Online Store Sales & Performance Analysis</h1>
+      <p>A comprehensive data analysis case study executing raw data cleansing, performance visualization, and evidence-based strategic formulation using Microsoft Excel.</p>
+    </div>
+
+    <div class="dashboard-img-container">
+      <img src="../Profile/data-dashboard.png" alt="Excel Sales Dashboard Thumbnail" />
+    </div>
+
+    <!-- Data Overview -->
+    <div class="report-section">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Dataset Overview & Cleansing
+      </h2>
+      <p style="color: var(--color-white-70); line-height: 1.6; margin-bottom: 15px;">
+        The analysis began with a raw e-commerce dataset containing 50 transaction rows. I performed data validation to ensure data integrity:
+      </p>
+      <ul style="color: var(--color-white-70); line-height: 1.6; margin-left: 20px;">
+        <li>Verified exactly 50 total records.</li>
+        <li>Confirmed 0 missing or invalid values.</li>
+        <li>Confirmed 0 duplicate Order IDs.</li>
+        <li><strong>Status:</strong> The data was clean and ready for analytical processing.</li>
+      </ul>
+    </div>
+
+    <!-- Major Findings -->
+    <div class="report-section">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        Major Patterns & Findings
+      </h2>
+      
+      <div class="insight-card">
+        <h3>Loyalty Dominates</h3>
+        <p>Returning customers account for the vast majority of the revenue (nearly 59%) and maintain a noticeably higher average order value than new customers.</p>
+      </div>
+      
+      <div class="insight-card">
+        <h3>Payment Preferences</h3>
+        <p>Traditional Bank transfers and Cash on Delivery (COD) are the dominant payment methods, significantly outperforming Cards and GCash in both transaction volume and total revenue.</p>
+      </div>
+
+      <div class="insight-card">
+        <h3>Discount Inefficiency</h3>
+        <p>The highest revenue tier comes from transactions with absolutely no discount (0%), while the 5% tier drives the most order volume. Steeper discounts (10% and 15%) are notably failing to incentivize proportionally higher total sales.</p>
+      </div>
+
+      <div class="insight-card">
+        <h3>Product Dynamics</h3>
+        <p>The "Software" category and individual "Webcams" serve as the primary revenue drivers, whereas "SSDs" are moving the highest physical unit volume out of the store.</p>
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="report-section">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        Evidence-Based Recommendations
+      </h2>
+      
+      <div class="insight-card" style="border-left-color: #f59e0b;">
+        <h3>1. Enhance Retention Efforts</h3>
+        <p>Since Returning Customers spend significantly more per transaction (Avg: ₱1,885.28 vs ₱1,555.54), the store must implement targeted post-purchase follow-ups or a loyalty system. The goal is to rapidly convert the 23 recorded New Customers into repeat buyers.</p>
+      </div>
+
+      <div class="insight-card" style="border-left-color: #f59e0b;">
+        <h3>2. Optimize the Discount Strategy</h3>
+        <p>Management should reevaluate the 10% and 15% discount tiers, as they consistently yield the lowest total sales. Those profit margins should be reallocated to heavily promote the highly successful 5% discount tier, which currently drives the highest overall transaction volume.</p>
+      </div>
+
+      <div class="insight-card" style="border-left-color: #f59e0b;">
+        <h3>3. Cross-Sell High-Volume Components</h3>
+        <p>Since SSDs are the most frequently purchased physical item (33 units sold) but Webcams drive the most overall revenue, the store should create "PC Upgrade" or "Work from Home" bundles. Combining SSDs with Webcams or Headsets will organically push average cart values higher.</p>
+      </div>
+    </div>
+
+    <!-- Download Actions -->
+    <div class="actions-footer">
+      <a href="../Profile/CASE_2_DATA_ANALYSIS_CASTRO.xlsx" download="Data_Analysis_Castro.xlsx" class="btn btn-primary">
+        <span class="btn-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        </span>
+        Download Excel Data
+      </a>
+      <a href="../Profile/DATA_ANALYSIS_CASTRO.docx" download="Data_Summary_Castro.docx" class="btn btn-outline">
+        <span class="btn-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </span>
+        Download Original Document
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="footer" style="border-top: 1px solid var(--color-white-10); padding-top: 20px;">
+    <div class="container" style="text-align: center; color: var(--color-white-50);">
+      <p>&copy; 2026 Jhay Castro. Data Analysis Case Study.</p>
+    </div>
+  </footer>
+
+  <script>
+    // WebGL Topography Background Effect from 21st.dev
+    const topoCanvas = document.getElementById('topo-canvas');
+    if (topoCanvas) {
+      const gl = topoCanvas.getContext('webgl', { alpha: false, antialias: false, depth: false });
+      if (gl) {
+          const vsSource = `
+              attribute vec2 a_position;
+              void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+          `;
+
+          const fsSource = `
+              precision highp float;
+              uniform vec2 u_resolution;
+              uniform float u_time;
+              uniform float u_dpr;
+
+              vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+              float snoise(vec2 v){
+                  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                  vec2 i  = floor(v + dot(v, C.yy) );
+                  vec2 x0 = v -   i + dot(i, C.xx);
+                  vec2 i1; i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                  vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+                  i = mod(i, 289.0);
+                  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                  m = m*m; m = m*m;
+                  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                  vec3 h = abs(x) - 0.5; vec3 ox = floor(x + 0.5);
+                  vec3 a0 = x - ox; m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                  vec3 g; g.x  = a0.x  * x0.x  + h.x  * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                  return 130.0 * dot(m, g);
+              }
+
+              void main() {
+                  vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                  st.x *= u_resolution.x / u_resolution.y;
+
+                  // 1px physical grid rendering
+                  float gridSize = 48.0 * u_dpr;
+                  vec2 gridSt = gl_FragCoord.xy / gridSize;
+                  vec2 gridFract = fract(gridSt);
+                  float lineThickness = 1.0 / gridSize;
+                  float gridLines = step(1.0 - lineThickness, gridFract.x) + step(1.0 - lineThickness, gridFract.y);
+                  gridLines = clamp(gridLines, 0.0, 1.0) * 0.12; 
+
+                  // Ultra-thin Topographic Lines
+                  float noiseScale = 1.4;
+                  vec2 noisePos = st * noiseScale + vec2(u_time * 0.015, u_time * 0.025);
+                  float n = snoise(noisePos) * 0.5 + 0.5;
+                  float numBands = 10.0;
+                  float bandVal = n * numBands;
+                  float triangleWave = abs(fract(bandVal) - 0.5) * 2.0; 
+                  
+                  // Thinner smoothstep constraint for fine industrial aesthetic
+                  float topoLines = smoothstep(0.02, 0.00, triangleWave) * 0.45;
+
+                  vec3 color = vec3(0.0);
+                  color += vec3(1.0) * gridLines;
+                  color += vec3(1.0) * topoLines;
+
+                  // Neon cyan glow
+                  vec3 accent = vec3(0.36, 0.88, 0.90);
+                  gl_FragColor = vec4(color * mix(vec3(1.0), accent, 0.3), 1.0);
+              }
+          `;
+
+          function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              return shader;
+          }
+
+          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          gl.useProgram(program);
+
+          const positionBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+          const positionLocation = gl.getAttribLocation(program, "a_position");
+          gl.enableVertexAttribArray(positionLocation);
+          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+          const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+          const timeLocation = gl.getUniformLocation(program, "u_time");
+          const dprLocation = gl.getUniformLocation(program, "u_dpr");
+
+          function resizeCanvas() {
+              const dpr = window.devicePixelRatio || 1;
+              topoCanvas.width = window.innerWidth * dpr;
+              topoCanvas.height = window.innerHeight * dpr;
+              gl.viewport(0, 0, topoCanvas.width, topoCanvas.height);
+              gl.uniform2f(resolutionLocation, topoCanvas.width, topoCanvas.height);
+              gl.uniform1f(dprLocation, dpr);
+          }
+
+          window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
+
+          let startTime = performance.now();
+          function render(time) {
+              gl.uniform1f(timeLocation, (time - startTime) * 0.001);
+              gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+              requestAnimationFrame(render);
+          }
+          requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+</html>

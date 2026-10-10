@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Repair System - Enterprise Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #09090b;
+      --color-surface: #18181b;
+      --color-border: #27272a;
+      --color-border-hover: #3f3f46;
+      --color-white: #fafafa;
+      --color-white-70: #a1a1aa;
+      --color-white-20: #3f3f46;
+      --color-accent: #ffffff;
+      --color-ai: #a855f7;
+      --color-ai-dim: rgba(168, 85, 247, 0.1);
+      --color-danger: #ef4444;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* --- LOGIN OVERLAY --- */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(9, 9, 11, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .login-box {
+      background: var(--color-surface);
+      padding: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--color-border);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .login-box h2 { font-family: var(--font-heading); margin-bottom: 24px; font-size: 1.8rem; }
+    .login-error { color: var(--color-danger); font-size: 0.85rem; margin-bottom: 16px; display: none; }
+
+    /* --- LAYOUT --- */
+    .app-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+    .sidebar-logo {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-white);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--color-white-70);
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: var(--color-border);
+      color: var(--color-white);
+    }
+    .sidebar-footer { margin-top: auto; }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 32px 48px;
+      background: rgba(10, 10, 15, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Header & Analytics */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .top-header h1 { font-family: var(--font-heading); font-size: 2rem; }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      padding: 24px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-title { color: var(--color-white-70); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 700; }
+
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Panel Base */
+    .panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 16px;
+    }
+    .panel-title { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 600; }
+
+    /* Forms & Inputs */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--color-white-70); margin-bottom: 6px; }
+    .form-input {
+      width: 100%;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { outline: none; border-color: var(--color-white-70); }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+
+    /* AI Button & Response */
+    .ai-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .btn-ai {
+      background: var(--color-ai-dim);
+      color: var(--color-ai);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-ai:hover { background: rgba(168, 85, 247, 0.2); }
+    .ai-response {
+      background: rgba(168, 85, 247, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      padding: 12px; border-radius: 6px; font-size: 0.85rem; color: #d8b4fe;
+      margin-bottom: 16px; display: none; line-height: 1.5;
+      max-height: 160px; overflow-y: auto;
+    }
+    .ai-response::-webkit-scrollbar { width: 6px; }
+    .ai-response::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
+    .ai-response::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.3); border-radius: 4px; }
+
+    .tab-btn {
+      background: transparent; border: none; color: var(--color-white-70); font-family: var(--font-body);
+      font-size: 0.9rem; font-weight: 500; padding: 8px 16px; cursor: pointer; transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-btn:hover { color: var(--color-white); }
+    .tab-btn.active { color: var(--color-white); border-bottom-color: var(--color-accent); }
+
+    /* Buttons */
+    .btn-submit {
+      width: 100%; background: var(--color-white); color: var(--color-bg);
+      border: none; border-radius: 6px; padding: 12px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s; margin-top: 8px;
+    }
+    .btn-submit:hover { background: #e4e4e7; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Tickets List */
+    .search-bar { width: 100%; max-width: 300px; position: relative; }
+    .search-icon { position: absolute; left: 12px; top: 10px; color: var(--color-white-70); }
+    .search-bar input { padding-left: 36px; }
+
+    .ticket-list { display: flex; flex-direction: column; gap: 12px; }
+    .ticket-item {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .ticket-item:hover { border-color: var(--color-border-hover); }
+    .ticket-info { display: flex; flex-direction: column; gap: 4px; }
+    .ticket-id { font-family: monospace; font-size: 0.75rem; color: var(--color-white-70); }
+    .ticket-name { font-size: 1.05rem; font-weight: 600; }
+    .ticket-device { font-size: 0.85rem; color: var(--color-white-70); }
+    
+    .ticket-actions-group { display: flex; align-items: center; gap: 16px; }
+    
+    .status-badge {
+      font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;
+    }
+    .status-Pending { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .status-Progress { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+    .status-Resolved { background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.2); }
+
+    .btn-view {
+      background: transparent; color: var(--color-white); border: 1px solid var(--color-border);
+      padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-view:hover { background: var(--color-white-10); }
+
+    .empty-state { text-align: center; padding: 40px; color: var(--color-white-70); font-size: 0.9rem; border: 1px dashed var(--color-border); border-radius: 8px; }
+
+    /* Modals & Toasts */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
+    .toast { background: var(--color-surface); border: 1px solid var(--color-border); padding: 16px 20px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease forwards; }
+    .toast.success { border-left: 4px solid var(--color-success); }
+    .toast.error { border-left: 4px solid var(--color-danger); }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+    .modal-content { background: var(--color-surface); width: 100%; max-width: 500px; border-radius: 12px; border: 1px solid var(--color-border); padding: 24px; position: relative; }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--color-white-70); font-size: 1.5rem; cursor: pointer; }
+    
+    .status-select { background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-white); padding: 8px; border-radius: 6px; width: 100%; margin-top: 16px; font-family: var(--font-body); }
+
+    #topo-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topographic Background -->
+  <canvas id="topo-canvas"></canvas>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Authentication Overlay -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 16px; color: var(--color-white);"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+      <h2>Admin Portal</h2>
+      <div id="loginError" class="login-error">Invalid credentials. Hint: use admin / admin123</div>
+      <form id="loginForm">
+        <div class="form-group"><input type="text" id="loginUser" class="form-input" placeholder="Username" required></div>
+        <div class="form-group"><input type="password" id="loginPass" class="form-input" placeholder="Password" required></div>
+        <button type="submit" class="btn-submit">Secure Login</button>
+        <div style="margin-top: 24px; text-align: center;">
+          <a href="../index.html" style="color: var(--color-white-70); text-decoration: none; font-size: 0.85rem;">← Return to Portfolio</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        FixIt AI
+      </div>
+      <nav>
+        <a class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg> Dashboard</a>
+        <a href="../index.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Portfolio</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="nav-item" style="background:transparent; border:none; width:100%; text-align:left; padding:12px 16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Secure Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-header">
+        <h1>Overview</h1>
+      </div>
+
+      <!-- Analytics -->
+      <div class="analytics-grid">
+        <div class="stat-card">
+          <span class="stat-title">Total Tickets</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-title" style="color: var(--color-warning);">Pending & In Progress</span>
+          <span class="stat-value" id="statPending">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-title" style="color: var(--color-success);">Successfully Resolved</span>
+          <span class="stat-value" id="statResolved">0</span>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <!-- Create Ticket Form -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">New Repair Ticket</h2>
+          </div>
+          <form id="ticketForm">
+            <div class="form-group">
+              <label class="form-label" for="customerName">Customer Name</label>
+              <input type="text" id="customerName" class="form-input" placeholder="e.g. Jane Doe" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="deviceModel">Device Model</label>
+              <input type="text" id="deviceModel" class="form-input" placeholder="e.g. MacBook Pro M1" required>
+            </div>
+            <div class="form-group">
+              <div class="ai-header">
+                <label class="form-label" for="issueSymptom" style="margin:0;">Reported Issue</label>
+              </div>
+              <textarea id="issueSymptom" class="form-input" placeholder="Describe the hardware or software problem..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="submitTicketBtn">Create Ticket & Diagnose</button>
+          </form>
+        </div>
+
+        <!-- Ticket Database -->
+        <div class="panel">
+          <div class="panel-header" style="flex-direction: column; align-items: stretch; gap: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h2 class="panel-title" style="margin: 0; padding: 0; border: none;">Ticket Database</h2>
+              <div class="search-bar">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchTickets" class="form-input" placeholder="Search customer or ID...">
+              </div>
+            </div>
+            <div class="tabs" style="display: flex; gap: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 0;">
+              <button class="tab-btn active" id="tabActive">Active Tickets</button>
+              <button class="tab-btn" id="tabResolved">Resolved History</button>
+            </div>
+          </div>
+          <div class="ticket-list" id="ticketsContainer">
+            <!-- Tickets injected via JS -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Details Modal -->
+  <div id="ticketModal" class="modal-overlay">
+    <div class="modal-content" id="modalContent">
+      <!-- Injected via JS -->
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module">
+    // --- 1. Authentication & Security ---
+    const loginOverlay = document.getElementById('loginOverlay');
+    const loginForm = document.getElementById('loginForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    // Check local Auth state
+    if (localStorage.getItem('adminAuth') === 'true') {
+      loginOverlay.style.display = 'none';
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('loginUser').value;
+      const p = document.getElementById('loginPass').value;
+      if (u === 'admin' && p === 'admin123') {
+        localStorage.setItem('adminAuth', 'true');
+        loginOverlay.style.display = 'none';
+        showToast('Successfully logged in', 'success');
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('adminAuth');
+      loginOverlay.style.display = 'flex';
+      document.getElementById('loginUser').value = '';
+      document.getElementById('loginPass').value = '';
+    });
+
+    // --- 2. Toast Notifications ---
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          ${type === 'success' ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
+        </svg>
+        <span style="font-size: 0.9rem; font-weight: 500;">${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    // --- 3. Supabase Setup ---
+    const supabaseUrl = 'https://wuyjwrqygvduspfngubk.supabase.co';
+    const supabaseKey = 'sb_publishable_MuB_tUrjHUVY5TXLstHMxg_zVllsuJk';
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let ticketsArray = [];
+
+    // --- 4. Fast AI Integration & CRUD Operations ---
+    const ticketForm = document.getElementById('ticketForm');
+    const searchTickets = document.getElementById('searchTickets');
+    const issueSymptom = document.getElementById('issueSymptom');
+
+    ticketForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('customerName').value.trim();
+      const device = document.getElementById('deviceModel').value.trim();
+      const issue = issueSymptom.value.trim();
+
+      const btn = document.getElementById('submitTicketBtn');
+      btn.disabled = true; btn.textContent = '✨ AI is analyzing & creating...';
+
+      try {
+        // Step 1: Request AI Diagnosis
+        let aiLog = "";
+        try {
+          const deviceText = device || "Unknown Device";
+          const res = await fetch('/api/diagnose', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ symptom: issue, device: deviceText })
+          });
+          if (!res.ok) throw new Error("Server error");
+          const data = await res.json();
+          aiLog = data.diagnosis;
+        } catch (error) {
+          console.error("AI Error:", error);
+          aiLog = "AI Diagnostics unavailable at this time.";
+        }
+
+        // Step 2: Insert into Database
+        const { error } = await supabaseClient.from('tickets').insert([{ 
+          name, device, issue, ai_log: aiLog, status: 'Pending' 
+        }]);
+        if (error) throw error;
+        
+        ticketForm.reset();
+        showToast('Ticket created with AI Diagnostics!');
+        fetchTickets();
+      } catch (error) {
+        showToast('Failed to create ticket', 'error');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Create Ticket & Diagnose';
+      }
+    });
+
+    async function fetchTickets() {
+      try {
+        const { data, error } = await supabaseClient.from('tickets').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        ticketsArray = data;
+        updateAnalytics();
+        renderTickets(searchTickets.value);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function updateAnalytics() {
+      document.getElementById('statTotal').innerText = ticketsArray.length;
+      document.getElementById('statResolved').innerText = ticketsArray.filter(t => t.status === 'Resolved').length;
+      document.getElementById('statPending').innerText = ticketsArray.filter(t => t.status !== 'Resolved').length;
+    }
+
+    let currentTab = 'Active';
+
+    document.getElementById('tabActive').addEventListener('click', (e) => {
+      currentTab = 'Active';
+      e.target.classList.add('active');
+      document.getElementById('tabResolved').classList.remove('active');
+      renderTickets(searchTickets.value);
+    });
+
+    document.getElementById('tabResolved').addEventListener('click', (e) => {
+      currentTab = 'Resolved';
+      e.target.classList.add('active');
+      document.getElementById('tabActive').classList.remove('active');
+      renderTickets(searchTickets.value);
+    });
+
+    function renderTickets(searchTerm = '') {
+      const container = document.getElementById('ticketsContainer');
+      container.innerHTML = '';
+      
+      const lower = searchTerm.toLowerCase();
+      let filtered = ticketsArray.filter(t => 
+        (t.name && t.name.toLowerCase().includes(lower)) || 
+        (t.id && String(t.id).toLowerCase().includes(lower))
+      );
+
+      // Apply Tab Filter
+      if (currentTab === 'Active') {
+        filtered = filtered.filter(t => t.status !== 'Resolved');
+      } else {
+        filtered = filtered.filter(t => t.status === 'Resolved');
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No tickets found in the database.</div>';
+        return;
+      }
+
+      filtered.forEach(ticket => {
+        let sc = ticket.status === 'In Progress' ? 'status-Progress' : (ticket.status === 'Resolved' ? 'status-Resolved' : 'status-Pending');
+        const item = document.createElement('div');
+        item.className = 'ticket-item';
+        item.innerHTML = `
+          <div class="ticket-info">
+            <span class="ticket-id">#${String(ticket.id).substring(0,8)}</span>
+            <span class="ticket-name">${ticket.name}</span>
+            <span class="ticket-device">💻 ${ticket.device}</span>
+          </div>
+          <div class="ticket-actions-group">
+            <span class="status-badge ${sc}">${ticket.status || 'Pending'}</span>
+            <button class="btn-view" onclick="window.openModal('${ticket.id}')">Manage</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    searchTickets.addEventListener('keyup', (e) => renderTickets(e.target.value));
+
+    // Modal Management
+    window.openModal = function(id) {
+      const ticket = ticketsArray.find(t => String(t.id) === String(id));
+      if (!ticket) return;
+      
+      let sc = ticket.status === 'In Progress' ? 'status-Progress' : (ticket.status === 'Resolved' ? 'status-Resolved' : 'status-Pending');
+      
+      let aiHtml = '';
+      if (ticket.ai_log) {
+        let formattedLog = ticket.ai_log.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--color-white);">$1</strong>');
+        formattedLog = formattedLog.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        formattedLog = formattedLog.replace(/([^\>])(\d+\.\s)/g, '$1<br><br>$2');
+        
+        aiHtml = `<div style="background:rgba(168,85,247,0.05); padding:16px; border-radius:8px; font-size:0.9rem; border:1px solid rgba(168,85,247,0.3); margin-bottom:16px; line-height:1.6;"><strong style="color:var(--color-ai);">✨ AI Diagnostic Log:</strong><br><br><span style="color:var(--color-white-70);">${formattedLog}</span></div>`;
+      }
+
+      const content = `
+        <button class="modal-close" onclick="document.getElementById('ticketModal').style.display='none'">&times;</button>
+        <div style="display:flex; justify-content:space-between; margin-bottom:16px; align-items:center;">
+          <span style="font-family:monospace; color:var(--color-white-70);">#${String(ticket.id)}</span>
+          <span class="status-badge ${sc}">${ticket.status || 'Pending'}</span>
+        </div>
+        <h3 style="font-family:var(--font-heading); font-size:1.5rem; margin-bottom:4px;">${ticket.name}</h3>
+        <p style="color:var(--color-white-70); margin-bottom:24px;">💻 ${ticket.device}</p>
+        <div style="background:var(--color-bg); padding:16px; border-radius:8px; border:1px solid var(--color-border); margin-bottom:16px; font-size:0.9rem;">
+          <strong>Issue:</strong> ${ticket.issue}
+        </div>
+        ${aiHtml}
+        <select class="status-select" onchange="window.updateStatus('${ticket.id}', this.value)">
+          <option value="Pending" ${ticket.status === 'Pending' ? 'selected' : ''}>Set Status: Pending</option>
+          <option value="In Progress" ${ticket.status === 'In Progress' ? 'selected' : ''}>Set Status: In Progress</option>
+          <option value="Resolved" ${ticket.status === 'Resolved' ? 'selected' : ''}>Set Status: Resolved</option>
+        </select>
+        <button onclick="window.deleteTicket('${ticket.id}')" style="width:100%; padding:10px; margin-top:12px; background:transparent; border:1px solid rgba(239,68,68,0.3); color:var(--color-danger); border-radius:6px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">Delete Ticket</button>
+      `;
+      document.getElementById('modalContent').innerHTML = content;
+      document.getElementById('ticketModal').style.display = 'flex';
+    };
+
+    window.updateStatus = async function(id, status) {
+      try {
+        await supabaseClient.from('tickets').update({ status }).eq('id', id);
+        showToast('Ticket status updated');
+        fetchTickets();
+        document.getElementById('ticketModal').style.display = 'none';
+      } catch (e) { showToast('Error updating status', 'error'); }
+    };
+
+    window.deleteTicket = async function(id) {
+      if(!confirm("Are you sure you want to permanently delete this ticket?")) return;
+      try {
+        await supabaseClient.from('tickets').delete().eq('id', id);
+        showToast('Ticket deleted permanently');
+        fetchTickets();
+        document.getElementById('ticketModal').style.display = 'none';
+      } catch (e) { showToast('Error deleting ticket', 'error'); }
+    };
+
+    // Initialize
+    fetchTickets();
+  </script>
+  <script>
+    // WebGL Topography Background Effect from 21st.dev
+    const topoCanvas = document.getElementById('topo-canvas');
+    if (topoCanvas) {
+      const gl = topoCanvas.getContext('webgl', { alpha: false, antialias: false, depth: false });
+      if (gl) {
+          const vsSource = `
+              attribute vec2 a_position;
+              void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+          `;
+
+          const fsSource = `
+              precision highp float;
+              uniform vec2 u_resolution;
+              uniform float u_time;
+              uniform float u_dpr;
+
+              vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+              float snoise(vec2 v){
+                  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                  vec2 i  = floor(v + dot(v, C.yy) );
+                  vec2 x0 = v -   i + dot(i, C.xx);
+                  vec2 i1; i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                  vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+                  i = mod(i, 289.0);
+                  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+                  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                  m = m*m; m = m*m;
+                  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                  vec3 h = abs(x) - 0.5; vec3 ox = floor(x + 0.5);
+                  vec3 a0 = x - ox; m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                  vec3 g; g.x  = a0.x  * x0.x  + h.x  * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                  return 130.0 * dot(m, g);
+              }
+
+              void main() {
+                  vec2 st = gl_FragCoord.xy / u_resolution.xy;
+                  st.x *= u_resolution.x / u_resolution.y;
+
+                  // 1px physical grid rendering
+                  float gridSize = 48.0 * u_dpr;
+                  vec2 gridSt = gl_FragCoord.xy / gridSize;
+                  vec2 gridFract = fract(gridSt);
+                  float lineThickness = 1.0 / gridSize;
+                  float gridLines = step(1.0 - lineThickness, gridFract.x) + step(1.0 - lineThickness, gridFract.y);
+                  gridLines = clamp(gridLines, 0.0, 1.0) * 0.12; 
+
+                  // Ultra-thin Topographic Lines
+                  float noiseScale = 1.4;
+                  vec2 noisePos = st * noiseScale + vec2(u_time * 0.015, u_time * 0.025);
+                  float n = snoise(noisePos) * 0.5 + 0.5;
+                  float numBands = 10.0;
+                  float bandVal = n * numBands;
+                  float triangleWave = abs(fract(bandVal) - 0.5) * 2.0; 
+                  
+                  // Thinner smoothstep constraint for fine industrial aesthetic
+                  float topoLines = smoothstep(0.02, 0.00, triangleWave) * 0.45;
+
+                  vec3 color = vec3(0.0);
+                  color += vec3(1.0) * gridLines;
+                  color += vec3(1.0) * topoLines;
+
+                  // Neon cyan glow
+                  vec3 accent = vec3(0.36, 0.88, 0.90);
+                  gl_FragColor = vec4(color * mix(vec3(1.0), accent, 0.3), 1.0);
+              }
+          `;
+
+          function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              return shader;
+          }
+
+          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          gl.useProgram(program);
+
+          const positionBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+          const positionLocation = gl.getAttribLocation(program, "a_position");
+          gl.enableVertexAttribArray(positionLocation);
+          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+          const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+          const timeLocation = gl.getUniformLocation(program, "u_time");
+          const dprLocation = gl.getUniformLocation(program, "u_dpr");
+
+          function resizeCanvas() {
+              const dpr = window.devicePixelRatio || 1;
+              topoCanvas.width = window.innerWidth * dpr;
+              topoCanvas.height = window.innerHeight * dpr;
+              gl.viewport(0, 0, topoCanvas.width, topoCanvas.height);
+              gl.uniform2f(resolutionLocation, topoCanvas.width, topoCanvas.height);
+              gl.uniform1f(dprLocation, dpr);
+          }
+
+          window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
+
+          let startTime = performance.now();
+          function render(time) {
+              gl.uniform1f(timeLocation, (time - startTime) * 0.001);
+              gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+              requestAnimationFrame(render);
+          }
+          requestAnimationFrame(render);
+      }
+    }
+  </script>
+</body>
+</html>
