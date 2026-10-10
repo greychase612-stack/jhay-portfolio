@@ -421,13 +421,13 @@ function initHeroMouseParallax() {
   
   if (!hero) return;
 
-  hero.addEventListener('mousemove', (e) => {
-    const rect = hero.getBoundingClientRect();
-    const x = e.clientX - rect.left - (rect.width / 2);
-    const y = e.clientY - rect.top - (rect.height / 2);
+  window.addEventListener('mousemove', (e) => {
+    // Track mouse relative to the entire browser window instead of just the hero container
+    const x = e.clientX - (window.innerWidth / 2);
+    const y = e.clientY - (window.innerHeight / 2);
 
-    const xNorm = x / (rect.width / 2);
-    const yNorm = y / (rect.height / 2);
+    const xNorm = x / (window.innerWidth / 2);
+    const yNorm = y / (window.innerHeight / 2);
 
     // Unify the movement so they all move as a single solid group (pan effect)
     const moveX = xNorm * -12;
@@ -437,11 +437,5 @@ function initHeroMouseParallax() {
     if(bottom) bottom.style.transform = `translate(${moveX}px, ${moveY}px)`;
     // Portrait is now a floating circle frame, so it can safely move on Y axis too
     if(portrait) portrait.style.transform = `translate(calc(-50% + ${moveX}px), ${moveY}px)`;
-  });
-
-  hero.addEventListener('mouseleave', () => {
-    if(text) text.style.transform = `translate(0, 0)`;
-    if(bottom) bottom.style.transform = `translate(0, 0)`;
-    if(portrait) portrait.style.transform = `translate(-50%, 0)`;
   });
 }
