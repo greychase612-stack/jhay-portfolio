@@ -430,8 +430,8 @@ function initHeroMouseParallax() {
     const yNorm = y / (rect.height / 2);
 
     // Unify the movement so they all move as a single solid group (pan effect)
-    const moveX = xNorm * -25;
-    const moveY = yNorm * -25;
+    const moveX = xNorm * -12;
+    const moveY = yNorm * -12;
 
     if(text) text.style.transform = `translate(${moveX}px, ${moveY}px)`;
     if(bottom) bottom.style.transform = `translate(${moveX}px, ${moveY}px)`;
