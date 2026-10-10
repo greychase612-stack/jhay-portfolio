@@ -314,34 +314,28 @@ img {
 /* Portrait */
 .hero-portrait-ref {
   position: absolute;
-  bottom: 0;
-  left: 70%; /* Centered slightly right */
+  bottom: 5vh;
+  left: 70%;
   transform: translateX(-50%);
-  width: 38vw; /* Matched to mockup scale */
-  max-width: 650px;
-  height: auto;
-  z-index: 10; /* INCREASED Z-INDEX SO HE IS IN FRONT OF TEXT */
-  pointer-events: none;
-}
-
-.hero-portrait-ref::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 85%;
+  width: 30vw;
+  max-width: 450px;
   aspect-ratio: 1 / 1;
-  border: 2px solid var(--color-accent);
   border-radius: 50%;
-  z-index: -1;
-  box-shadow: 0 0 30px var(--color-accent-dim), inset 0 0 20px var(--color-accent-dim);
+  overflow: hidden;
+  border: 3px solid var(--color-accent);
+  background: rgba(7, 7, 7, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 40px var(--color-accent-dim);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .portrait-img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
 }
 
 
