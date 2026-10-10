@@ -324,6 +324,20 @@ img {
   pointer-events: none;
 }
 
+.hero-portrait-ref::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
+  z-index: -1;
+  box-shadow: 0 0 30px var(--color-accent-dim), inset 0 0 20px var(--color-accent-dim);
+}
+
 .portrait-img {
   width: 100%;
   height: auto;
