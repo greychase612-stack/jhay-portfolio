@@ -429,16 +429,19 @@ function initHeroMouseParallax() {
     const xNorm = x / (rect.width / 2);
     const yNorm = y / (rect.height / 2);
 
-    if(text) text.style.transform = `translate(${xNorm * -15}px, ${yNorm * -15}px)`;
-    if(bottom) bottom.style.transform = `translate(${xNorm * 10}px, ${yNorm * 10}px)`;
-    // Portrait has an existing translateX(-50%) that must be maintained
-    // Constrain to X-axis only so the bottom cut edge is never revealed
-    if(portrait) portrait.style.transform = `translateX(calc(-50% + ${xNorm * -30}px))`;
+    // Unify the movement so they all move as a single solid group (pan effect)
+    const moveX = xNorm * -25;
+    const moveY = yNorm * -25;
+
+    if(text) text.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    if(bottom) bottom.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    // Portrait is now a floating circle frame, so it can safely move on Y axis too
+    if(portrait) portrait.style.transform = `translate(calc(-50% + ${moveX}px), ${moveY}px)`;
   });
 
   hero.addEventListener('mouseleave', () => {
     if(text) text.style.transform = `translate(0, 0)`;
     if(bottom) bottom.style.transform = `translate(0, 0)`;
-    if(portrait) portrait.style.transform = `translateX(-50%)`;
+    if(portrait) portrait.style.transform = `translate(-50%, 0)`;
   });
 }
