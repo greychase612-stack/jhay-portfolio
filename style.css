@@ -267,7 +267,7 @@ img {
 }
 .hero-skills-list li {
   font-family: var(--font-heading);
-  font-size: 1.8vw;
+  font-size: 1.4vw;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-white);
