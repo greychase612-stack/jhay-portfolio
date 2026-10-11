@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     /* ========================================================
-       NYNÄ COLOR PALETTE TOKENS
+       NYNÄ COLOR PALETTE TOKENS & SYSTEM VARIABLES
        ======================================================== */
     :root {
       --lime-green: #E6F9AF;       /* RGB: 230, 249, 175 */
@@ -18,15 +18,15 @@
       --deep-space-blue: #18314F;  /* RGB: 24, 49, 79 */
       --dark-amethyst: #0D0630;    /* RGB: 13, 6, 48 */
 
-      --teal-dark: #234c44;
+      --teal-dark: #1f423b;
       --gold-dark: #4d3f13;
       --gold-light: #f5e9bd;
       --card-radius: 24px;
-      --inner-radius: 16px;
+      --inner-radius: 18px;
       
-      --font-heading: 'Outfit', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,21 +38,104 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Fluid Background matching user mockup */
+    /* ========================================================
+       ANIMATED MOVING GRADIENT MESH BACKGROUND (AURORA)
+       Using NYNÄ Palette: Muted Teal, Gold, Lime, Space Blue, Amethyst
+       ======================================================== */
     .ambient-fluid-bg {
       position: fixed;
-      inset: 0;
+      inset: -30%;
+      width: 160%;
+      height: 160%;
       z-index: -1;
-      background: radial-gradient(circle at 15% 25%, rgba(139, 190, 178, 0.22) 0%, transparent 45%),
-                  radial-gradient(circle at 85% 75%, rgba(202, 172, 75, 0.25) 0%, transparent 50%),
-                  radial-gradient(circle at 50% 50%, rgba(24, 49, 79, 0.8) 0%, var(--dark-amethyst) 100%);
-      filter: blur(40px);
+      background: radial-gradient(circle at 50% 50%, var(--dark-amethyst) 0%, #060217 100%);
+      overflow: hidden;
       pointer-events: none;
     }
 
-    /* App Shell */
+    .aurora-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      mix-blend-mode: screen;
+      will-change: transform;
+    }
+
+    .aurora-orb-1 {
+      width: 65vw;
+      height: 65vw;
+      background: radial-gradient(circle, rgba(139, 190, 178, 0.45) 0%, rgba(139, 190, 178, 0.15) 50%, transparent 75%);
+      top: 5%;
+      left: 5%;
+      animation: driftAurora1 24s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .aurora-orb-2 {
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(202, 172, 75, 0.4) 0%, rgba(202, 172, 75, 0.12) 50%, transparent 75%);
+      top: 20%;
+      right: 5%;
+      animation: driftAurora2 28s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .aurora-orb-3 {
+      width: 55vw;
+      height: 55vw;
+      background: radial-gradient(circle, rgba(24, 49, 79, 0.8) 0%, rgba(24, 49, 79, 0.3) 55%, transparent 80%);
+      bottom: 5%;
+      left: 25%;
+      animation: driftAurora3 32s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .aurora-orb-4 {
+      width: 42vw;
+      height: 42vw;
+      background: radial-gradient(circle, rgba(230, 249, 175, 0.35) 0%, rgba(230, 249, 175, 0.08) 45%, transparent 70%);
+      bottom: 15%;
+      right: 20%;
+      animation: driftAurora4 20s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    @keyframes driftAurora1 {
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      50% { transform: translate(16vw, 10vh) scale(1.15) rotate(40deg); }
+      100% { transform: translate(-8vw, 18vh) scale(0.92) rotate(80deg); }
+    }
+
+    @keyframes driftAurora2 {
+      0% { transform: translate(0, 0) scale(1.08) rotate(0deg); }
+      50% { transform: translate(-14vw, -8vh) scale(0.9) rotate(-35deg); }
+      100% { transform: translate(10vw, 14vh) scale(1.18) rotate(-75deg); }
+    }
+
+    @keyframes driftAurora3 {
+      0% { transform: translate(0, 0) scale(0.95) rotate(0deg); }
+      50% { transform: translate(12vw, -16vh) scale(1.2) rotate(50deg); }
+      100% { transform: translate(-14vw, 8vh) scale(1.05) rotate(110deg); }
+    }
+
+    @keyframes driftAurora4 {
+      0% { transform: translate(0, 0) scale(0.9); opacity: 0.35; }
+      50% { transform: translate(-16vw, 14vh) scale(1.12); opacity: 0.6; }
+      100% { transform: translate(14vw, -10vh) scale(0.95); opacity: 0.4; }
+    }
+
+    /* Ambient Dark Mesh Vignette */
+    .vignette-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 30%, rgba(13, 6, 48, 0.6) 100%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ========================================================
+       APP CONTAINER & NAVIGATION HEADER
+       ======================================================== */
     .app-wrapper {
       max-width: 1380px;
       margin: 0 auto;
@@ -62,19 +145,19 @@
       flex-direction: column;
     }
 
-    /* Top Navigation Header */
+    /* Top Glassmorphic Navigation Header */
     .app-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 24px;
-      background: rgba(13, 6, 48, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(139, 190, 178, 0.2);
+      padding: 14px 24px;
+      background: rgba(13, 6, 48, 0.72);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 9999px;
-      margin-bottom: 28px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-bottom: 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     }
 
     .brand-group {
@@ -83,6 +166,11 @@
       gap: 12px;
       text-decoration: none;
       color: #ffffff;
+      transition: transform 0.2s ease;
+    }
+
+    .brand-group:hover {
+      transform: scale(1.02);
     }
 
     .brand-icon-wrap {
@@ -94,7 +182,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      box-shadow: 0 0 14px rgba(139, 190, 178, 0.4);
+      box-shadow: 0 0 16px rgba(139, 190, 178, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
     }
 
     .brand-icon-wrap img {
@@ -118,11 +206,12 @@
     .nav-pills {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(24, 49, 79, 0.5);
+      gap: 6px;
+      background: rgba(24, 49, 79, 0.6);
       padding: 4px;
       border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .nav-pill-btn {
@@ -135,7 +224,7 @@
       font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -143,13 +232,15 @@
 
     .nav-pill-btn:hover {
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
     }
 
     .nav-pill-btn.active {
       background: var(--lime-green);
       color: var(--dark-amethyst);
-      box-shadow: 0 4px 14px rgba(230, 249, 175, 0.35);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(230, 249, 175, 0.4), inset 0 1px 1px #ffffff;
     }
 
     .header-actions {
@@ -159,23 +250,29 @@
     }
 
     .back-portfolio-btn {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.75);
       text-decoration: none;
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: color 0.2s;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
     }
 
     .back-portfolio-btn:hover {
       color: var(--lime-green);
+      border-color: rgba(230, 249, 175, 0.4);
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .logout-btn {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.4);
       color: #fca5a5;
       padding: 6px 14px;
       border-radius: 9999px;
@@ -190,19 +287,125 @@
       color: #ffffff;
     }
 
-    /* Views Container */
+    /* ========================================================
+       MACOS WINDOW FRAME & CHROME
+       ======================================================== */
+    .macos-window-shell {
+      background: rgba(13, 6, 48, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.85),
+                  inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(35px) saturate(180%);
+      -webkit-backdrop-filter: blur(35px) saturate(180%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .macos-titlebar {
+      height: 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(24, 49, 79, 0.5);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      user-select: none;
+    }
+
+    .macos-traffic-lights {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .traffic-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .traffic-dot:hover {
+      transform: scale(1.15);
+      filter: brightness(1.15);
+    }
+
+    .traffic-close { background-color: #ff5f56; border: 1px solid #e0443e; }
+    .traffic-min { background-color: #ffbd2e; border: 1px solid #dea123; }
+    .traffic-max { background-color: #27c93f; border: 1px solid #1aab29; }
+
+    .traffic-dot svg {
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .macos-traffic-lights:hover .traffic-dot svg {
+      opacity: 0.8;
+    }
+
+    .macos-window-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13, 6, 48, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      padding: 5px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.01em;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .macos-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .status-indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lime-green);
+      box-shadow: 0 0 10px var(--lime-green);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.55; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    .macos-window-body {
+      padding: 24px;
+      position: relative;
+      min-height: 620px;
+    }
+
+    /* Views visibility */
     .view-container {
       display: none;
-      animation: fadeIn 0.3s ease forwards;
-      flex: 1;
+      animation: fadeInView 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .view-container.active-view {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+    @keyframes fadeInView {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -211,32 +414,26 @@
        ======================================================== */
     .layout-grid-triage {
       display: grid;
-      grid-template-columns: 1fr 1.3fr;
-      gap: 28px;
-      background: rgba(24, 49, 79, 0.4);
-      border: 2px solid rgba(24, 49, 79, 0.8);
-      border-radius: var(--card-radius);
-      padding: 24px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      min-height: 640px;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 24px;
+      min-height: 580px;
     }
 
     /* Left Card: Muted Teal AI Assistant Station */
     .card-muted-teal {
       background-color: var(--muted-teal);
       border-radius: var(--inner-radius);
-      padding: 28px;
+      padding: 32px 28px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Interactive Speech Bubble */
+    /* Vector Stage (Centered, Clean, No Chat Log Crowding) */
     .vector-stage {
       display: flex;
       flex-direction: column;
@@ -246,24 +443,31 @@
       padding: 10px 0;
     }
 
+    /* Interactive Speech Bubble with Pop Spring Animation */
     .speech-bubble {
       background: #ffffff;
       color: var(--dark-amethyst);
-      padding: 18px 24px;
-      border-radius: 20px;
+      padding: 18px 26px;
+      border-radius: 22px;
       font-weight: 700;
       font-size: 1.15rem;
       line-height: 1.45;
       text-align: center;
       max-width: 90%;
-      box-shadow: 0 10px 25px rgba(13, 6, 48, 0.15);
+      box-shadow: 0 14px 30px rgba(13, 6, 48, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.8);
       position: relative;
       margin-bottom: 24px;
-      transition: all 0.3s ease;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       min-height: 68px;
       display: flex;
       align-items: center;
       justify-content: center;
+      animation: bubblePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes bubblePop {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .speech-bubble::after {
@@ -279,19 +483,21 @@
       width: 0;
     }
 
-    /* Chase Vector Animation */
+    /* Chase Vector Animation & 3D Tilt Hover */
     .chase-vector-img {
-      width: 190px;
-      height: 190px;
+      width: 210px;
+      height: 210px;
       object-fit: contain;
-      filter: drop-shadow(0 14px 20px rgba(13, 6, 48, 0.3));
+      filter: drop-shadow(0 16px 22px rgba(13, 6, 48, 0.35));
       animation: chaseFloat 3.5s ease-in-out infinite;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.2s ease;
+      transform-origin: center bottom;
     }
 
     .chase-vector-img:hover {
-      transform: scale(1.08) rotate(2deg);
+      transform: scale(1.08) perspective(600px) rotateY(6deg) translateY(-6px);
+      filter: drop-shadow(0 22px 28px rgba(13, 6, 48, 0.45));
     }
 
     @keyframes chaseFloat {
@@ -303,50 +509,60 @@
       }
     }
 
-    /* Chat Conversation Drawer */
-    .chat-history-log {
-      max-height: 160px;
-      overflow-y: auto;
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-right: 6px;
-    }
-
-    .chat-bubble-msg {
-      padding: 8px 14px;
-      border-radius: 14px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      max-width: 85%;
-      word-break: break-word;
-    }
-
-    .chat-msg-user {
-      align-self: flex-end;
-      background: var(--deep-space-blue);
-      color: #ffffff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .chat-msg-bot {
-      align-self: flex-start;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--dark-amethyst);
+    /* Silent Background Intake Status Breadcrumb (Clean & Professional) */
+    .intake-breadcrumb-pill {
+      align-self: center;
+      margin-bottom: 14px;
+      background: rgba(24, 49, 79, 0.7);
+      color: var(--lime-green);
+      border: 1px solid rgba(230, 249, 175, 0.3);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
       font-weight: 600;
-      border-bottom-left-radius: 4px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeInView 0.25s ease;
     }
 
-    /* Chat Input Pill */
+    .crumb-clear-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .crumb-clear-btn:hover {
+      background: rgba(239, 68, 68, 0.8);
+    }
+
+    /* Chat Input Pill matching Mockup */
     .chat-input-bar {
       display: flex;
       align-items: center;
       background: #ffffff;
       border-radius: 9999px;
       padding: 6px 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
       gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .chat-input-bar:focus-within {
+      box-shadow: 0 12px 30px rgba(24, 49, 79, 0.3);
+      transform: translateY(-2px);
     }
 
     .chat-input-field {
@@ -379,19 +595,20 @@
 
     .chat-send-btn:hover {
       color: var(--dark-amethyst);
-      transform: scale(1.15) translateX(2px);
+      transform: scale(1.18) translateX(2px);
     }
 
     /* Right Card: Metallic Gold Diagnostic Summary (Mockup 1) */
     .card-metallic-gold {
-      background-color: var(--metallic-gold);
+      background: linear-gradient(145deg, #d8bc5e 0%, #caac4b 50%, #b39335 100%);
       border-radius: var(--inner-radius);
       padding: 36px 32px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: var(--dark-amethyst);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       position: relative;
     }
 
@@ -407,15 +624,17 @@
 
     /* Diagnostic Output Box */
     .diagnostic-output-box {
-      background: rgba(255, 255, 255, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 16px;
       padding: 24px;
       flex: 1;
       overflow-y: auto;
       margin-bottom: 24px;
       font-size: 0.98rem;
       line-height: 1.65;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
     }
 
     .diag-placeholder {
@@ -449,53 +668,56 @@
 
     .diag-meta-item span {
       font-weight: 800;
-      color: var(--deep-space-blue);
+      color: var(--dark-amethyst);
     }
 
     .diag-summary-text {
       color: var(--dark-amethyst);
-      font-size: 0.96rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .diag-summary-text strong {
-      color: #000000;
+      color: var(--dark-amethyst);
+      font-weight: 800;
     }
 
+    /* Bottom Pill Button: LOG DIAGNOSE */
     .diag-bottom-bar {
       display: flex;
       justify-content: flex-end;
-      align-items: center;
-      padding-top: 10px;
     }
 
-    /* Log Diagnose Button matching Mockup */
     .btn-log-diagnose {
-      background: var(--deep-space-blue);
+      background-color: var(--deep-space-blue);
       color: #ffffff;
       border: none;
-      padding: 14px 28px;
       border-radius: 9999px;
+      padding: 14px 34px;
       font-family: var(--font-heading);
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      letter-spacing: 0.05em;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(24, 49, 79, 0.4);
-      transition: all 0.25s ease;
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      box-shadow: 0 8px 24px rgba(24, 49, 79, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .btn-log-diagnose:hover:not(:disabled) {
-      background: var(--dark-amethyst);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(13, 6, 48, 0.5);
+      background-color: #12243a;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(24, 49, 79, 0.5);
+    }
+
+    .btn-log-diagnose:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
     }
 
     .btn-log-diagnose:disabled {
-      opacity: 0.5;
+      opacity: 0.45;
       cursor: not-allowed;
       transform: none;
     }
@@ -506,15 +728,8 @@
     .layout-grid-pending {
       display: grid;
       grid-template-columns: 1.4fr 1fr;
-      gap: 28px;
-      background: rgba(24, 49, 79, 0.4);
-      border: 2px solid rgba(24, 49, 79, 0.8);
-      border-radius: var(--card-radius);
-      padding: 24px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      min-height: 640px;
+      gap: 24px;
+      min-height: 580px;
     }
 
     /* Left Container: List of Pending Works in Muted Teal */
@@ -524,8 +739,9 @@
       padding: 32px 28px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
       color: var(--dark-amethyst);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .pending-heading {
@@ -545,20 +761,22 @@
 
     .pending-search-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       border: 1px solid rgba(13, 6, 48, 0.15);
       border-radius: 9999px;
-      padding: 10px 18px;
+      padding: 12px 20px;
       font-family: var(--font-body);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--dark-amethyst);
       outline: none;
-      transition: background 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      transition: background 0.2s, box-shadow 0.2s;
     }
 
     .pending-search-input:focus {
       background: #ffffff;
       border-color: var(--deep-space-blue);
+      box-shadow: 0 6px 18px rgba(24, 49, 79, 0.18);
     }
 
     /* Scrollable Customer Cards Container */
@@ -569,11 +787,11 @@
       flex-direction: column;
       gap: 12px;
       padding-right: 6px;
-      max-height: 480px;
+      max-height: 440px;
     }
 
     .customer-work-card {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(13, 6, 48, 0.1);
       border-radius: 14px;
       padding: 16px 20px;
@@ -581,16 +799,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .customer-work-card:hover {
+      transform: translateY(-2px) translateX(4px);
+      box-shadow: 0 8px 20px rgba(13, 6, 48, 0.15);
       background: #ffffff;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      border-color: var(--deep-space-blue);
     }
 
     .work-info-group {
@@ -600,131 +816,126 @@
     }
 
     .work-customer-name {
-      font-size: 1.05rem;
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--dark-amethyst);
     }
 
     .work-unit-name {
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--deep-space-blue);
     }
 
     .work-issue-snippet {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: rgba(13, 6, 48, 0.7);
-      line-height: 1.35;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
+      white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
     }
 
     .work-actions-group {
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .btn-resolve-work {
-      background: var(--lime-green);
-      color: var(--dark-amethyst);
-      border: 1px solid rgba(13, 6, 48, 0.15);
-      padding: 8px 14px;
-      border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .btn-resolve-work:hover {
-      background: #d4f38e;
-      transform: scale(1.05);
+      gap: 8px;
     }
 
     .btn-view-diag {
-      background: var(--deep-space-blue);
-      color: #ffffff;
-      border: none;
-      padding: 8px 14px;
+      background: rgba(24, 49, 79, 0.1);
+      border: 1px solid rgba(24, 49, 79, 0.25);
+      color: var(--deep-space-blue);
+      padding: 7px 14px;
       border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .btn-view-diag:hover {
-      background: var(--dark-amethyst);
+      background: var(--deep-space-blue);
+      color: #ffffff;
+    }
+
+    .btn-resolve-work {
+      background: var(--lime-green);
+      border: 1px solid rgba(13, 6, 48, 0.15);
+      color: var(--dark-amethyst);
+      padding: 7px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(230, 249, 175, 0.4);
+    }
+
+    .btn-resolve-work:hover {
+      background: #dcfa96;
+      transform: scale(1.04);
     }
 
     .empty-works-placeholder {
       text-align: center;
-      padding: 48px 20px;
-      color: rgba(13, 6, 48, 0.6);
+      padding: 48px 24px;
+      color: rgba(13, 6, 48, 0.65);
       font-weight: 600;
       font-size: 0.95rem;
-      border: 2px dashed rgba(13, 6, 48, 0.2);
-      border-radius: 12px;
     }
 
-    /* Right Column: Number of Works Done & Chase (Mockup 2) */
+    /* Right Column (Layout 2) */
     .pending-right-column {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: flex-end;
-      padding: 12px 16px;
+      padding: 10px 0;
     }
 
-    /* Number of works done button */
+    /* Top Button: Number of Works Done */
     .btn-works-done-badge {
-      background-color: var(--lime-green);
+      background-color: var(--metallic-gold);
       color: var(--dark-amethyst);
       border: none;
-      border-radius: 12px;
+      border-radius: 9999px;
       padding: 14px 28px;
       font-family: var(--font-heading);
+      font-size: 1.15rem;
       font-weight: 800;
-      font-size: 1.05rem;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(230, 249, 175, 0.25);
-      transition: all 0.25s ease;
-      text-transform: lowercase;
       letter-spacing: -0.01em;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(202, 172, 75, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .btn-works-done-badge:hover {
-      background-color: var(--metallic-gold);
-      color: #ffffff;
-      transform: translateY(-2px);
+      transform: translateY(-2px) scale(1.02);
+      filter: brightness(1.05);
     }
 
-    /* Time to Work Stage */
+    /* Bottom Character Stage: time to work */
     .time-to-work-stage {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: auto;
-      gap: 16px;
       position: relative;
     }
 
     .speech-bubble-work {
       background: #ffffff;
       color: var(--dark-amethyst);
-      padding: 16px 26px;
-      border-radius: 18px;
+      padding: 14px 28px;
+      border-radius: 20px;
+      font-family: var(--font-heading);
       font-weight: 800;
-      font-size: 1.2rem;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      font-size: 1.3rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
       position: relative;
-      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      animation: bubblePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .speech-bubble-work::after {
@@ -741,16 +952,17 @@
     }
 
     .btn-new-intake-jump {
+      margin-top: 18px;
       background: var(--metallic-gold);
       color: var(--dark-amethyst);
       border: none;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 9999px;
-      font-weight: 700;
-      font-size: 0.85rem;
+      font-weight: 800;
+      font-size: 0.88rem;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(202, 172, 75, 0.3);
-      transition: all 0.2s;
+      box-shadow: 0 6px 18px rgba(202, 172, 75, 0.35);
+      transition: all 0.2s ease;
     }
 
     .btn-new-intake-jump:hover {
@@ -763,8 +975,8 @@
        ======================================================== */
     .card-completed-container {
       background: rgba(24, 49, 79, 0.6);
-      border: 2px solid rgba(230, 249, 175, 0.4);
-      border-radius: var(--card-radius);
+      border: 1px solid rgba(230, 249, 175, 0.35);
+      border-radius: var(--inner-radius);
       padding: 32px;
       backdrop-filter: blur(20px);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
@@ -801,25 +1013,26 @@
       flex-direction: column;
       justify-content: space-between;
       gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 
     /* ========================================================
-       MODAL & POPUP DIALOGS
+       MODAL & POPUP DIALOGS (MACOS SHEET STYLE)
        ======================================================== */
     .app-modal-overlay {
       position: fixed;
       inset: 0;
       z-index: 99999;
       background: rgba(13, 6, 48, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .app-modal-overlay.open {
@@ -829,18 +1042,18 @@
 
     .app-modal-window {
       background: var(--dark-amethyst);
-      border: 2px solid var(--muted-teal);
-      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
       max-width: 680px;
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
       padding: 32px;
       position: relative;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.3);
       color: #ffffff;
       transform: scale(0.95);
-      transition: transform 0.25s ease;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .app-modal-overlay.open .app-modal-window {
@@ -858,24 +1071,27 @@
       height: 36px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.2rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.3rem;
       transition: background 0.2s;
     }
 
     .app-modal-close:hover {
-      background: var(--lime-green);
-      color: var(--dark-amethyst);
+      background: rgba(239, 68, 68, 0.8);
     }
 
-    /* Login Overlay */
+    /* ========================================================
+       LOGIN OVERLAY
+       ======================================================== */
     .login-overlay {
       position: fixed;
       inset: 0;
-      z-index: 999999;
-      background: var(--dark-amethyst);
+      background: rgba(13, 6, 48, 0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      z-index: 100000;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -883,51 +1099,56 @@
     }
 
     .login-card {
-      background: rgba(24, 49, 79, 0.8);
-      border: 2px solid var(--muted-teal);
-      border-radius: 24px;
-      padding: 40px;
-      max-width: 420px;
+      background: rgba(24, 49, 79, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 28px;
+      padding: 42px 36px;
+      max-width: 440px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.3);
     }
 
     .login-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 18px;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 16px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
       animation: chaseFloat 3s ease-in-out infinite;
     }
 
     .login-card h2 {
       font-family: var(--font-heading);
-      font-size: 1.8rem;
+      font-size: 1.85rem;
+      font-weight: 800;
       color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .login-card p {
-      color: var(--muted-teal);
       font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
       margin-bottom: 24px;
     }
 
     .login-input {
       width: 100%;
-      background: rgba(13, 6, 48, 0.8);
-      border: 1px solid rgba(139, 190, 178, 0.4);
-      border-radius: 10px;
+      background: rgba(13, 6, 48, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
       padding: 12px 16px;
-      color: #ffffff;
       font-family: var(--font-body);
       font-size: 0.95rem;
-      margin-bottom: 14px;
+      color: #ffffff;
       outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
     }
 
     .login-input:focus {
       border-color: var(--lime-green);
+      box-shadow: 0 0 12px rgba(230, 249, 175, 0.25);
     }
 
     .login-btn-submit {
@@ -935,28 +1156,30 @@
       background: var(--lime-green);
       color: var(--dark-amethyst);
       border: none;
+      border-radius: 12px;
       padding: 14px;
-      border-radius: 10px;
       font-family: var(--font-heading);
       font-size: 1rem;
       font-weight: 800;
       cursor: pointer;
+      box-shadow: 0 8px 24px rgba(230, 249, 175, 0.35);
       transition: all 0.2s;
     }
 
     .login-btn-submit:hover {
-      background: #d4f38e;
-      box-shadow: 0 8px 20px rgba(230, 249, 175, 0.4);
+      background: #d8f795;
+      transform: translateY(-2px);
     }
 
     .login-error-msg {
       color: #f87171;
       font-size: 0.85rem;
-      margin-bottom: 12px;
+      font-weight: 600;
+      margin-bottom: 14px;
       display: none;
     }
 
-    /* Toast Notification */
+    /* Toast Notification Tray */
     .toast-tray {
       position: fixed;
       bottom: 24px;
@@ -971,12 +1194,15 @@
       background: var(--deep-space-blue);
       border: 1px solid var(--lime-green);
       color: #ffffff;
-      padding: 14px 20px;
+      padding: 12px 20px;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
       font-size: 0.9rem;
       font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
       animation: slideInRight 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     @keyframes slideInRight {
@@ -999,13 +1225,25 @@
         gap: 16px;
         border-radius: 20px;
       }
+      .macos-titlebar {
+        padding: 0 14px;
+      }
+      .macos-window-title {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Fluid Ambient Lighting Canvas -->
-  <div class="ambient-fluid-bg"></div>
+  <!-- Animated Fluid Aurora Mesh Background -->
+  <div class="ambient-fluid-bg">
+    <div class="aurora-orb aurora-orb-1"></div>
+    <div class="aurora-orb aurora-orb-2"></div>
+    <div class="aurora-orb aurora-orb-3"></div>
+    <div class="aurora-orb aurora-orb-4"></div>
+  </div>
+  <div class="vignette-overlay"></div>
 
   <!-- Toast Notification Tray -->
   <div id="toastTray" class="toast-tray"></div>
@@ -1064,150 +1302,185 @@
       </div>
     </header>
 
-    <!-- ========================================================
-         VIEW 1: AI ASSISTANT INTAKE STATION (LAYOUT 1 MOCKUP)
-         ======================================================== -->
-    <main id="viewTriage" class="view-container active-view">
-      <div class="layout-grid-triage">
-        
-        <!-- Left Side: Muted Teal Card with Chase Vector & Conversational Chat -->
-        <div class="card-muted-teal">
-          
-          <div class="vector-stage">
-            <!-- Dynamic Speech Bubble -->
-            <div id="chaseSpeechBubble" class="speech-bubble">
-              What are we going to fix today?
-            </div>
-
-            <!-- Animated Vector Character -->
-            <img src="vector/Chase.png" alt="Chase Assistant" class="chase-vector-img" id="chaseRobot" onclick="onChaseClick()" title="Click me to say hello!" />
-          </div>
-
-          <!-- Conversation Log -->
-          <div class="chat-history-log" id="chatHistoryLog">
-            <!-- Populated dynamically via JS -->
-          </div>
-
-          <!-- Bottom Chat Input Pill -->
-          <form id="triageChatForm" class="chat-input-bar" onsubmit="handleTriageSubmit(event)">
-            <input type="text" id="triageInput" class="chat-input-field" placeholder="Type customer name or full repair details..." autocomplete="off" />
-            <button type="submit" class="chat-send-btn" aria-label="Send message">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-              </svg>
-            </button>
-          </form>
-
+    <!-- macOS App Window Shell -->
+    <div class="macos-window-shell">
+      
+      <!-- macOS Window Header with Traffic Lights -->
+      <div class="macos-titlebar">
+        <div class="macos-traffic-lights">
+          <span class="traffic-dot traffic-close" title="Close Window" onclick="showToast('FixIt Studio is currently locked to active bench session.')">
+            <svg width="6" height="6" viewBox="0 0 10 10" fill="none"><path d="M1 1L9 9M9 1L1 9" stroke="#5a0000" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="traffic-dot traffic-min" title="Minimize" onclick="showToast('Window minimized to dock bar.')">
+            <svg width="6" height="6" viewBox="0 0 10 10" fill="none"><path d="M1 5L9 5" stroke="#6b4a00" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="traffic-dot traffic-max" title="Full Screen" onclick="showToast('Displaying full-width diagnostic workspace.')">
+            <svg width="6" height="6" viewBox="0 0 10 10" fill="none"><path d="M1 9L9 1M9 1H4M9 1V6" stroke="#004c08" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
         </div>
 
-        <!-- Right Side: Metallic Gold Card with AI Summary & Log Diagnose Button -->
-        <div class="card-metallic-gold">
-          
-          <h2 class="gold-header-title">Ai summary and answers goes here</h2>
+        <div class="macos-window-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>FixIt AI Diagnostic Studio &bull; v2.4 (Active Bench)</span>
+        </div>
 
-          <div id="diagSummaryBox" class="diagnostic-output-box">
-            <div class="diag-placeholder" id="diagPlaceholder">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-              </svg>
-              <p>Awaiting customer intake details.<br>Chat with Chase on the left to generate an AI hardware diagnostic.</p>
-            </div>
+        <div class="macos-status-pill">
+          <span class="status-indicator-dot"></span>
+          <span>Online &bull; Admin</span>
+        </div>
+      </div>
 
-            <div id="diagActiveContent" style="display: none;">
-              <div class="diag-meta-row">
-                <div class="diag-meta-item">Customer: <span id="diagCustomerName">&mdash;</span></div>
-                <div class="diag-meta-item">Unit: <span id="diagDeviceUnit">&mdash;</span></div>
-                <div class="diag-meta-item">Reported Issue: <span id="diagIssueDesc">&mdash;</span></div>
+      <!-- Window Body containing Views -->
+      <div class="macos-window-body">
+
+        <!-- ========================================================
+             VIEW 1: AI ASSISTANT INTAKE STATION (LAYOUT 1 MOCKUP)
+             ======================================================== -->
+        <main id="viewTriage" class="view-container active-view">
+          <div class="layout-grid-triage">
+            
+            <!-- Left Side: Muted Teal Card with Chase Vector & Clean Input (NO BOTTOM CHAT LOG) -->
+            <div class="card-muted-teal">
+              
+              <div class="vector-stage">
+                <!-- Dynamic Speech Bubble -->
+                <div id="chaseSpeechBubble" class="speech-bubble">
+                  What are we going to fix today?
+                </div>
+
+                <!-- Animated Vector Character with 3D perspective hover tilt -->
+                <img src="vector/Chase.png" alt="Chase Assistant" class="chase-vector-img" id="chaseRobot" onclick="onChaseClick()" title="Click me to say hello!" />
               </div>
-              <div class="diag-summary-text" id="diagSummaryText">
-                <!-- AI Output injected here -->
+
+              <!-- Silent Background Intake Breadcrumb (Appears when intake fields are captured) -->
+              <div id="intakeBreadcrumb" class="intake-breadcrumb-pill" style="display: none;">
+                <span id="crumbContent"></span>
+                <button type="button" class="crumb-clear-btn" onclick="resetIntakeFlow()" title="Reset Intake">&times;</button>
+              </div>
+
+              <!-- Bottom Chat Input Pill -->
+              <form id="triageChatForm" class="chat-input-bar" onsubmit="handleTriageSubmit(event)">
+                <input type="text" id="triageInput" class="chat-input-field" placeholder="Type customer name or full repair details..." autocomplete="off" />
+                <button type="submit" class="chat-send-btn" aria-label="Send message" id="triageSendBtn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                  </svg>
+                </button>
+              </form>
+
+            </div>
+
+            <!-- Right Side: Metallic Gold Card with AI Summary & Log Diagnose Button -->
+            <div class="card-metallic-gold">
+              
+              <h2 class="gold-header-title">Ai summary and answers goes here</h2>
+
+              <div id="diagSummaryBox" class="diagnostic-output-box">
+                <div class="diag-placeholder" id="diagPlaceholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                  <p>Awaiting customer intake details.<br>Chat with Chase on the left to generate an AI hardware diagnostic.</p>
+                </div>
+
+                <div id="diagActiveContent" style="display: none;">
+                  <div class="diag-meta-row">
+                    <div class="diag-meta-item">Customer: <span id="diagCustomerName">&mdash;</span></div>
+                    <div class="diag-meta-item">Unit: <span id="diagDeviceUnit">&mdash;</span></div>
+                    <div class="diag-meta-item">Reported Issue: <span id="diagIssueDesc">&mdash;</span></div>
+                  </div>
+                  <div class="diag-summary-text" id="diagSummaryText">
+                    <!-- AI Output injected here -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="diag-bottom-bar">
+                <button type="button" id="btnLogDiagnose" class="btn-log-diagnose" onclick="logDiagnoseToDatabase()" disabled>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  LOG DIAGNOSE
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </main>
+
+        <!-- ========================================================
+             VIEW 2: LIST OF PENDING WORKS (LAYOUT 2 MOCKUP)
+             ======================================================== -->
+        <main id="viewPending" class="view-container">
+          <div class="layout-grid-pending">
+            
+            <!-- Left Side: List of Pending Works in Muted Teal -->
+            <div class="card-pending-list-container">
+              <h2 class="pending-heading">list of pending works</h2>
+
+              <div class="pending-search-bar">
+                <input type="text" id="pendingSearchInput" class="pending-search-input" placeholder="Search customer name or device model..." onkeyup="renderPendingWorks(this.value)" />
+              </div>
+
+              <div class="works-scroll-list" id="pendingWorksList">
+                <!-- Injected dynamically -->
               </div>
             </div>
-          </div>
 
-          <div class="diag-bottom-bar">
-            <button type="button" id="btnLogDiagnose" class="btn-log-diagnose" onclick="logDiagnoseToDatabase()" disabled>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              LOG DIAGNOSE
-            </button>
-          </div>
+            <!-- Right Side: Number of Works Done & Chase Vector ("time to work") -->
+            <div class="pending-right-column">
+              
+              <!-- Top Button: Number of works done -->
+              <button type="button" class="btn-works-done-badge" onclick="switchAppView('done')">
+                number of works done (<span id="counterBadgeDone">0</span>)
+              </button>
 
-        </div>
+              <!-- Bottom Stage: Speech Bubble & Chase -->
+              <div class="time-to-work-stage">
+                <div class="speech-bubble-work" id="bubbleTimeToWork">
+                  time to work
+                </div>
+                <img src="vector/Chase.png" alt="Chase Ready to Work" class="chase-vector-img" style="width: 210px; height: 210px;" />
+                <button type="button" class="btn-new-intake-jump" onclick="switchAppView('triage')">
+                  + Intake New Customer
+                </button>
+              </div>
 
-      </div>
-    </main>
-
-    <!-- ========================================================
-         VIEW 2: LIST OF PENDING WORKS (LAYOUT 2 MOCKUP)
-         ======================================================== -->
-    <main id="viewPending" class="view-container">
-      <div class="layout-grid-pending">
-        
-        <!-- Left Side: List of Pending Works in Muted Teal -->
-        <div class="card-pending-list-container">
-          <h2 class="pending-heading">list of pending works</h2>
-
-          <div class="pending-search-bar">
-            <input type="text" id="pendingSearchInput" class="pending-search-input" placeholder="Search customer name or device model..." onkeyup="renderPendingWorks(this.value)" />
-          </div>
-
-          <div class="works-scroll-list" id="pendingWorksList">
-            <!-- Injected dynamically -->
-          </div>
-        </div>
-
-        <!-- Right Side: Number of Works Done & Chase Vector ("time to work") -->
-        <div class="pending-right-column">
-          
-          <!-- Top Button: Number of works done -->
-          <button type="button" class="btn-works-done-badge" onclick="switchAppView('done')">
-            number of works done (<span id="counterBadgeDone">0</span>)
-          </button>
-
-          <!-- Bottom Stage: Speech Bubble & Chase -->
-          <div class="time-to-work-stage">
-            <div class="speech-bubble-work" id="bubbleTimeToWork">
-              time to work
             </div>
-            <img src="vector/Chase.png" alt="Chase Ready to Work" class="chase-vector-img" style="width: 210px; height: 210px;" />
-            <button type="button" class="btn-new-intake-jump" onclick="switchAppView('triage')">
-              + Intake New Customer
-            </button>
-          </div>
 
-        </div>
+          </div>
+        </main>
+
+        <!-- ========================================================
+             VIEW 3: FIX COMPLETE / RESOLVED HISTORY ARCHIVE
+             ======================================================== -->
+        <main id="viewDone" class="view-container">
+          <div class="card-completed-container">
+            
+            <div class="completed-header">
+              <div>
+                <h2 class="completed-title">Fix Complete / Resolved History</h2>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-top: 4px;">
+                  Archive of all successfully serviced hardware work orders and diagnostic records.
+                </p>
+              </div>
+              <button type="button" class="nav-pill-btn active" onclick="switchAppView('pending')">
+                &larr; Return to Pending Works
+              </button>
+            </div>
+
+            <div class="completed-list" id="completedWorksList">
+              <!-- Injected dynamically -->
+            </div>
+
+          </div>
+        </main>
 
       </div>
-    </main>
-
-    <!-- ========================================================
-         VIEW 3: FIX COMPLETE / RESOLVED HISTORY ARCHIVE
-         ======================================================== -->
-    <main id="viewDone" class="view-container">
-      <div class="card-completed-container">
-        
-        <div class="completed-header">
-          <div>
-            <h2 class="completed-title">Fix Complete / Resolved History</h2>
-            <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-top: 4px;">
-              Archive of all successfully serviced hardware work orders and diagnostic records.
-            </p>
-          </div>
-          <button type="button" class="nav-pill-btn active" onclick="switchAppView('pending')">
-            &larr; Return to Pending Works
-          </button>
-        </div>
-
-        <div class="completed-list" id="completedWorksList">
-          <!-- Injected dynamically -->
-        </div>
-
-      </div>
-    </main>
+    </div>
 
   </div>
 
-  <!-- Customer Diagnostic Detail Modal -->
+  <!-- Customer Diagnostic Detail Modal (macOS Sheet Style) -->
   <div id="customerDetailModal" class="app-modal-overlay">
     <div class="app-modal-window">
       <button type="button" class="app-modal-close" onclick="closeCustomerModal()">&times;</button>
@@ -1262,7 +1535,7 @@
       const tray = document.getElementById('toastTray');
       const toast = document.createElement('div');
       toast.className = 'app-toast';
-      toast.textContent = msg;
+      toast.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--lime-green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${msg}</span>`;
       tray.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
@@ -1349,7 +1622,8 @@
     }
 
     /* ========================================================
-       5. CONVERSATIONAL AI INTAKE TRIAGE (LAYOUT 1)
+       5. SILENT BACKGROUND INTAKE TRIAGE (LAYOUT 1)
+       NO BOTTOM CHAT BUBBLES - CLEAN CONVERSATIONAL SPEECH
        ======================================================== */
     let currentTriage = {
       step: 0, // 0 = idle / ask customer, 1 = ask unit, 2 = ask issue, 3 = analyzing/done
@@ -1360,25 +1634,47 @@
     };
 
     const chaseSpeechBubble = document.getElementById('chaseSpeechBubble');
-    const chatHistoryLog = document.getElementById('chatHistoryLog');
     const triageInput = document.getElementById('triageInput');
+    const intakeBreadcrumb = document.getElementById('intakeBreadcrumb');
+    const crumbContent = document.getElementById('crumbContent');
 
     function triggerChaseSpeech(text) {
       if (chaseSpeechBubble) {
-        chaseSpeechBubble.style.transform = 'scale(0.95)';
+        chaseSpeechBubble.style.transform = 'scale(0.92)';
+        chaseSpeechBubble.style.opacity = '0.7';
         setTimeout(() => {
           chaseSpeechBubble.textContent = text;
           chaseSpeechBubble.style.transform = 'scale(1)';
+          chaseSpeechBubble.style.opacity = '1';
         }, 120);
       }
     }
 
-    function addChatMessage(sender, text) {
-      const msg = document.createElement('div');
-      msg.className = `chat-bubble-msg ${sender === 'user' ? 'chat-msg-user' : 'chat-msg-bot'}`;
-      msg.textContent = text;
-      chatHistoryLog.appendChild(msg);
-      chatHistoryLog.scrollTop = chatHistoryLog.scrollHeight;
+    function updateIntakeBreadcrumb() {
+      if (!intakeBreadcrumb || !crumbContent) return;
+      let tags = [];
+      if (currentTriage.customerName) tags.push(`👤 ${currentTriage.customerName}`);
+      if (currentTriage.deviceUnit) tags.push(`💻 ${currentTriage.deviceUnit}`);
+      if (currentTriage.reportedIssue) tags.push(`⚠️ ${currentTriage.reportedIssue}`);
+
+      if (tags.length > 0) {
+        crumbContent.textContent = tags.join(' • ');
+        intakeBreadcrumb.style.display = 'inline-flex';
+      } else {
+        intakeBreadcrumb.style.display = 'none';
+      }
+    }
+
+    function resetIntakeFlow() {
+      currentTriage = { step: 0, customerName: '', deviceUnit: '', reportedIssue: '', aiDiagnosis: '' };
+      updateIntakeBreadcrumb();
+      triggerChaseSpeech("What are we going to fix today?");
+      triageInput.value = '';
+      triageInput.disabled = false;
+      triageInput.placeholder = "Type customer name or full repair details...";
+      document.getElementById('diagActiveContent').style.display = 'none';
+      document.getElementById('diagPlaceholder').style.display = 'flex';
+      document.getElementById('btnLogDiagnose').disabled = true;
     }
 
     function onChaseClick() {
@@ -1399,11 +1695,11 @@
       const customerMatch = text.match(/(?:customer|client|name)?\s*[:\-]?\s*([A-Za-z\s]+?)(?:,|\s+(?:with|having|unit|device|model|reports|experiencing)\s+)/i);
       const deviceMatch = text.match(/(?:unit|device|model|laptop|pc|desktop)?\s*[:\-]?\s*([A-Za-z0-9\s]+?(?:MacBook|Dell|HP|Lenovo|Acer|Asus|ThinkPad|Pro|Air|iPhone|Galaxy|Desktop|Laptop|PC|Nitro|ROG|iPad|Console)[A-Za-z0-9\s]*)/i);
 
-      if (customerMatch && deviceMatch && text.length > 25) {
+      if (customerMatch && deviceMatch && text.length > 20) {
         let name = customerMatch[1].replace(/^(customer|client|name)/i, '').trim();
         let device = deviceMatch[1].trim();
         let issue = text.replace(customerMatch[0], '').replace(deviceMatch[0], '').replace(/^(with|having|experiencing|issue|problem|reports)/i, '').trim();
-        if (issue.length > 5) {
+        if (issue.length > 4) {
           return { name, device, issue };
         }
       }
@@ -1415,7 +1711,6 @@
       const val = triageInput.value.trim();
       if (!val) return;
 
-      addChatMessage('user', val);
       triageInput.value = '';
 
       // Check for one-shot full details
@@ -1426,42 +1721,46 @@
         currentTriage.reportedIssue = oneShot.issue;
         currentTriage.step = 3;
 
-        addChatMessage('bot', `Great! Identified customer ${oneShot.name} with ${oneShot.device}. Analyzing reported issue now...`);
-        triggerChaseSpeech(`Analyzing ${oneShot.device} issue right now!`);
+        updateIntakeBreadcrumb();
+        triggerChaseSpeech(`Analyzing ${oneShot.device} telemetry right now...`);
+        triageInput.placeholder = "AI is analyzing in background...";
+        triageInput.disabled = true;
+
         await executeAiDiagnosis(currentTriage.customerName, currentTriage.deviceUnit, currentTriage.reportedIssue);
+        triageInput.disabled = false;
+        triageInput.placeholder = "Intake complete. Log diagnose or start new...";
         return;
       }
 
-      // Step-by-Step Flow
+      // Step-by-Step Flow (Silent Background Logging, Updates Speech Bubble)
       if (currentTriage.step === 0) {
         // Technician provided Customer Name
         currentTriage.customerName = val;
         currentTriage.step = 1;
-        const reply = `Got it! Customer is ${val}. What is the unit or device model? (e.g. MacBook Pro M1, Dell XPS 15)`;
-        addChatMessage('bot', reply);
-        triggerChaseSpeech("What's the unit or device model?");
-        triageInput.placeholder = "Enter device model (e.g., MacBook, Dell, HP)...";
+        updateIntakeBreadcrumb();
+        triggerChaseSpeech(`What is the unit or device model for ${val}?`);
+        triageInput.placeholder = "Enter device model (e.g. MacBook Pro, Dell XPS)...";
       } else if (currentTriage.step === 1) {
         // Technician provided Unit Model
         currentTriage.deviceUnit = val;
         currentTriage.step = 2;
-        const reply = `Understood: ${val}. What issue or symptoms is the customer experiencing?`;
-        addChatMessage('bot', reply);
-        triggerChaseSpeech("What's the issue or symptoms reported?");
-        triageInput.placeholder = "Describe hardware or software problem...";
+        updateIntakeBreadcrumb();
+        triggerChaseSpeech(`What is the issue or symptoms reported for ${val}?`);
+        triageInput.placeholder = "Describe problem (e.g. no power, overheating)...";
       } else if (currentTriage.step === 2) {
         // Technician provided Issue Description
         currentTriage.reportedIssue = val;
         currentTriage.step = 3;
-        const reply = `Synthesizing diagnostic parameters for ${currentTriage.deviceUnit}...`;
-        addChatMessage('bot', reply);
-        triggerChaseSpeech("Analyzing the issue right now...");
-        triageInput.placeholder = "Intake complete. Log diagnose or start new...";
+        updateIntakeBreadcrumb();
+        triggerChaseSpeech(`Analyzing hardware telemetry for ${currentTriage.deviceUnit}...`);
+        triageInput.placeholder = "AI is analyzing in background...";
+        triageInput.disabled = true;
         
         await executeAiDiagnosis(currentTriage.customerName, currentTriage.deviceUnit, currentTriage.reportedIssue);
+        triageInput.disabled = false;
+        triageInput.placeholder = "Intake complete. Log diagnose or start new...";
       } else {
-        // Intake is already active or user wants to restart
-        addChatMessage('bot', `Diagnostic summary is ready on the gold panel! Click "LOG DIAGNOSE" to save this ticket.`);
+        // Intake is already active
         triggerChaseSpeech(`Click "LOG DIAGNOSE" to save this work order!`);
       }
     }
@@ -1503,7 +1802,6 @@
         }
       } catch (err) {
         console.warn("Using smart local diagnostic logic:", err);
-        // Smart Local Diagnostic Generator based on symptoms
         aiResult = generateSmartLocalDiagnosis(device, issue);
       }
 
@@ -1517,8 +1815,7 @@
       diagSummaryText.innerHTML = formattedText;
       btnLogDiagnose.disabled = false;
 
-      triggerChaseSpeech("Diagnostics ready! Click LOG DIAGNOSE to record it.");
-      addChatMessage('bot', "Diagnosis complete! Summary has appeared on the gold panel. Click LOG DIAGNOSE to submit to pending works.");
+      triggerChaseSpeech("Diagnostics ready on the gold panel! Click LOG DIAGNOSE to record it.");
     }
 
     function generateSmartLocalDiagnosis(device, issue) {
@@ -1577,14 +1874,7 @@
       updateTicketCounters();
 
       // Reset triage state
-      currentTriage = { step: 0, customerName: '', deviceUnit: '', reportedIssue: '', aiDiagnosis: '' };
-      document.getElementById('diagActiveContent').style.display = 'none';
-      document.getElementById('diagPlaceholder').style.display = 'flex';
-      btn.disabled = true;
-      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> LOG DIAGNOSE';
-
-      triageInput.placeholder = "Type customer name or full repair details...";
-      triggerChaseSpeech("Ticket saved! Now on to the bench list.");
+      resetIntakeFlow();
 
       // Automatically jump to Page 2 (Pending Works) as requested!
       setTimeout(() => {
@@ -1714,7 +2004,7 @@
     }
 
     /* ========================================================
-       10. CUSTOMER DETAIL MODAL
+       10. CUSTOMER DETAIL MODAL (MACOS SHEET)
        ======================================================== */
     function openCustomerModalById(id) {
       const ticket = allTickets.find(t => String(t.id) === String(id));
