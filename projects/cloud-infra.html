@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise Cloud &amp; Network Infrastructure | Jhay Castro</title>
+  <meta name="description" content="Cloud Network Infrastructure case study and architecture blueprint featuring automated provisioning, VPC peering, and high-availability routing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    :root {
+      --color-bg-deep: #08090e;
+      --color-surface-card: #12141f;
+      --color-cyan: #06b6d4;
+      --color-cyan-glow: rgba(6, 182, 212, 0.25);
+    }
+    body {
+      background-color: var(--color-bg-deep);
+      color: #e2e8f0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 80px;
+    }
+    .infra-header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8, 9, 14, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.25s ease;
+    }
+    .back-btn:hover {
+      background: #ffffff;
+      color: #08090e;
+      transform: translateX(-3px);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--color-cyan);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-cyan);
+      box-shadow: 0 0 8px var(--color-cyan);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .page-hero {
+      max-width: 1080px;
+      margin: 60px auto 40px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .page-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--color-cyan);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .page-lead {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #94a3b8;
+    }
+    .tags-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .infra-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      letter-spacing: 0.04em;
+    }
+    .content-grid {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 36px;
+    }
+    @media (max-width: 900px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 2.2rem; }
+    }
+    .showcase-card {
+      background: var(--color-surface-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    .showcase-banner {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .showcase-body {
+      padding: 36px;
+    }
+    .showcase-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .showcase-p {
+      color: #94a3b8;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+    .sidebar-card {
+      background: var(--color-surface-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .stat-metric {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+    .stat-metric:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .specs-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .specs-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+    .specs-list svg {
+      color: var(--color-cyan);
+      flex-shrink: 0;
+    }
+    .coming-soon-notice {
+      margin-top: 40px;
+      padding: 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+      border: 1px dashed rgba(6, 182, 212, 0.35);
+      text-align: center;
+    }
+    .coming-soon-notice h4 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .coming-soon-notice p {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header class="infra-header-nav">
+    <a href="../index.html#projects" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Portfolio
+    </a>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      Stage 3 &bull; Architecture Spec
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="page-eyebrow">Enterprise Cloud &amp; Systems</p>
+      <h1 class="page-title">Automated Cloud &amp; Network Infrastructure</h1>
+      <p class="page-lead">
+        A resilient multi-region infrastructure architecture featuring automated provisioning, VPC peering, dynamic routing with BGP, and real-time telemetry inspection for mission-critical services.
+      </p>
+      <div class="tags-row">
+        <span class="infra-tag">VPC Peering</span>
+        <span class="infra-tag">BGP Dynamic Routing</span>
+        <span class="infra-tag">Terraform IaC</span>
+        <span class="infra-tag">Packet Telemetry</span>
+        <span class="infra-tag">Redundant WAN</span>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <div class="showcase-card">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80" alt="Server Datacenter" class="showcase-banner" />
+        <div class="showcase-body">
+          <h3 class="showcase-h3">High-Availability Hybrid Topology</h3>
+          <p class="showcase-p">
+            Engineered with strict zero-single-point-of-failure principles. Employs dual transit gateways, automated failover triggers, and state-synchronized firewall clusters to guarantee 99.99% network uptime across distributed campus and cloud environments.
+          </p>
+
+          <h3 class="showcase-h3" style="margin-top: 32px;">Automated Provisioning &amp; Monitoring</h3>
+          <p class="showcase-p">
+            Utilizes Infrastructure-as-Code to spin up isolated testing VPCs, configure subnets, and establish encrypted IPsec tunnels in under 4 minutes. Real-time metrics are streamed via Prometheus and Grafana dashboards for immediate anomaly notification.
+          </p>
+
+          <div class="coming-soon-notice">
+            <h4>Live Topology Sandbox in Final QA</h4>
+            <p>
+              Interactive web-based packet tracer and topology visualizer is currently being finalized. Full live emulator will be accessible shortly.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: #ffffff;">Performance Metrics</h3>
+        
+        <div class="stat-metric">
+          <div class="stat-val">99.99%</div>
+          <div class="stat-lbl">Target Uptime SLA</div>
+        </div>
+        <div class="stat-metric">
+          <div class="stat-val">&lt; 12ms</div>
+          <div class="stat-lbl">Inter-VPC Latency</div>
+        </div>
+        <div class="stat-metric">
+          <div class="stat-val">10 Gbps</div>
+          <div class="stat-lbl">Core Backbone Throughput</div>
+        </div>
+
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #ffffff; margin-top: 16px;">Core Competencies</h3>
+        <ul class="specs-list">
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Automated Subnetting &amp; CIDR
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            OSPF / BGP Protocol Tuning
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            IPsec Site-to-Site VPN
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            L4/L7 Load Balancing
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

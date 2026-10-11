@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero-Trust Security &amp; Threat Detection | Jhay Castro</title>
+  <meta name="description" content="Cybersecurity case study and Zero-Trust architecture specification featuring automated threat detection, granular access controls, and SIEM logging." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    :root {
+      --color-bg-deep: #08090e;
+      --color-surface-card: #12141f;
+      --color-emerald: #10b981;
+      --color-emerald-glow: rgba(16, 185, 129, 0.25);
+    }
+    body {
+      background-color: var(--color-bg-deep);
+      color: #e2e8f0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 80px;
+    }
+    .sec-header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8, 9, 14, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.25s ease;
+    }
+    .back-btn:hover {
+      background: #ffffff;
+      color: #08090e;
+      transform: translateX(-3px);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-emerald);
+      box-shadow: 0 0 8px var(--color-emerald);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .page-hero {
+      max-width: 1080px;
+      margin: 60px auto 40px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .page-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--color-emerald);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .page-lead {
+      max-width: 760px;
+      margin: 0 auto 36px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #94a3b8;
+    }
+    .tags-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .sec-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      letter-spacing: 0.04em;
+    }
+    .content-grid {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 36px;
+    }
+    @media (max-width: 900px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 2.2rem; }
+    }
+    .showcase-card {
+      background: var(--color-surface-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    .showcase-banner {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .showcase-body {
+      padding: 36px;
+    }
+    .showcase-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .showcase-p {
+      color: #94a3b8;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+    .sidebar-card {
+      background: var(--color-surface-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .stat-metric {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+    .stat-metric:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .specs-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .specs-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+    .specs-list svg {
+      color: var(--color-emerald);
+      flex-shrink: 0;
+    }
+    .coming-soon-notice {
+      margin-top: 40px;
+      padding: 24px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
+      border: 1px dashed rgba(16, 185, 129, 0.35);
+      text-align: center;
+    }
+    .coming-soon-notice h4 {
+      font-family: 'Outfit', sans-serif;
+      color: #ffffff;
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .coming-soon-notice p {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header class="sec-header-nav">
+    <a href="../index.html#projects" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Portfolio
+    </a>
+    <div class="status-badge">
+      <span class="status-dot"></span>
+      Stage 4 &bull; Security Spec
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="page-eyebrow">Defensive Cyber Operations</p>
+      <h1 class="page-title">Zero-Trust Security &amp; Threat Detection</h1>
+      <p class="page-lead">
+        A comprehensive defensive cybersecurity framework enforcing continuous mutual authentication, least-privilege network segmentation, automated firewall rule auditing, and real-time SIEM alerting.
+      </p>
+      <div class="tags-row">
+        <span class="sec-tag">Zero-Trust (ZTNA)</span>
+        <span class="sec-tag">Next-Gen Firewalls</span>
+        <span class="sec-tag">SIEM Telemetry</span>
+        <span class="sec-tag">Vulnerability Auditing</span>
+        <span class="sec-tag">Intrusion Prevention</span>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <div class="showcase-card">
+        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&auto=format&fit=crop&q=80" alt="Cyber Security Operations" class="showcase-banner" />
+        <div class="showcase-body">
+          <h3 class="showcase-h3">Zero Implicit Trust Perimeter</h3>
+          <p class="showcase-p">
+            Replaces outdated castle-and-moat models with continuous cryptographic verification on all requests. Implements micro-segmentation so lateral movement is completely blocked even if an endpoint on the subnet is compromised.
+          </p>
+
+          <h3 class="showcase-h3" style="margin-top: 32px;">Automated Security Auditing &amp; Incident Logs</h3>
+          <p class="showcase-p">
+            Centralized telemetry ingestion monitors packet anomalies, port scan probes, and SQL injection payloads. Correlates indicators of compromise (IoC) to trigger automated containment rules before threats reach production databases.
+          </p>
+
+          <div class="coming-soon-notice">
+            <h4>Live Threat Simulation Environment Under Setup</h4>
+            <p>
+              Interactive terminal demo featuring packet capture analysis (Wireshark/Suricata) and automated quarantine response scripts will be released soon.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: #ffffff;">Defensive Benchmark</h3>
+        
+        <div class="stat-metric">
+          <div class="stat-val">0</div>
+          <div class="stat-lbl">Implicit Trust Tolerated</div>
+        </div>
+        <div class="stat-metric">
+          <div class="stat-val">&lt; 300ms</div>
+          <div class="stat-lbl">Threat Quarantine Trigger</div>
+        </div>
+        <div class="stat-metric">
+          <div class="stat-val">100%</div>
+          <div class="stat-lbl">Micro-Segmented Endpoints</div>
+        </div>
+
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #ffffff; margin-top: 16px;">Defensive Protocol Stack</h3>
+        <ul class="specs-list">
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Micro-Segmentation &amp; VLAN ACLs
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Automated Suricata IDS/IPS Rules
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            WAF SQLi / XSS Sanitization
+          </li>
+          <li>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Centralized Syslog / SIEM Pipelines
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

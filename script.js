@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initCertificatesScrollAnimation();
   initAboutScrollAnimation();
-  initProjectsCurve();
+  initProjectsStickyScroll();
   initHeroVideo();
   initHeroShrinkAnimation();
   initHeroMouseParallax();
@@ -326,28 +326,275 @@ function initAboutScrollAnimation() {
   });
 }
 
-/* ---------- Projects Curve Animation ---------- */
-function initProjectsCurve() {
-  const section = document.querySelector('.projects-section');
+/* ---------- Projects Sticky Multi-Layer Showcase Animation ---------- */
+function initProjectsStickyScroll() {
+  const section = document.getElementById('projects');
   if (!section) return;
 
-  window.addEventListener('scroll', () => {
+  const cards = section.querySelectorAll('.project-slide-card');
+  const steps = section.querySelectorAll('.timeline-step');
+  const dotBoxes = section.querySelectorAll('.step-dot-box');
+  const navContainer = section.querySelector('.projects-timeline-nav');
+  const track = document.getElementById('timelineNavTrack');
+  const lineFill = document.getElementById('timelineNavFill');
+  const totalCards = cards.length;
+
+  if (totalCards === 0) return;
+
+  // Calibrate line position to run from exact center of Dot 0 to center of Dot 3
+  function calibrateTrackLine() {
+    if (!track || dotBoxes.length < 2 || !navContainer) return;
+    const navRect = navContainer.getBoundingClientRect();
+    const firstBoxRect = dotBoxes[0].getBoundingClientRect();
+    const lastBoxRect = dotBoxes[dotBoxes.length - 1].getBoundingClientRect();
+
+    // Horizontal center of the dot boxes
+    const centerX = (firstBoxRect.left + firstBoxRect.width / 2) - navRect.left;
+    // Vertical center of first and last dots
+    const startY = (firstBoxRect.top + firstBoxRect.height / 2) - navRect.top;
+    const endY = (lastBoxRect.top + lastBoxRect.height / 2) - navRect.top;
+    const totalTrackHeight = Math.max(0, endY - startY);
+
+    track.style.top = `${startY}px`;
+    track.style.height = `${totalTrackHeight}px`;
+    track.style.left = `${(centerX - 0.75).toFixed(1)}px`;
+  }
+
+  function updateScrollProgress() {
     const rect = section.getBoundingClientRect();
     const windowHeight = window.innerHeight;
-    
-    // When the top of the section is visible in the viewport
-    if (rect.top <= windowHeight) {
-      let progress = 1 - (rect.top / windowHeight);
-      
-      // Clamp between 0 and 1
-      progress = Math.max(0, Math.min(1, progress));
-      
-      // Calculate curve: starts at 200 down to 0
-      const curve = 200 * (1 - Math.pow(progress, 0.5)); // slightly non-linear ease out
-      section.style.setProperty('--curve', curve);
+    const sectionHeight = rect.height;
+    const totalScrollable = sectionHeight - windowHeight;
+
+    let progress = 0;
+    if (rect.top <= 0) {
+      const scrolled = -rect.top;
+      progress = totalScrollable > 0 ? (scrolled / totalScrollable) : 0;
     }
+    progress = Math.max(0, Math.min(1, progress));
+
+    // Smooth cubic easing for natural card slide
+    function easeInOut(t) {
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    // Configure slide-up intervals for cards 1, 2, 3
+    const intervals = [
+      { start: 0.12, end: 0.35 }, // Card 1 reveals
+      { start: 0.44, end: 0.67 }, // Card 2 reveals
+      { start: 0.74, end: 0.95 }  // Card 3 reveals
+    ];
+
+    cards.forEach((card) => {
+      const idx = parseInt(card.getAttribute('data-index'), 10);
+      if (idx === 0) {
+        card.style.transform = 'translateY(0%)';
+        return;
+      }
+
+      const interval = intervals[idx - 1];
+      if (!interval) return;
+
+      if (progress <= interval.start) {
+        card.style.transform = 'translateY(105%)';
+      } else if (progress >= interval.end) {
+        card.style.transform = 'translateY(0%)';
+      } else {
+        const rawT = (progress - interval.start) / (interval.end - interval.start);
+        const t = easeInOut(Math.max(0, Math.min(1, rawT)));
+        const transY = 105 * (1 - t);
+        card.style.transform = `translateY(${transY.toFixed(2)}%)`;
+      }
+    });
+
+    // Continuous line fill that travels from Dot 0 down to Dot 3
+    let lineProgress = 0;
+    if (progress <= 0.06) {
+      lineProgress = 0;
+    } else if (progress <= 0.35) {
+      const t = (progress - 0.06) / (0.35 - 0.06);
+      lineProgress = t * 33.33;
+    } else if (progress <= 0.67) {
+      const t = (progress - 0.35) / (0.67 - 0.35);
+      lineProgress = 33.33 + t * 33.33;
+    } else {
+      const t = (progress - 0.67) / (0.95 - 0.67);
+      lineProgress = 66.67 + Math.min(1, t) * 33.33;
+    }
+    lineProgress = Math.max(0, Math.min(100, lineProgress));
+
+    if (lineFill) {
+      lineFill.style.height = `${lineProgress}%`;
+    }
+
+    // Circles light up as the line reaches them, matching reference exactly!
+    const isDot0Lit = true;
+    const isDot1Lit = lineProgress >= 32;
+    const isDot2Lit = lineProgress >= 65;
+    const isDot3Lit = lineProgress >= 98;
+    const litFlags = [isDot0Lit, isDot1Lit, isDot2Lit, isDot3Lit];
+
+    // Determine current active card for text highlight
+    let currentIdx = 0;
+    if (progress < 0.25) {
+      currentIdx = 0;
+    } else if (progress < 0.55) {
+      currentIdx = 1;
+    } else if (progress < 0.82) {
+      currentIdx = 2;
+    } else {
+      currentIdx = 3;
+    }
+
+    steps.forEach((step, idx) => {
+      step.classList.toggle('is-lit', litFlags[idx]);
+      step.classList.toggle('is-current', idx === currentIdx);
+    });
+  }
+
+  // Recalibrate on layout changes
+  calibrateTrackLine();
+  window.addEventListener('resize', () => {
+    calibrateTrackLine();
+    updateScrollProgress();
+  }, { passive: true });
+
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  updateScrollProgress();
+
+  // Allow clicking on timeline step to smoothly scroll to that project card
+  steps.forEach((step) => {
+    step.addEventListener('click', () => {
+      const idx = parseInt(step.getAttribute('data-index'), 10);
+      const targetFractions = [0.03, 0.38, 0.70, 0.98];
+      const targetFraction = targetFractions[idx] || 0;
+
+      const rect = section.getBoundingClientRect();
+      const currentScrollY = window.scrollY || window.pageYOffset;
+      const sectionTop = currentScrollY + rect.top;
+      const totalScrollable = rect.height - window.innerHeight;
+      const targetY = sectionTop + (targetFraction * totalScrollable);
+
+      window.scrollTo({
+        top: targetY,
+        behavior: 'smooth'
+      });
+    });
   });
 }
+
+/* ---------- Project Quick Specs Modal ---------- */
+const projectModalData = {
+  'repair-system': {
+    title: 'AI-Assisted Computer Repair Shop Management System',
+    badge: 'Production Web App • AI Diagnostics',
+    description: 'A full-stack enterprise ticket management and troubleshooting platform built to streamline repair workflows, customer intake, inventory synchronization, and hardware diagnostics.',
+    specs: [
+      { label: 'Architecture', val: 'Full-Stack JavaScript / Node.js & SQLite' },
+      { label: 'Core Features', val: 'CRUD Operations, Live Ticket Tracking, Role Authentication' },
+      { label: 'AI Capabilities', val: 'NLP Automated Hardware Diagnostic Log Ingestion' },
+      { label: 'Deployment', val: 'Live Production Demo Available' }
+    ],
+    primaryAction: {
+      text: 'Launch Full Web Application ↗',
+      url: 'projects/repair-system.html'
+    }
+  },
+  'cloud-infra': {
+    title: 'Enterprise Cloud & Network Infrastructure',
+    badge: 'Network Engineering • Cloud DevOps',
+    description: 'A scalable multi-VPC cloud network topology engineered for zero-single-point-of-failure operations, dynamic BGP routing, and automated infrastructure deployment.',
+    specs: [
+      { label: 'Topology', val: 'Dual Transit Gateway, Multi-AZ Peering' },
+      { label: 'Reliability', val: '99.99% SLA Automated Subnet Failover' },
+      { label: 'Automation', val: 'Terraform IaC, Ansible Configuration Playbooks' },
+      { label: 'Monitoring', val: 'Prometheus Telemetry, Flow Log Packet Inspection' }
+    ],
+    primaryAction: {
+      text: 'View Full Architecture Blueprint ↗',
+      url: 'projects/cloud-infra.html'
+    }
+  },
+  'zero-trust': {
+    title: 'Zero-Trust Security & Threat Detection',
+    badge: 'Defensive Operations • Threat Telemetry',
+    description: 'An enterprise defensive security architecture implementing micro-segmentation, continuous cryptographic authentication, and automated SIEM threat containment.',
+    specs: [
+      { label: 'Access Model', val: 'Zero Implicit Trust (ZTNA), Mutual TLS' },
+      { label: 'Intrusion Defense', val: 'Automated Suricata IDS/IPS Rules & Containment' },
+      { label: 'Containment Speed', val: '< 300ms Automated Network Quarantine' },
+      { label: 'Compliance', val: 'Least-Privilege RBAC, Immutable Audit Logs' }
+    ],
+    primaryAction: {
+      text: 'Open Security Protocol Suite ↗',
+      url: 'projects/zero-trust.html'
+    }
+  }
+};
+
+window.openProjectModal = function(id) {
+  const modal = document.getElementById('project-modal');
+  const content = document.getElementById('project-modal-content');
+  if (!modal || !content) return;
+
+  const data = projectModalData[id];
+  if (!data) return;
+
+  let specsHtml = data.specs.map(s => `
+    <div style="border-bottom: 1px solid rgba(255,255,255,0.08); padding: 12px 0; display: flex; justify-content: space-between; gap: 16px; font-size: 0.9rem;">
+      <span style="color: rgba(255,255,255,0.5); font-weight: 500;">${s.label}</span>
+      <span style="color: #ffffff; font-weight: 600; text-align: right;">${s.val}</span>
+    </div>
+  `).join('');
+
+  content.innerHTML = `
+    <div style="display: inline-block; padding: 4px 12px; border-radius: 9999px; background: rgba(243, 112, 30, 0.2); border: 1px solid rgba(243, 112, 30, 0.4); color: #f3701e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;">
+      ${data.badge}
+    </div>
+    <h3 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #ffffff; line-height: 1.25; margin-bottom: 14px;">
+      ${data.title}
+    </h3>
+    <p style="color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.65; margin-bottom: 24px;">
+      ${data.description}
+    </p>
+    <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 20px; margin-bottom: 28px;">
+      ${specsHtml}
+    </div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="${data.primaryAction.url}" target="_blank" class="proj-action-btn proj-primary" style="text-decoration: none; padding: 12px 24px;">
+        ${data.primaryAction.text}
+      </a>
+      <button type="button" class="proj-action-btn proj-secondary" onclick="closeProjectModal()">
+        Close Window
+      </button>
+    </div>
+  `;
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeProjectModal = function() {
+  const modal = document.getElementById('project-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+};
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeProjectModal();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('project-modal');
+  if (modal && e.target === modal) {
+    closeProjectModal();
+  }
+});
 
 /* ---------- Hero Video Animation ---------- */
 function initHeroVideo() {
