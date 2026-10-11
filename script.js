@@ -264,30 +264,157 @@ function initContactForm() {
   });
 }
 
-/* ---------- Certificates Scroll Animation ---------- */
-function initCertificatesScrollAnimation() {
-  const section = document.querySelector('.cert-scroll-section');
-  if (!section) return;
+/* ========================================================
+   CERTIFICATES / ACHIEVEMENTS (ELENA VOSS PARALLAX SCROLL)
+   ======================================================== */
+const certificateData = [
+  {
+    title: "Cyber Awareness: Cyber Threats in 2026 and How to Stay Safe",
+    category: "Cybersecurity & Perimeter Defense",
+    issuer: "UpSkillTechPH Training Services",
+    date: "2026",
+    id: "UST-2026-CA",
+    img: "Profile/cert/jhay-1.png",
+    desc: "Comprehensive training on emerging cyber threats in 2026, social engineering mitigation, zero-trust endpoint hygiene, and network perimeter protection."
+  },
+  {
+    title: "Web Dev 101: System Integration & Connecting Apps via API",
+    category: "Fullstack Systems & APIs",
+    issuer: "UpSkillTechPH Training Services",
+    date: "2026",
+    id: "UST-2026-WD",
+    img: "Profile/cert/jhay-2.png",
+    desc: "Hands-on implementation of RESTful API endpoints, cross-service payload serialization, token-based authentication, and modern web application integration."
+  },
+  {
+    title: "QA 101: Software Quality, Bug Tracking and Manual Testing",
+    category: "Quality Assurance & Diagnostics",
+    issuer: "UpSkillTechPH Training Services",
+    date: "2026",
+    id: "UST-2026-QA",
+    img: "Profile/cert/jhay-3.png",
+    desc: "Formal test case documentation, defect lifecycle tracking, QA staging validations, and systematic manual regression testing in production workflows."
+  },
+  {
+    title: "Arduino 101: Coding Meets Hardware",
+    category: "Embedded Systems & IoT",
+    issuer: "UpSkillTechPH Training Services",
+    date: "2026",
+    id: "UST-2026-ARD",
+    img: "Profile/cert/jhay-4.png",
+    desc: "Microcontroller logic with Arduino Uno, C++ embedded scripting, ultrasonic and infrared sensor interfacing, servo PWM control, and physical circuit debugging."
+  },
+  {
+    title: "Pro Skills: 21st Century Soft Skills for Tech Pros",
+    category: "Professional Development & Leadership",
+    issuer: "UpSkillTechPH Training Services",
+    date: "2026",
+    id: "UST-2026-PS",
+    img: "Profile/cert/jhay-5.png",
+    desc: "Executive training in engineering teamwork, cross-functional stakeholder presentation, Agile communication methodologies, and structured technical problem-solving."
+  }
+];
 
-  window.addEventListener('scroll', () => {
+window.openCertModal = function(index) {
+  const cert = certificateData[index];
+  if (!cert) return;
+
+  const contentHtml = `
+    <div style="display: flex; flex-direction: column; gap: 22px;">
+      <div style="width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 20px 50px rgba(0,0,0,0.7); background: #000;">
+        <img src="${cert.img}" alt="${cert.title}" style="width: 100%; height: auto; display: block;" />
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <span style="font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; color: var(--color-accent); text-transform: uppercase;">
+            ${cert.issuer} &bull; ${cert.date}
+          </span>
+          <span style="font-size: 0.75rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); padding: 4px 12px; border-radius: 9999px; color: rgba(255,255,255,0.85); font-family: monospace;">
+            VERIFIED ID: ${cert.id}
+          </span>
+        </div>
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.82); line-height: 1.65; margin: 0;">
+          ${cert.desc}
+        </p>
+        <div style="margin-top: 14px; display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="${cert.img}" target="_blank" download class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 0.86rem;">
+            <span>DOWNLOAD HIGH-RES CERTIFICATE &darr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  openPortfolioModal(cert.title, cert.category, contentHtml);
+};
+
+function initCertificatesScrollAnimation() {
+  const section = document.querySelector('#certificates');
+  const track = document.getElementById('certElenaTrack');
+  if (!section || !track) return;
+  const cards = track.querySelectorAll('.cert-elena-card');
+
+  let ticking = false;
+
+  function updateParallax() {
     const rect = section.getBoundingClientRect();
-    const sectionTop = rect.top;
     const sectionHeight = rect.height;
     const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth <= 768) {
+      track.style.removeProperty('--cert-scroll-x');
+      cards.forEach(card => {
+        card.style.removeProperty('--parallax-x');
+        card.style.removeProperty('--parallax-y');
+      });
+      ticking = false;
+      return;
+    }
 
     let progress = 0;
-    if (sectionTop <= 0) {
-      const scrolled = -sectionTop;
+    if (rect.top <= 0) {
+      const scrolled = -rect.top;
       const totalScrollable = sectionHeight - windowHeight;
       if (totalScrollable > 0) {
-        progress = scrolled / totalScrollable;
+        progress = Math.min(1, Math.max(0, scrolled / totalScrollable));
       }
     }
-    
-    // Clamp between 0 and 1
-    progress = Math.max(0, Math.min(1, progress));
-    section.style.setProperty('--cert-progress', progress);
+
+    // Measure track width and compute total translateX needed so intro glides and all cards scroll smoothly through view
+    const trackWidth = track.scrollWidth;
+    const maxScroll = Math.max(0, trackWidth - windowWidth);
+
+    const trackX = -progress * maxScroll;
+    track.style.setProperty('--cert-scroll-x', `${trackX.toFixed(2)}px`);
+
+    // Individual Multi-Plane Parallax Depth for each card
+    const speedFactors = [0.92, 1.12, 0.94, 1.14, 1.0];
+    cards.forEach((card, idx) => {
+      const factor = speedFactors[idx % speedFactors.length];
+      const cardProgress = progress * (factor - 1.0) * 110;
+      
+      const floatY = Math.sin((progress * 3.5) + (idx * 0.8)) * 6 * (idx % 2 === 0 ? 1 : -1);
+
+      card.style.setProperty('--parallax-x', `${cardProgress.toFixed(2)}px`);
+      card.style.setProperty('--parallax-y', `${floatY.toFixed(2)}px`);
+    });
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    requestAnimationFrame(updateParallax);
   });
+
+  updateParallax();
 }
 
 /* ---------- About Section Scroll Animation ---------- */

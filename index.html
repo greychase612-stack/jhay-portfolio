@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=15" />
+  <link rel="stylesheet" href="style.css?v=20" />
 </head>
 <body>
   <!-- ===== NAVIGATION ===== -->
@@ -974,72 +974,130 @@
     </div>
   </section>
 
-  <!-- ===== CERTIFICATES SECTION ===== -->
-  <section id="certificates" class="section cert-scroll-section" style="background-color: var(--color-bg);">
+  <!-- ===== ACHIEVEMENTS / CERTIFICATES HORIZONTAL PARALLAX SECTION ===== -->
+  <section id="certificates" class="section cert-scroll-section" aria-label="My Achievements">
     <div class="cert-sticky-wrapper">
       
-      <div class="cert-track">
+      <!-- Horizontal Parallax Card Track -->
+      <div class="cert-track" id="certElenaTrack">
         
-        <!-- Intro Slide -->
+        <!-- Fullscreen Centered Intro Slide (Classic Layout) -->
         <div class="cert-intro-slide">
           <div class="cert-intro-content">
             <p class="cert-intro-eyebrow">ACHIEVEMENTS</p>
-            <h2 class="cert-intro-title">My Certificates</h2>
+            <h2 class="cert-intro-title">My Achievements</h2>
             <p class="cert-intro-desc">A showcase of my continuous learning and professional development.</p>
             <span class="cert-intro-arrow">&darr;</span>
           </div>
         </div>
 
-        <!-- The timeline line that scrolls with the track -->
-        <div class="cert-timeline-line"></div>
+        <!-- CARD 1: Cyber Awareness -->
+        <article class="cert-elena-card" data-index="0" onclick="openCertModal(0)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag">CYBERSECURITY</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
+          </div>
+          <div class="cert-card-preview">
+            <img src="Profile/cert/jhay-1.png" alt="Cyber Awareness Certificate" loading="lazy" />
+          </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">Cyber Awareness</h3>
+            <ul class="cert-card-bullets">
+              <li>Cyber Threats in 2026 &amp; Countermeasures</li>
+              <li>UpSkillTechPH Verified Seminar</li>
+              <li>Credential ID: UST-2026-CA</li>
+            </ul>
+          </div>
+        </article>
 
-        <div class="cert-item">
-          <div class="cert-node"></div>
-          <div class="cert-content">
-            <h4 class="cert-title">Cyber Awareness</h4>
-            <p class="cert-desc">Cyber Threats in 2026 and How to Stay Safe</p>
-            <img src="Profile/cert/jhay-1.png" alt="Certificate 1" class="cert-img" loading="lazy" />
+        <!-- CARD 2: Web Dev 101 -->
+        <article class="cert-elena-card" data-index="1" onclick="openCertModal(1)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag">SYSTEM INTEGRATION</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
           </div>
-        </div>
-        
-        <div class="cert-item">
-          <div class="cert-node"></div>
-          <div class="cert-content">
-            <h4 class="cert-title">Web Dev 101</h4>
-            <p class="cert-desc">System Integration &amp; Connecting Apps via API</p>
-            <img src="Profile/cert/jhay-2.png" alt="Certificate 2" class="cert-img" loading="lazy" />
+          <div class="cert-card-preview">
+            <img src="Profile/cert/jhay-2.png" alt="Web Dev 101 Certificate" loading="lazy" />
           </div>
-        </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">Web Dev 101</h3>
+            <ul class="cert-card-bullets">
+              <li>Connecting Applications via REST APIs</li>
+              <li>UpSkillTechPH Verified Training</li>
+              <li>Credential ID: UST-2026-WD</li>
+            </ul>
+          </div>
+        </article>
 
-        <div class="cert-item">
-          <div class="cert-node"></div>
-          <div class="cert-content">
-            <h4 class="cert-title">QA 101</h4>
-            <p class="cert-desc">Software Quality, Bug Tracking and Manual Testing</p>
-            <img src="Profile/cert/jhay-3.png" alt="Certificate 3" class="cert-img" loading="lazy" />
+        <!-- CARD 3: QA 101 -->
+        <article class="cert-elena-card" data-index="2" onclick="openCertModal(2)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag">QUALITY ASSURANCE</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
           </div>
-        </div>
+          <div class="cert-card-preview">
+            <img src="Profile/cert/jhay-3.png" alt="QA 101 Certificate" loading="lazy" />
+          </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">QA 101</h3>
+            <ul class="cert-card-bullets">
+              <li>Manual Testing &amp; Bug Tracking Workflows</li>
+              <li>Software Quality Lifecycle</li>
+              <li>Credential ID: UST-2026-QA</li>
+            </ul>
+          </div>
+        </article>
 
-        <div class="cert-item">
-          <div class="cert-node"></div>
-          <div class="cert-content">
-            <h4 class="cert-title">Arduino 101</h4>
-            <p class="cert-desc">Coding Meets Hardware</p>
-            <img src="Profile/cert/jhay-4.png" alt="Certificate 4" class="cert-img" loading="lazy" />
+        <!-- CARD 4: Arduino 101 -->
+        <article class="cert-elena-card" data-index="3" onclick="openCertModal(3)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag">EMBEDDED SYSTEMS</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
           </div>
-        </div>
+          <div class="cert-card-preview">
+            <img src="Profile/cert/jhay-4.png" alt="Arduino 101 Certificate" loading="lazy" />
+          </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">Arduino 101</h3>
+            <ul class="cert-card-bullets">
+              <li>Microcontroller Logic &amp; Sensor Interfacing</li>
+              <li>Hardware-Software Integration</li>
+              <li>Credential ID: UST-2026-ARD</li>
+            </ul>
+          </div>
+        </article>
 
-        <div class="cert-item">
-          <div class="cert-node"></div>
-          <div class="cert-content">
-            <h4 class="cert-title">Pro Skills</h4>
-            <p class="cert-desc">21st Century Soft Skills for Tech Pros</p>
-            <img src="Profile/cert/jhay-5.png" alt="Certificate 5" class="cert-img" loading="lazy" />
+        <!-- CARD 5: Pro Skills -->
+        <article class="cert-elena-card" data-index="4" onclick="openCertModal(4)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag">PROFESSIONAL DEV</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
           </div>
-        </div>
-        
-        <!-- End padding so the last item reaches the center before scroll ends -->
-        <div class="cert-end-padding"></div>
+          <div class="cert-card-preview">
+            <img src="Profile/cert/jhay-5.png" alt="Pro Skills Certificate" loading="lazy" />
+          </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">Pro Skills</h3>
+            <ul class="cert-card-bullets">
+              <li>21st Century Workplace &amp; Agile Collaboration</li>
+              <li>Technical Communications</li>
+              <li>Credential ID: UST-2026-PS</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- End Spacer to allow full scroll traversal -->
+        <div class="cert-end-padding" aria-hidden="true"></div>
       </div>
     </div>
   </section>
@@ -1513,7 +1571,7 @@
     </div>
   </section>
 
-  <script src="script.js?v=15"></script>
+  <script src="script.js?v=20"></script>
 
 
   <!-- ===== PROJECT QUICK MODAL ===== -->

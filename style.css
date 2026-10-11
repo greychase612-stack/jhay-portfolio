@@ -2647,35 +2647,27 @@ img {
 }
 
 /* ============================================
-   CERTIFICATES SECTION
+   CERTIFICATES / ACHIEVEMENTS SECTION (CLASSIC CENTER INTRO + SIDE PARALLAX)
    ============================================ */
 .cert-scroll-section {
-  height: 800vh;
+  height: 400vh;
   position: relative;
-  background-color: var(--color-bg);
-  --cert-progress: 0;
+  background-color: #000000;
+  background: #000000;
   padding: 0;
+  z-index: 6;
 }
 
 .cert-sticky-wrapper {
   position: sticky;
   top: 0;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 100%;
   overflow: hidden;
-}
-
-.cert-timeline-line {
-  position: absolute;
-  top: 50%;
-  left: 104vw; /* Starts exactly at the first certificate node */
-  right: 0;
-  height: 2px;
-  background: var(--color-accent);
-  z-index: -1;
-  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  background-color: #000000;
+  box-sizing: border-box;
 }
 
 .cert-track {
@@ -2683,13 +2675,15 @@ img {
   width: max-content;
   align-items: center;
   height: 100vh;
-  gap: 8vw;
-  transform: translateX(calc(var(--cert-progress) * -1 * (100% - 100vw)));
+  gap: clamp(24px, 3.5vw, 48px);
+  will-change: transform;
+  transform: translate3d(var(--cert-scroll-x, 0px), 0, 0);
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
 }
 
-/* Intro Slide Styles */
+/* Fullscreen Centered Intro Slide */
 .cert-intro-slide {
   width: 100vw;
   height: 100vh;
@@ -2698,117 +2692,299 @@ img {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 20px;
+  padding: 0 24px;
   flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 3;
 }
 
 .cert-intro-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .cert-intro-eyebrow {
   font-family: var(--font-body);
-  font-size: 0.8rem;
-  text-transform: uppercase;
+  font-size: 0.82rem;
   letter-spacing: 0.3em;
-  color: var(--color-white-50);
-  margin-bottom: 16px;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
 .cert-intro-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 600;
+  font-size: clamp(2.6rem, 5.5vw, 4.6rem);
+  font-weight: 800;
   line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--color-white);
-  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0 0 24px 0;
 }
 
 .cert-intro-desc {
   font-family: var(--font-body);
-  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-  color: var(--color-white-70);
-  line-height: 1.6;
-  max-width: 500px;
-  margin-bottom: 40px;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+  max-width: 540px;
+  margin: 0 0 36px 0;
 }
 
 .cert-intro-arrow {
-  font-size: 1.5rem;
-  color: var(--color-white-50);
-  animation: bounce 2s infinite;
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  animation: bounce 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  display: inline-block;
 }
 
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(10px); }
-  60% { transform: translateY(5px); }
+  40% { transform: translateY(12px); }
+  60% { transform: translateY(6px); }
 }
 
-.cert-item {
-  width: 45vw;
-  max-width: 550px;
-  position: relative;
+/* Elena Voss Cards in Parallax Track */
+.cert-elena-card {
+  width: clamp(330px, 26vw, 420px);
+  height: clamp(450px, 60vh, 540px);
+  border-radius: 24px;
+  flex-shrink: 0;
+  background: #14161d;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 26px 24px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
+  transition: 
+    background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+/* Card Header: Tag & Circular Arrow */
+.cert-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cert-card-tag {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  transition: all 0.35s ease;
+}
+
+.cert-circle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
 }
 
-.cert-node {
-  width: 16px;
-  height: 16px;
-  background: var(--color-accent);
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: -4vw;
-  transform: translateY(-50%);
-  box-shadow: 0 0 15px var(--color-accent);
+.circle-btn-arrow {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.cert-content {
-  background: rgba(20, 20, 25, 0.5);
-  border: 1px solid var(--color-white-10);
-  border-radius: 16px;
-  padding: 24px;
+/* Certificate Preview Thumbnail Frame */
+.cert-card-preview {
   width: 100%;
-  backdrop-filter: blur(10px);
+  height: 165px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.cert-title {
+.cert-card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card Body & Bullets */
+.cert-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cert-card-title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--color-white);
-  margin-bottom: 8px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  transition: color 0.3s ease;
 }
 
-.cert-desc {
-  font-size: 0.9rem;
-  color: var(--color-white-70);
-  margin-bottom: 20px;
+.cert-card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.cert-img {
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transition: transform 0.3s;
-}
-.cert-img:hover {
-  transform: scale(1.02);
+.cert-card-bullets li {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.45;
+  position: relative;
+  padding-left: 14px;
+  transition: color 0.3s ease;
 }
 
+.cert-card-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+/* ============================================
+   SIGNATURE ORANGE HOVER STATE (ELENA VOSS MATCH)
+   ============================================ */
+.cert-elena-card:hover {
+  background: linear-gradient(145deg, #f97316 0%, #ea580c 50%, #c2410c 100%) !important;
+  border-color: #f97316 !important;
+  box-shadow: 
+    0 30px 65px -12px rgba(234, 88, 12, 0.55),
+    0 0 35px rgba(249, 115, 22, 0.35) !important;
+  transform: translate3d(var(--parallax-x, 0px), calc(var(--parallax-y, 0px) - 8px), 0) scale(1.02);
+}
+
+.cert-elena-card:hover .cert-circle-btn {
+  background: #ffffff;
+  color: #ea580c;
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.cert-elena-card:hover .circle-btn-arrow {
+  transform: rotate(45deg);
+}
+
+.cert-elena-card:hover .cert-card-tag {
+  background: rgba(0, 0, 0, 0.28);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.cert-elena-card:hover .cert-card-preview {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+}
+
+.cert-elena-card:hover .cert-card-preview img {
+  transform: scale(1.06);
+}
+
+.cert-elena-card:hover .cert-card-bullets li {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.cert-elena-card:hover .cert-card-bullets li::before {
+  color: #ffffff;
+}
+
+/* End Spacer */
 .cert-end-padding {
-  width: 40vw;
+  width: 15vw;
   flex-shrink: 0;
 }
 
 #topo-canvas {
   display: none !important;
+}
+
+/* Responsive adjustments for Elena Voss Certificates */
+@media (max-width: 1024px) {
+  .cert-elena-card {
+    width: 38vw;
+    height: 52vw;
+    min-width: 310px;
+    min-height: 440px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cert-scroll-section {
+    height: auto;
+    padding: 80px 0 60px;
+  }
+  .cert-sticky-wrapper {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+  .cert-track {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    gap: 32px;
+    transform: none !important;
+  }
+  .cert-intro-slide {
+    width: 100%;
+    height: auto;
+    padding: 0 20px;
+    margin-bottom: 24px;
+  }
+  .cert-elena-card {
+    width: calc(100% - 40px);
+    max-width: 440px;
+    height: auto;
+    min-height: 430px;
+    margin: 0 auto;
+    transform: none !important;
+  }
 }
 
 /* ============================================
