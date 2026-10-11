@@ -3,766 +3,1777 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Repair System - Enterprise Dashboard</title>
+  <title>FixIt AI — Computer Repair Management &amp; AI Diagnostic Station</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <style>
+    /* ========================================================
+       NYNÄ COLOR PALETTE TOKENS
+       ======================================================== */
     :root {
-      --color-bg: #09090b;
-      --color-surface: #18181b;
-      --color-border: #27272a;
-      --color-border-hover: #3f3f46;
-      --color-white: #fafafa;
-      --color-white-70: #a1a1aa;
-      --color-white-20: #3f3f46;
-      --color-accent: #ffffff;
-      --color-ai: #a855f7;
-      --color-ai-dim: rgba(168, 85, 247, 0.1);
-      --color-danger: #ef4444;
-      --color-success: #10b981;
-      --color-warning: #f59e0b;
+      --lime-green: #E6F9AF;       /* RGB: 230, 249, 175 */
+      --metallic-gold: #CAAC4B;    /* RGB: 202, 172, 75 */
+      --muted-teal: #8BBEB2;       /* RGB: 139, 190, 178 */
+      --deep-space-blue: #18314F;  /* RGB: 24, 49, 79 */
+      --dark-amethyst: #0D0630;    /* RGB: 13, 6, 48 */
+
+      --teal-dark: #234c44;
+      --gold-dark: #4d3f13;
+      --gold-light: #f5e9bd;
+      --card-radius: 24px;
+      --inner-radius: 16px;
+      
       --font-heading: 'Outfit', sans-serif;
       --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     body {
       font-family: var(--font-body);
-      background-color: var(--color-bg);
-      color: var(--color-white);
+      background-color: var(--dark-amethyst);
+      color: #ffffff;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* --- LOGIN OVERLAY --- */
-    .login-overlay {
+    /* Ambient Fluid Background matching user mockup */
+    .ambient-fluid-bg {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(9, 9, 11, 0.95);
-      backdrop-filter: blur(10px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .login-box {
-      background: var(--color-surface);
-      padding: 40px;
-      border-radius: 12px;
-      border: 1px solid var(--color-border);
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-      text-align: center;
-    }
-    .login-box h2 { font-family: var(--font-heading); margin-bottom: 24px; font-size: 1.8rem; }
-    .login-error { color: var(--color-danger); font-size: 0.85rem; margin-bottom: 16px; display: none; }
-
-    /* --- LAYOUT --- */
-    .app-layout {
-      display: flex;
-      height: 100vh;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 15% 25%, rgba(139, 190, 178, 0.22) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 75%, rgba(202, 172, 75, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 50% 50%, rgba(24, 49, 79, 0.8) 0%, var(--dark-amethyst) 100%);
+      filter: blur(40px);
+      pointer-events: none;
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: var(--color-surface);
-      border-right: 1px solid var(--color-border);
+    /* App Shell */
+    .app-wrapper {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 24px 32px 48px;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 24px;
     }
-    .sidebar-logo {
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--color-white);
-      margin-bottom: 40px;
+
+    /* Top Navigation Header */
+    .app-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: rgba(13, 6, 48, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(139, 190, 178, 0.2);
+      border-radius: 9999px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
-    .nav-item {
+
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
-      color: var(--color-white-70);
       text-decoration: none;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      transition: all 0.2s;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .nav-item:hover, .nav-item.active {
-      background: var(--color-border);
-      color: var(--color-white);
-    }
-    .sidebar-footer { margin-top: auto; }
-
-    /* Main Content */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      padding: 32px 48px;
-      background: rgba(10, 10, 15, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      color: #ffffff;
     }
 
-    /* Header & Analytics */
-    .top-header {
+    .brand-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--muted-teal);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 32px;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 14px rgba(139, 190, 178, 0.4);
     }
-    .top-header h1 { font-family: var(--font-heading); font-size: 2rem; }
 
-    .analytics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 32px;
+    .brand-icon-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .stat-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .brand-title span {
+      color: var(--lime-green);
+    }
+
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(24, 49, 79, 0.5);
+      padding: 4px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-pill-btn {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.75);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-pill-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-pill-btn.active {
+      background: var(--lime-green);
+      color: var(--dark-amethyst);
+      box-shadow: 0 4px 14px rgba(230, 249, 175, 0.35);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-portfolio-btn {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-portfolio-btn:hover {
+      color: var(--lime-green);
+    }
+
+    .logout-btn {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #ffffff;
+    }
+
+    /* Views Container */
+    .view-container {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+      flex: 1;
+    }
+
+    .view-container.active-view {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================================
+       LAYOUT 1: AI ASSISTANT INTAKE STATION (MOCKUP 1)
+       ======================================================== */
+    .layout-grid-triage {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 28px;
+      background: rgba(24, 49, 79, 0.4);
+      border: 2px solid rgba(24, 49, 79, 0.8);
+      border-radius: var(--card-radius);
       padding: 24px;
-      border-radius: 12px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      min-height: 640px;
+    }
+
+    /* Left Card: Muted Teal AI Assistant Station */
+    .card-muted-teal {
+      background-color: var(--muted-teal);
+      border-radius: var(--inner-radius);
+      padding: 28px;
       display: flex;
       flex-direction: column;
-    }
-    .stat-title { color: var(--color-white-70); font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
-    .stat-value { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 700; }
-
-    /* Content Grid */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 32px;
-      align-items: start;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
 
-    /* Panel Base */
-    .panel {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
+    /* Interactive Speech Bubble */
+    .vector-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      margin: auto 0;
+      padding: 10px 0;
+    }
+
+    .speech-bubble {
+      background: #ffffff;
+      color: var(--dark-amethyst);
+      padding: 18px 24px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      line-height: 1.45;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 10px 25px rgba(13, 6, 48, 0.15);
+      position: relative;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 12px 12px 0;
+      border-style: solid;
+      border-color: #ffffff transparent;
+      display: block;
+      width: 0;
+    }
+
+    /* Chase Vector Animation */
+    .chase-vector-img {
+      width: 190px;
+      height: 190px;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 20px rgba(13, 6, 48, 0.3));
+      animation: chaseFloat 3.5s ease-in-out infinite;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .chase-vector-img:hover {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    @keyframes chaseFloat {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-12px) rotate(-1.5deg);
+      }
+    }
+
+    /* Chat Conversation Drawer */
+    .chat-history-log {
+      max-height: 160px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 6px;
+    }
+
+    .chat-bubble-msg {
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      max-width: 85%;
+      word-break: break-word;
+    }
+
+    .chat-msg-user {
+      align-self: flex-end;
+      background: var(--deep-space-blue);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-msg-bot {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--dark-amethyst);
+      font-weight: 600;
+      border-bottom-left-radius: 4px;
+    }
+
+    /* Chat Input Pill */
+    .chat-input-bar {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 9999px;
+      padding: 6px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      gap: 10px;
+    }
+
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--dark-amethyst);
+      font-weight: 500;
+      background: transparent;
+      padding: 8px 6px;
+    }
+
+    .chat-input-field::placeholder {
+      color: rgba(13, 6, 48, 0.45);
+    }
+
+    .chat-send-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--deep-space-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .chat-send-btn:hover {
+      color: var(--dark-amethyst);
+      transform: scale(1.15) translateX(2px);
+    }
+
+    /* Right Card: Metallic Gold Diagnostic Summary (Mockup 1) */
+    .card-metallic-gold {
+      background-color: var(--metallic-gold);
+      border-radius: var(--inner-radius);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--dark-amethyst);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      position: relative;
+    }
+
+    .gold-header-title {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: var(--dark-amethyst);
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    /* Diagnostic Output Box */
+    .diagnostic-output-box {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 14px;
       padding: 24px;
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 24px;
+      font-size: 0.98rem;
+      line-height: 1.65;
     }
-    .panel-header {
+
+    .diag-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: rgba(13, 6, 48, 0.65);
+      gap: 12px;
+    }
+
+    .diag-placeholder svg {
+      opacity: 0.5;
+    }
+
+    .diag-meta-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(13, 6, 48, 0.15);
+      flex-wrap: wrap;
+    }
+
+    .diag-meta-item {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .diag-meta-item span {
+      font-weight: 800;
+      color: var(--deep-space-blue);
+    }
+
+    .diag-summary-text {
+      color: var(--dark-amethyst);
+      font-size: 0.96rem;
+    }
+
+    .diag-summary-text strong {
+      color: #000000;
+    }
+
+    .diag-bottom-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 10px;
+    }
+
+    /* Log Diagnose Button matching Mockup */
+    .btn-log-diagnose {
+      background: var(--deep-space-blue);
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(24, 49, 79, 0.4);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-log-diagnose:hover:not(:disabled) {
+      background: var(--dark-amethyst);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(13, 6, 48, 0.5);
+    }
+
+    .btn-log-diagnose:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ========================================================
+       LAYOUT 2: LIST OF PENDING WORKS (MOCKUP 2)
+       ======================================================== */
+    .layout-grid-pending {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      background: rgba(24, 49, 79, 0.4);
+      border: 2px solid rgba(24, 49, 79, 0.8);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      min-height: 640px;
+    }
+
+    /* Left Container: List of Pending Works in Muted Teal */
+    .card-pending-list-container {
+      background-color: var(--muted-teal);
+      border-radius: var(--inner-radius);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      color: var(--dark-amethyst);
+    }
+
+    .pending-heading {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.2;
+      color: var(--dark-amethyst);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .pending-search-bar {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .pending-search-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(13, 6, 48, 0.15);
+      border-radius: 9999px;
+      padding: 10px 18px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--dark-amethyst);
+      outline: none;
+      transition: background 0.2s;
+    }
+
+    .pending-search-input:focus {
+      background: #ffffff;
+      border-color: var(--deep-space-blue);
+    }
+
+    /* Scrollable Customer Cards Container */
+    .works-scroll-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 6px;
+      max-height: 480px;
+    }
+
+    .customer-work-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(13, 6, 48, 0.1);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .customer-work-card:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      border-color: var(--deep-space-blue);
+    }
+
+    .work-info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .work-customer-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--dark-amethyst);
+    }
+
+    .work-unit-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--deep-space-blue);
+    }
+
+    .work-issue-snippet {
+      font-size: 0.78rem;
+      color: rgba(13, 6, 48, 0.7);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .work-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-resolve-work {
+      background: var(--lime-green);
+      color: var(--dark-amethyst);
+      border: 1px solid rgba(13, 6, 48, 0.15);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-resolve-work:hover {
+      background: #d4f38e;
+      transform: scale(1.05);
+    }
+
+    .btn-view-diag {
+      background: var(--deep-space-blue);
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-view-diag:hover {
+      background: var(--dark-amethyst);
+    }
+
+    .empty-works-placeholder {
+      text-align: center;
+      padding: 48px 20px;
+      color: rgba(13, 6, 48, 0.6);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 2px dashed rgba(13, 6, 48, 0.2);
+      border-radius: 12px;
+    }
+
+    /* Right Column: Number of Works Done & Chase (Mockup 2) */
+    .pending-right-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 12px 16px;
+    }
+
+    /* Number of works done button */
+    .btn-works-done-badge {
+      background-color: var(--lime-green);
+      color: var(--dark-amethyst);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(230, 249, 175, 0.25);
+      transition: all 0.25s ease;
+      text-transform: lowercase;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-works-done-badge:hover {
+      background-color: var(--metallic-gold);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Time to Work Stage */
+    .time-to-work-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: auto;
+      gap: 16px;
+      position: relative;
+    }
+
+    .speech-bubble-work {
+      background: #ffffff;
+      color: var(--dark-amethyst);
+      padding: 16px 26px;
+      border-radius: 18px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      position: relative;
+      letter-spacing: -0.01em;
+    }
+
+    .speech-bubble-work::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: #ffffff transparent;
+      display: block;
+      width: 0;
+    }
+
+    .btn-new-intake-jump {
+      background: var(--metallic-gold);
+      color: var(--dark-amethyst);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(202, 172, 75, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-new-intake-jump:hover {
+      background: #e2c45d;
+      transform: scale(1.05);
+    }
+
+    /* ========================================================
+       VIEW 3: FIX COMPLETE / RESOLVED ARCHIVE
+       ======================================================== */
+    .card-completed-container {
+      background: rgba(24, 49, 79, 0.6);
+      border: 2px solid rgba(230, 249, 175, 0.4);
+      border-radius: var(--card-radius);
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .completed-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       padding-bottom: 16px;
     }
-    .panel-title { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 600; }
 
-    /* Forms & Inputs */
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--color-white-70); margin-bottom: 6px; }
-    .form-input {
-      width: 100%;
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: 6px;
-      padding: 10px 12px;
-      color: var(--color-white);
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      transition: border-color 0.2s;
+    .completed-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--lime-green);
     }
-    .form-input:focus { outline: none; border-color: var(--color-white-70); }
-    textarea.form-input { resize: vertical; min-height: 80px; }
 
-    /* AI Button & Response */
-    .ai-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .btn-ai {
-      background: var(--color-ai-dim);
-      color: var(--color-ai);
-      border: 1px solid rgba(168, 85, 247, 0.3);
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 4px;
-      transition: all 0.2s;
+    .completed-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 18px;
     }
-    .btn-ai:hover { background: rgba(168, 85, 247, 0.2); }
-    .ai-response {
-      background: rgba(168, 85, 247, 0.05);
-      border: 1px solid rgba(168, 85, 247, 0.2);
-      padding: 12px; border-radius: 6px; font-size: 0.85rem; color: #d8b4fe;
-      margin-bottom: 16px; display: none; line-height: 1.5;
-      max-height: 160px; overflow-y: auto;
-    }
-    .ai-response::-webkit-scrollbar { width: 6px; }
-    .ai-response::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
-    .ai-response::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.3); border-radius: 4px; }
 
-    .tab-btn {
-      background: transparent; border: none; color: var(--color-white-70); font-family: var(--font-body);
-      font-size: 0.9rem; font-weight: 500; padding: 8px 16px; cursor: pointer; transition: all 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-    .tab-btn:hover { color: var(--color-white); }
-    .tab-btn.active { color: var(--color-white); border-bottom-color: var(--color-accent); }
-
-    /* Buttons */
-    .btn-submit {
-      width: 100%; background: var(--color-white); color: var(--color-bg);
-      border: none; border-radius: 6px; padding: 12px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s; margin-top: 8px;
-    }
-    .btn-submit:hover { background: #e4e4e7; }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Tickets List */
-    .search-bar { width: 100%; max-width: 300px; position: relative; }
-    .search-icon { position: absolute; left: 12px; top: 10px; color: var(--color-white-70); }
-    .search-bar input { padding-left: 36px; }
-
-    .ticket-list { display: flex; flex-direction: column; gap: 12px; }
-    .ticket-item {
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      padding: 16px;
+    .completed-item-card {
+      background: rgba(13, 6, 48, 0.7);
+      border: 1px solid rgba(230, 249, 175, 0.2);
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      transition: border-color 0.2s;
+      gap: 12px;
     }
-    .ticket-item:hover { border-color: var(--color-border-hover); }
-    .ticket-info { display: flex; flex-direction: column; gap: 4px; }
-    .ticket-id { font-family: monospace; font-size: 0.75rem; color: var(--color-white-70); }
-    .ticket-name { font-size: 1.05rem; font-weight: 600; }
-    .ticket-device { font-size: 0.85rem; color: var(--color-white-70); }
-    
-    .ticket-actions-group { display: flex; align-items: center; gap: 16px; }
-    
-    .status-badge {
-      font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;
-    }
-    .status-Pending { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.2); }
-    .status-Progress { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
-    .status-Resolved { background: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.2); }
 
-    .btn-view {
-      background: transparent; color: var(--color-white); border: 1px solid var(--color-border);
-      padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-view:hover { background: var(--color-white-10); }
-
-    .empty-state { text-align: center; padding: 40px; color: var(--color-white-70); font-size: 0.9rem; border: 1px dashed var(--color-border); border-radius: 8px; }
-
-    /* Modals & Toasts */
-    .toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
-    .toast { background: var(--color-surface); border: 1px solid var(--color-border); padding: 16px 20px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease forwards; }
-    .toast.success { border-left: 4px solid var(--color-success); }
-    .toast.error { border-left: 4px solid var(--color-danger); }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-    .modal-content { background: var(--color-surface); width: 100%; max-width: 500px; border-radius: 12px; border: 1px solid var(--color-border); padding: 24px; position: relative; }
-    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--color-white-70); font-size: 1.5rem; cursor: pointer; }
-    
-    .status-select { background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-white); padding: 8px; border-radius: 6px; width: 100%; margin-top: 16px; font-family: var(--font-body); }
-
-    #topo-canvas {
+    /* ========================================================
+       MODAL & POPUP DIALOGS
+       ======================================================== */
+    .app-modal-overlay {
       position: fixed;
       inset: 0;
+      z-index: 99999;
+      background: rgba(13, 6, 48, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .app-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .app-modal-window {
+      background: var(--dark-amethyst);
+      border: 2px solid var(--muted-teal);
+      border-radius: 20px;
+      max-width: 680px;
       width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      transform: scale(0.95);
+      transition: transform 0.25s ease;
+    }
+
+    .app-modal-overlay.open .app-modal-window {
+      transform: scale(1);
+    }
+
+    .app-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .app-modal-close:hover {
+      background: var(--lime-green);
+      color: var(--dark-amethyst);
+    }
+
+    /* Login Overlay */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: var(--dark-amethyst);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: rgba(24, 49, 79, 0.8);
+      border: 2px solid var(--muted-teal);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 18px;
+      animation: chaseFloat 3s ease-in-out infinite;
+    }
+
+    .login-card h2 {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: var(--muted-teal);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+
+    .login-input {
+      width: 100%;
+      background: rgba(13, 6, 48, 0.8);
+      border: 1px solid rgba(139, 190, 178, 0.4);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .login-input:focus {
+      border-color: var(--lime-green);
+    }
+
+    .login-btn-submit {
+      width: 100%;
+      background: var(--lime-green);
+      color: var(--dark-amethyst);
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .login-btn-submit:hover {
+      background: #d4f38e;
+      box-shadow: 0 8px 20px rgba(230, 249, 175, 0.4);
+    }
+
+    .login-error-msg {
+      color: #f87171;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    /* Toast Notification */
+    .toast-tray {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .app-toast {
+      background: var(--deep-space-blue);
+      border: 1px solid var(--lime-green);
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      font-size: 0.9rem;
+      font-weight: 600;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .layout-grid-triage,
+      .layout-grid-pending {
+        grid-template-columns: 1fr;
+      }
+      .pending-right-column {
+        align-items: center;
+        margin-top: 24px;
+      }
+      .app-header {
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Topographic Background -->
-  <canvas id="topo-canvas"></canvas>
 
-  <!-- Toast Notification Container -->
-  <div id="toastContainer" class="toast-container"></div>
+  <!-- Fluid Ambient Lighting Canvas -->
+  <div class="ambient-fluid-bg"></div>
 
-  <!-- Authentication Overlay -->
+  <!-- Toast Notification Tray -->
+  <div id="toastTray" class="toast-tray"></div>
+
+  <!-- Admin Login Overlay -->
   <div id="loginOverlay" class="login-overlay">
-    <div class="login-box">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 16px; color: var(--color-white);"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-      <h2>Admin Portal</h2>
-      <div id="loginError" class="login-error">Invalid credentials. Hint: use admin / admin123</div>
-      <form id="loginForm">
-        <div class="form-group"><input type="text" id="loginUser" class="form-input" placeholder="Username" required></div>
-        <div class="form-group"><input type="password" id="loginPass" class="form-input" placeholder="Password" required></div>
-        <button type="submit" class="btn-submit">Secure Login</button>
-        <div style="margin-top: 24px; text-align: center;">
-          <a href="../index.html" style="color: var(--color-white-70); text-decoration: none; font-size: 0.85rem;">← Return to Portfolio</a>
-        </div>
+    <div class="login-card">
+      <img src="vector/Chase.png" alt="Chase Robot Assistant" class="login-logo" />
+      <h2>FixIt AI &bull; Admin Portal</h2>
+      <p>Enter technician credentials to access diagnostic station.</p>
+      <div id="loginErrorMsg" class="login-error-msg">Invalid credentials. Use admin / admin123</div>
+      <form id="adminLoginForm">
+        <input type="text" id="loginUsername" class="login-input" placeholder="Username (admin)" required />
+        <input type="password" id="loginPassword" class="login-input" placeholder="Password (admin123)" required />
+        <button type="submit" class="login-btn-submit">Launch Diagnostic Station</button>
       </form>
+      <div style="margin-top: 18px;">
+        <a href="../index.html" style="color: var(--muted-teal); text-decoration: none; font-size: 0.85rem;">&larr; Return to Portfolio</a>
+      </div>
     </div>
   </div>
 
-  <div class="app-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-        FixIt AI
-      </div>
-      <nav>
-        <a class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg> Dashboard</a>
-        <a href="../index.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg> Portfolio</a>
+  <div class="app-wrapper">
+    
+    <!-- Top App Navigation -->
+    <header class="app-header">
+      <a href="#" class="brand-group">
+        <div class="brand-icon-wrap">
+          <img src="vector/Chase.png" alt="Chase" />
+        </div>
+        <div class="brand-title">FixIt <span>AI</span></div>
+      </a>
+
+      <!-- View Switcher Tabs -->
+      <nav class="nav-pills">
+        <button type="button" class="nav-pill-btn active" id="tabNavTriage" onclick="switchAppView('triage')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          AI Intake Station
+        </button>
+        <button type="button" class="nav-pill-btn" id="tabNavPending" onclick="switchAppView('pending')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          Pending Works (<span id="counterNavPending">0</span>)
+        </button>
+        <button type="button" class="nav-pill-btn" id="tabNavDone" onclick="switchAppView('done')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          Works Done (<span id="counterNavDone">0</span>)
+        </button>
       </nav>
-      <div class="sidebar-footer">
-        <button id="logoutBtn" class="nav-item" style="background:transparent; border:none; width:100%; text-align:left; padding:12px 16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Secure Logout</button>
-      </div>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <div class="top-header">
-        <h1>Overview</h1>
+      <div class="header-actions">
+        <a href="../index.html" class="back-portfolio-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          Portfolio
+        </a>
+        <button type="button" class="logout-btn" onclick="logoutAdmin()">Logout</button>
       </div>
+    </header>
 
-      <!-- Analytics -->
-      <div class="analytics-grid">
-        <div class="stat-card">
-          <span class="stat-title">Total Tickets</span>
-          <span class="stat-value" id="statTotal">0</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-title" style="color: var(--color-warning);">Pending & In Progress</span>
-          <span class="stat-value" id="statPending">0</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-title" style="color: var(--color-success);">Successfully Resolved</span>
-          <span class="stat-value" id="statResolved">0</span>
-        </div>
-      </div>
+    <!-- ========================================================
+         VIEW 1: AI ASSISTANT INTAKE STATION (LAYOUT 1 MOCKUP)
+         ======================================================== -->
+    <main id="viewTriage" class="view-container active-view">
+      <div class="layout-grid-triage">
+        
+        <!-- Left Side: Muted Teal Card with Chase Vector & Conversational Chat -->
+        <div class="card-muted-teal">
+          
+          <div class="vector-stage">
+            <!-- Dynamic Speech Bubble -->
+            <div id="chaseSpeechBubble" class="speech-bubble">
+              What are we going to fix today?
+            </div>
 
-      <div class="content-grid">
-        <!-- Create Ticket Form -->
-        <div class="panel">
-          <div class="panel-header">
-            <h2 class="panel-title">New Repair Ticket</h2>
+            <!-- Animated Vector Character -->
+            <img src="vector/Chase.png" alt="Chase Assistant" class="chase-vector-img" id="chaseRobot" onclick="onChaseClick()" title="Click me to say hello!" />
           </div>
-          <form id="ticketForm">
-            <div class="form-group">
-              <label class="form-label" for="customerName">Customer Name</label>
-              <input type="text" id="customerName" class="form-input" placeholder="e.g. Jane Doe" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="deviceModel">Device Model</label>
-              <input type="text" id="deviceModel" class="form-input" placeholder="e.g. MacBook Pro M1" required>
-            </div>
-            <div class="form-group">
-              <div class="ai-header">
-                <label class="form-label" for="issueSymptom" style="margin:0;">Reported Issue</label>
-              </div>
-              <textarea id="issueSymptom" class="form-input" placeholder="Describe the hardware or software problem..." required></textarea>
-            </div>
-            <button type="submit" class="btn-submit" id="submitTicketBtn">Create Ticket & Diagnose</button>
+
+          <!-- Conversation Log -->
+          <div class="chat-history-log" id="chatHistoryLog">
+            <!-- Populated dynamically via JS -->
+          </div>
+
+          <!-- Bottom Chat Input Pill -->
+          <form id="triageChatForm" class="chat-input-bar" onsubmit="handleTriageSubmit(event)">
+            <input type="text" id="triageInput" class="chat-input-field" placeholder="Type customer name or full repair details..." autocomplete="off" />
+            <button type="submit" class="chat-send-btn" aria-label="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              </svg>
+            </button>
           </form>
+
         </div>
 
-        <!-- Ticket Database -->
-        <div class="panel">
-          <div class="panel-header" style="flex-direction: column; align-items: stretch; gap: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <h2 class="panel-title" style="margin: 0; padding: 0; border: none;">Ticket Database</h2>
-              <div class="search-bar">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchTickets" class="form-input" placeholder="Search customer or ID...">
+        <!-- Right Side: Metallic Gold Card with AI Summary & Log Diagnose Button -->
+        <div class="card-metallic-gold">
+          
+          <h2 class="gold-header-title">Ai summary and answers goes here</h2>
+
+          <div id="diagSummaryBox" class="diagnostic-output-box">
+            <div class="diag-placeholder" id="diagPlaceholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <p>Awaiting customer intake details.<br>Chat with Chase on the left to generate an AI hardware diagnostic.</p>
+            </div>
+
+            <div id="diagActiveContent" style="display: none;">
+              <div class="diag-meta-row">
+                <div class="diag-meta-item">Customer: <span id="diagCustomerName">&mdash;</span></div>
+                <div class="diag-meta-item">Unit: <span id="diagDeviceUnit">&mdash;</span></div>
+                <div class="diag-meta-item">Reported Issue: <span id="diagIssueDesc">&mdash;</span></div>
+              </div>
+              <div class="diag-summary-text" id="diagSummaryText">
+                <!-- AI Output injected here -->
               </div>
             </div>
-            <div class="tabs" style="display: flex; gap: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 0;">
-              <button class="tab-btn active" id="tabActive">Active Tickets</button>
-              <button class="tab-btn" id="tabResolved">Resolved History</button>
-            </div>
           </div>
-          <div class="ticket-list" id="ticketsContainer">
-            <!-- Tickets injected via JS -->
+
+          <div class="diag-bottom-bar">
+            <button type="button" id="btnLogDiagnose" class="btn-log-diagnose" onclick="logDiagnoseToDatabase()" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              LOG DIAGNOSE
+            </button>
           </div>
+
         </div>
+
       </div>
     </main>
+
+    <!-- ========================================================
+         VIEW 2: LIST OF PENDING WORKS (LAYOUT 2 MOCKUP)
+         ======================================================== -->
+    <main id="viewPending" class="view-container">
+      <div class="layout-grid-pending">
+        
+        <!-- Left Side: List of Pending Works in Muted Teal -->
+        <div class="card-pending-list-container">
+          <h2 class="pending-heading">list of pending works</h2>
+
+          <div class="pending-search-bar">
+            <input type="text" id="pendingSearchInput" class="pending-search-input" placeholder="Search customer name or device model..." onkeyup="renderPendingWorks(this.value)" />
+          </div>
+
+          <div class="works-scroll-list" id="pendingWorksList">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Right Side: Number of Works Done & Chase Vector ("time to work") -->
+        <div class="pending-right-column">
+          
+          <!-- Top Button: Number of works done -->
+          <button type="button" class="btn-works-done-badge" onclick="switchAppView('done')">
+            number of works done (<span id="counterBadgeDone">0</span>)
+          </button>
+
+          <!-- Bottom Stage: Speech Bubble & Chase -->
+          <div class="time-to-work-stage">
+            <div class="speech-bubble-work" id="bubbleTimeToWork">
+              time to work
+            </div>
+            <img src="vector/Chase.png" alt="Chase Ready to Work" class="chase-vector-img" style="width: 210px; height: 210px;" />
+            <button type="button" class="btn-new-intake-jump" onclick="switchAppView('triage')">
+              + Intake New Customer
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ========================================================
+         VIEW 3: FIX COMPLETE / RESOLVED HISTORY ARCHIVE
+         ======================================================== -->
+    <main id="viewDone" class="view-container">
+      <div class="card-completed-container">
+        
+        <div class="completed-header">
+          <div>
+            <h2 class="completed-title">Fix Complete / Resolved History</h2>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-top: 4px;">
+              Archive of all successfully serviced hardware work orders and diagnostic records.
+            </p>
+          </div>
+          <button type="button" class="nav-pill-btn active" onclick="switchAppView('pending')">
+            &larr; Return to Pending Works
+          </button>
+        </div>
+
+        <div class="completed-list" id="completedWorksList">
+          <!-- Injected dynamically -->
+        </div>
+
+      </div>
+    </main>
+
   </div>
 
-  <!-- Details Modal -->
-  <div id="ticketModal" class="modal-overlay">
-    <div class="modal-content" id="modalContent">
-      <!-- Injected via JS -->
+  <!-- Customer Diagnostic Detail Modal -->
+  <div id="customerDetailModal" class="app-modal-overlay">
+    <div class="app-modal-window">
+      <button type="button" class="app-modal-close" onclick="closeCustomerModal()">&times;</button>
+      <div id="customerModalBody">
+        <!-- Injected dynamically -->
+      </div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module">
-    // --- 1. Authentication & Security ---
+
+  <script>
+    /* ========================================================
+       1. AUTHENTICATION & SESSION MANAGEMENT
+       ======================================================== */
     const loginOverlay = document.getElementById('loginOverlay');
-    const loginForm = document.getElementById('loginForm');
-    const logoutBtn = document.getElementById('logoutBtn');
-    
-    // Check local Auth state
-    if (localStorage.getItem('adminAuth') === 'true') {
+    const adminLoginForm = document.getElementById('adminLoginForm');
+    const loginErrorMsg = document.getElementById('loginErrorMsg');
+
+    if (localStorage.getItem('fixit_admin_auth') === 'true') {
       loginOverlay.style.display = 'none';
     }
 
-    loginForm.addEventListener('submit', (e) => {
+    adminLoginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const u = document.getElementById('loginUser').value;
-      const p = document.getElementById('loginPass').value;
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value.trim();
+
       if (u === 'admin' && p === 'admin123') {
-        localStorage.setItem('adminAuth', 'true');
+        localStorage.setItem('fixit_admin_auth', 'true');
         loginOverlay.style.display = 'none';
-        showToast('Successfully logged in', 'success');
+        showToast('Welcome, Administrator! Diagnostic Station Ready.', 'success');
+        triggerChaseSpeech('Ready to diagnose! Who is our customer today?');
       } else {
-        document.getElementById('loginError').style.display = 'block';
+        loginErrorMsg.style.display = 'block';
       }
     });
 
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('adminAuth');
+    function logoutAdmin() {
+      localStorage.removeItem('fixit_admin_auth');
       loginOverlay.style.display = 'flex';
-      document.getElementById('loginUser').value = '';
-      document.getElementById('loginPass').value = '';
-    });
-
-    // --- 2. Toast Notifications ---
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          ${type === 'success' ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>' : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'}
-        </svg>
-        <span style="font-size: 0.9rem; font-weight: 500;">${message}</span>
-      `;
-      container.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      loginErrorMsg.style.display = 'none';
     }
 
-    // --- 3. Supabase Setup ---
-    const supabaseUrl = 'https://wuyjwrqygvduspfngubk.supabase.co';
-    const supabaseKey = 'sb_publishable_MuB_tUrjHUVY5TXLstHMxg_zVllsuJk';
-    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+    /* ========================================================
+       2. TOAST NOTIFICATIONS
+       ======================================================== */
+    function showToast(msg) {
+      const tray = document.getElementById('toastTray');
+      const toast = document.createElement('div');
+      toast.className = 'app-toast';
+      toast.textContent = msg;
+      tray.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
 
-    let ticketsArray = [];
+    /* ========================================================
+       3. VIEW SWITCHER (Triage, Pending, Done)
+       ======================================================== */
+    function switchAppView(viewId) {
+      document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active-view'));
+      document.querySelectorAll('.nav-pill-btn').forEach(el => el.classList.remove('active'));
 
-    // --- 4. Fast AI Integration & CRUD Operations ---
-    const ticketForm = document.getElementById('ticketForm');
-    const searchTickets = document.getElementById('searchTickets');
-    const issueSymptom = document.getElementById('issueSymptom');
-
-    ticketForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('customerName').value.trim();
-      const device = document.getElementById('deviceModel').value.trim();
-      const issue = issueSymptom.value.trim();
-
-      const btn = document.getElementById('submitTicketBtn');
-      btn.disabled = true; btn.textContent = '✨ AI is analyzing & creating...';
-
-      try {
-        // Step 1: Request AI Diagnosis
-        let aiLog = "";
-        try {
-          const deviceText = device || "Unknown Device";
-          const res = await fetch('/api/diagnose', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ symptom: issue, device: deviceText })
-          });
-          if (!res.ok) throw new Error("Server error");
-          const data = await res.json();
-          aiLog = data.diagnosis;
-        } catch (error) {
-          console.error("AI Error:", error);
-          aiLog = "AI Diagnostics unavailable at this time.";
-        }
-
-        // Step 2: Insert into Database
-        const { error } = await supabaseClient.from('tickets').insert([{ 
-          name, device, issue, ai_log: aiLog, status: 'Pending' 
-        }]);
-        if (error) throw error;
-        
-        ticketForm.reset();
-        showToast('Ticket created with AI Diagnostics!');
-        fetchTickets();
-      } catch (error) {
-        showToast('Failed to create ticket', 'error');
-      } finally {
-        btn.disabled = false; btn.textContent = 'Create Ticket & Diagnose';
+      if (viewId === 'triage') {
+        document.getElementById('viewTriage').classList.add('active-view');
+        document.getElementById('tabNavTriage').classList.add('active');
+      } else if (viewId === 'pending') {
+        document.getElementById('viewPending').classList.add('active-view');
+        document.getElementById('tabNavPending').classList.add('active');
+        renderPendingWorks();
+      } else if (viewId === 'done') {
+        document.getElementById('viewDone').classList.add('active-view');
+        document.getElementById('tabNavDone').classList.add('active');
+        renderCompletedWorks();
       }
-    });
+    }
 
-    async function fetchTickets() {
+    /* ========================================================
+       4. SUPABASE & LOCAL STORAGE REPLICATION
+       ======================================================== */
+    const SUPABASE_URL = 'https://wuyjwrqygvduspfngubk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_MuB_tUrjHUVY5TXLstHMxg_zVllsuJk';
+    let supabaseClient = null;
+
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (err) {
+      console.warn("Supabase initialization error:", err);
+    }
+
+    let allTickets = JSON.parse(localStorage.getItem('fixit_local_tickets') || '[]');
+
+    async function syncDatabase() {
+      if (!supabaseClient) {
+        updateTicketCounters();
+        return;
+      }
       try {
         const { data, error } = await supabaseClient.from('tickets').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        ticketsArray = data;
-        updateAnalytics();
-        renderTickets(searchTickets.value);
-      } catch (error) {
-        console.error(error);
+        if (!error && data && data.length > 0) {
+          allTickets = data;
+          localStorage.setItem('fixit_local_tickets', JSON.stringify(allTickets));
+        }
+      } catch (err) {
+        console.warn("Supabase fetch fallback to local:", err);
+      }
+      updateTicketCounters();
+      renderPendingWorks();
+      renderCompletedWorks();
+    }
+
+    function updateTicketCounters() {
+      const pendingCount = allTickets.filter(t => t.status !== 'Resolved').length;
+      const doneCount = allTickets.filter(t => t.status === 'Resolved').length;
+
+      document.getElementById('counterNavPending').textContent = pendingCount;
+      document.getElementById('counterNavDone').textContent = doneCount;
+      document.getElementById('counterBadgeDone').textContent = doneCount;
+
+      const bubbleWork = document.getElementById('bubbleTimeToWork');
+      if (bubbleWork) {
+        if (pendingCount === 0) {
+          bubbleWork.textContent = 'all caught up! great job!';
+        } else if (pendingCount === 1) {
+          bubbleWork.textContent = '1 unit waiting for work!';
+        } else {
+          bubbleWork.textContent = `${pendingCount} units ready to fix!`;
+        }
       }
     }
 
-    function updateAnalytics() {
-      document.getElementById('statTotal').innerText = ticketsArray.length;
-      document.getElementById('statResolved').innerText = ticketsArray.filter(t => t.status === 'Resolved').length;
-      document.getElementById('statPending').innerText = ticketsArray.filter(t => t.status !== 'Resolved').length;
+    /* ========================================================
+       5. CONVERSATIONAL AI INTAKE TRIAGE (LAYOUT 1)
+       ======================================================== */
+    let currentTriage = {
+      step: 0, // 0 = idle / ask customer, 1 = ask unit, 2 = ask issue, 3 = analyzing/done
+      customerName: '',
+      deviceUnit: '',
+      reportedIssue: '',
+      aiDiagnosis: ''
+    };
+
+    const chaseSpeechBubble = document.getElementById('chaseSpeechBubble');
+    const chatHistoryLog = document.getElementById('chatHistoryLog');
+    const triageInput = document.getElementById('triageInput');
+
+    function triggerChaseSpeech(text) {
+      if (chaseSpeechBubble) {
+        chaseSpeechBubble.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          chaseSpeechBubble.textContent = text;
+          chaseSpeechBubble.style.transform = 'scale(1)';
+        }, 120);
+      }
     }
 
-    let currentTab = 'Active';
+    function addChatMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = `chat-bubble-msg ${sender === 'user' ? 'chat-msg-user' : 'chat-msg-bot'}`;
+      msg.textContent = text;
+      chatHistoryLog.appendChild(msg);
+      chatHistoryLog.scrollTop = chatHistoryLog.scrollHeight;
+    }
 
-    document.getElementById('tabActive').addEventListener('click', (e) => {
-      currentTab = 'Active';
-      e.target.classList.add('active');
-      document.getElementById('tabResolved').classList.remove('active');
-      renderTickets(searchTickets.value);
-    });
+    function onChaseClick() {
+      const greetings = [
+        "What are we going to fix today?",
+        "Ready to inspect hardware telemetry!",
+        "Got a broken laptop or desktop? Tell me the details!",
+        "Diagnostics online! Let's get to work!"
+      ];
+      const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+      triggerChaseSpeech(randomGreeting);
+    }
 
-    document.getElementById('tabResolved').addEventListener('click', (e) => {
-      currentTab = 'Resolved';
-      e.target.classList.add('active');
-      document.getElementById('tabActive').classList.remove('active');
-      renderTickets(searchTickets.value);
-    });
+    // Smart One-Shot Entity Extraction
+    function tryOneShotExtraction(rawText) {
+      const text = rawText.trim();
+      // Look for patterns like "Customer: X, Unit: Y, Issue: Z" or "X, Y, Z"
+      const customerMatch = text.match(/(?:customer|client|name)?\s*[:\-]?\s*([A-Za-z\s]+?)(?:,|\s+(?:with|having|unit|device|model|reports|experiencing)\s+)/i);
+      const deviceMatch = text.match(/(?:unit|device|model|laptop|pc|desktop)?\s*[:\-]?\s*([A-Za-z0-9\s]+?(?:MacBook|Dell|HP|Lenovo|Acer|Asus|ThinkPad|Pro|Air|iPhone|Galaxy|Desktop|Laptop|PC|Nitro|ROG|iPad|Console)[A-Za-z0-9\s]*)/i);
 
-    function renderTickets(searchTerm = '') {
-      const container = document.getElementById('ticketsContainer');
-      container.innerHTML = '';
-      
-      const lower = searchTerm.toLowerCase();
-      let filtered = ticketsArray.filter(t => 
-        (t.name && t.name.toLowerCase().includes(lower)) || 
-        (t.id && String(t.id).toLowerCase().includes(lower))
-      );
-
-      // Apply Tab Filter
-      if (currentTab === 'Active') {
-        filtered = filtered.filter(t => t.status !== 'Resolved');
-      } else {
-        filtered = filtered.filter(t => t.status === 'Resolved');
+      if (customerMatch && deviceMatch && text.length > 25) {
+        let name = customerMatch[1].replace(/^(customer|client|name)/i, '').trim();
+        let device = deviceMatch[1].trim();
+        let issue = text.replace(customerMatch[0], '').replace(deviceMatch[0], '').replace(/^(with|having|experiencing|issue|problem|reports)/i, '').trim();
+        if (issue.length > 5) {
+          return { name, device, issue };
+        }
       }
+      return null;
+    }
 
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state">No tickets found in the database.</div>';
+    async function handleTriageSubmit(e) {
+      e.preventDefault();
+      const val = triageInput.value.trim();
+      if (!val) return;
+
+      addChatMessage('user', val);
+      triageInput.value = '';
+
+      // Check for one-shot full details
+      const oneShot = tryOneShotExtraction(val);
+      if (oneShot && currentTriage.step === 0) {
+        currentTriage.customerName = oneShot.name;
+        currentTriage.deviceUnit = oneShot.device;
+        currentTriage.reportedIssue = oneShot.issue;
+        currentTriage.step = 3;
+
+        addChatMessage('bot', `Great! Identified customer ${oneShot.name} with ${oneShot.device}. Analyzing reported issue now...`);
+        triggerChaseSpeech(`Analyzing ${oneShot.device} issue right now!`);
+        await executeAiDiagnosis(currentTriage.customerName, currentTriage.deviceUnit, currentTriage.reportedIssue);
         return;
       }
 
-      filtered.forEach(ticket => {
-        let sc = ticket.status === 'In Progress' ? 'status-Progress' : (ticket.status === 'Resolved' ? 'status-Resolved' : 'status-Pending');
-        const item = document.createElement('div');
-        item.className = 'ticket-item';
-        item.innerHTML = `
-          <div class="ticket-info">
-            <span class="ticket-id">#${String(ticket.id).substring(0,8)}</span>
-            <span class="ticket-name">${ticket.name}</span>
-            <span class="ticket-device">💻 ${ticket.device}</span>
+      // Step-by-Step Flow
+      if (currentTriage.step === 0) {
+        // Technician provided Customer Name
+        currentTriage.customerName = val;
+        currentTriage.step = 1;
+        const reply = `Got it! Customer is ${val}. What is the unit or device model? (e.g. MacBook Pro M1, Dell XPS 15)`;
+        addChatMessage('bot', reply);
+        triggerChaseSpeech("What's the unit or device model?");
+        triageInput.placeholder = "Enter device model (e.g., MacBook, Dell, HP)...";
+      } else if (currentTriage.step === 1) {
+        // Technician provided Unit Model
+        currentTriage.deviceUnit = val;
+        currentTriage.step = 2;
+        const reply = `Understood: ${val}. What issue or symptoms is the customer experiencing?`;
+        addChatMessage('bot', reply);
+        triggerChaseSpeech("What's the issue or symptoms reported?");
+        triageInput.placeholder = "Describe hardware or software problem...";
+      } else if (currentTriage.step === 2) {
+        // Technician provided Issue Description
+        currentTriage.reportedIssue = val;
+        currentTriage.step = 3;
+        const reply = `Synthesizing diagnostic parameters for ${currentTriage.deviceUnit}...`;
+        addChatMessage('bot', reply);
+        triggerChaseSpeech("Analyzing the issue right now...");
+        triageInput.placeholder = "Intake complete. Log diagnose or start new...";
+        
+        await executeAiDiagnosis(currentTriage.customerName, currentTriage.deviceUnit, currentTriage.reportedIssue);
+      } else {
+        // Intake is already active or user wants to restart
+        addChatMessage('bot', `Diagnostic summary is ready on the gold panel! Click "LOG DIAGNOSE" to save this ticket.`);
+        triggerChaseSpeech(`Click "LOG DIAGNOSE" to save this work order!`);
+      }
+    }
+
+    /* ========================================================
+       6. AI HARDWARE DIAGNOSTIC ENGINE (/api/diagnose + Fallback)
+       ======================================================== */
+    async function executeAiDiagnosis(name, device, issue) {
+      const diagPlaceholder = document.getElementById('diagPlaceholder');
+      const diagActiveContent = document.getElementById('diagActiveContent');
+      const diagCustomerName = document.getElementById('diagCustomerName');
+      const diagDeviceUnit = document.getElementById('diagDeviceUnit');
+      const diagIssueDesc = document.getElementById('diagIssueDesc');
+      const diagSummaryText = document.getElementById('diagSummaryText');
+      const btnLogDiagnose = document.getElementById('btnLogDiagnose');
+
+      diagPlaceholder.style.display = 'none';
+      diagActiveContent.style.display = 'block';
+
+      diagCustomerName.textContent = name;
+      diagDeviceUnit.textContent = device;
+      diagIssueDesc.textContent = issue;
+      diagSummaryText.innerHTML = '<span style="color:var(--deep-space-blue); font-weight:700;">✨ Gemini AI is analyzing hardware telemetry & symptom logs...</span>';
+
+      let aiResult = "";
+
+      try {
+        const res = await fetch('/api/diagnose', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ symptom: issue, device: device })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          aiResult = data.diagnosis;
+        } else {
+          throw new Error("Server API response not OK");
+        }
+      } catch (err) {
+        console.warn("Using smart local diagnostic logic:", err);
+        // Smart Local Diagnostic Generator based on symptoms
+        aiResult = generateSmartLocalDiagnosis(device, issue);
+      }
+
+      currentTriage.aiDiagnosis = aiResult;
+
+      // Format AI output
+      let formattedText = aiResult.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      formattedText = formattedText.replace(/([^\>])(\d+\.\s)/g, '$1<br><br>$2');
+
+      diagSummaryText.innerHTML = formattedText;
+      btnLogDiagnose.disabled = false;
+
+      triggerChaseSpeech("Diagnostics ready! Click LOG DIAGNOSE to record it.");
+      addChatMessage('bot', "Diagnosis complete! Summary has appeared on the gold panel. Click LOG DIAGNOSE to submit to pending works.");
+    }
+
+    function generateSmartLocalDiagnosis(device, issue) {
+      const lower = issue.toLowerCase();
+      if (lower.includes('blue screen') || lower.includes('bsod') || lower.includes('crash')) {
+        return `**Case Summary:** Operating system kernel panic triggered by storage controller or memory parity failure on ${device}.\n1. Boot into Windows Recovery Environment and run 'chkdsk /f /r' to inspect storage sectors.\n2. Perform Windows Memory Diagnostic (mdsched.exe) to isolate faulty RAM sticks.\n3. Update SATA/NVMe storage controller firmware and review Minidump crash logs.`;
+      } else if (lower.includes('heat') || lower.includes('fan') || lower.includes('temperature') || lower.includes('hot')) {
+        return `**Case Summary:** Thermal throttling and heat dissipation blockage detected on ${device}.\n1. Disassemble chassis and clear accumulated dust from heatsink cooling fins and blower fan.\n2. Clean old degraded thermal paste with 99% isopropyl alcohol and apply Arctic MX-4 thermal compound.\n3. Stress test CPU/GPU with Cinebench and verify temperatures stabilize below 80°C.`;
+      } else if (lower.includes('screen') || lower.includes('display') || lower.includes('flicker') || lower.includes('black')) {
+        return `**Case Summary:** Display panel EDP ribbon cable looseness or backlight inverter fault on ${device}.\n1. Connect external HDMI monitor to verify if GPU output is functioning normally.\n2. Reseat internal 30-pin/40-pin eDP display connector on motherboard.\n3. Inspect display panel for cracked traces or test with a replacement compatible LCD panel.`;
+      } else if (lower.includes('power') || lower.includes('turn on') || lower.includes('dead') || lower.includes('charge')) {
+        return `**Case Summary:** Power delivery failure, DC jack degradation, or shorted motherboard capacitor on ${device}.\n1. Test power adapter voltage output with digital multimeter (verify rated DC voltage).\n2. Perform hard battery reset by disconnecting main battery and holding power button for 30s.\n3. Inspect motherboard 19V rail MOSFETs for thermal hotspots with thermal camera.`;
+      } else {
+        return `**Case Summary:** General hardware malfunction and system degradation reported on ${device}.\n1. Execute POST diagnostics and check BIOS hardware telemetry for component errors.\n2. Isolate peripherals and perform bench testing with known-good RAM and power supply.\n3. Run manufacturer hardware diagnostics (Dell ePSA / HP UEFI PC Diagnostics).`;
+      }
+    }
+
+    /* ========================================================
+       7. LOG DIAGNOSE BUTTON & TICKET CREATION
+       ======================================================== */
+    async function logDiagnoseToDatabase() {
+      const btn = document.getElementById('btnLogDiagnose');
+      btn.disabled = true;
+      btn.innerHTML = 'Logging to database...';
+
+      const newTicket = {
+        id: 'TCK-' + Date.now().toString().slice(-6),
+        name: currentTriage.customerName || 'Walk-in Customer',
+        device: currentTriage.deviceUnit || 'Generic PC',
+        issue: currentTriage.reportedIssue || 'Hardware check',
+        ai_log: currentTriage.aiDiagnosis || 'Standard bench diagnostics performed.',
+        status: 'Pending',
+        created_at: new Date().toISOString()
+      };
+
+      // 1. Save to Supabase if connected
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('tickets').insert([{
+            name: newTicket.name,
+            device: newTicket.device,
+            issue: newTicket.issue,
+            ai_log: newTicket.ai_log,
+            status: 'Pending'
+          }]);
+        } catch (e) {
+          console.warn("Supabase insert error, saved locally:", e);
+        }
+      }
+
+      // 2. Save to local storage array
+      allTickets.unshift(newTicket);
+      localStorage.setItem('fixit_local_tickets', JSON.stringify(allTickets));
+
+      showToast(`Logged repair for ${newTicket.name}! Transferred to Pending Works.`);
+      updateTicketCounters();
+
+      // Reset triage state
+      currentTriage = { step: 0, customerName: '', deviceUnit: '', reportedIssue: '', aiDiagnosis: '' };
+      document.getElementById('diagActiveContent').style.display = 'none';
+      document.getElementById('diagPlaceholder').style.display = 'flex';
+      btn.disabled = true;
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> LOG DIAGNOSE';
+
+      triageInput.placeholder = "Type customer name or full repair details...";
+      triggerChaseSpeech("Ticket saved! Now on to the bench list.");
+
+      // Automatically jump to Page 2 (Pending Works) as requested!
+      setTimeout(() => {
+        switchAppView('pending');
+      }, 700);
+    }
+
+    /* ========================================================
+       8. LIST OF PENDING WORKS (LAYOUT 2)
+       ======================================================== */
+    function renderPendingWorks(searchTerm = '') {
+      const container = document.getElementById('pendingWorksList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const search = searchTerm.toLowerCase().trim();
+      const pendingTickets = allTickets.filter(t => t.status !== 'Resolved' && (
+        (t.name && t.name.toLowerCase().includes(search)) ||
+        (t.device && t.device.toLowerCase().includes(search)) ||
+        (t.issue && t.issue.toLowerCase().includes(search))
+      ));
+
+      if (pendingTickets.length === 0) {
+        container.innerHTML = `<div class="empty-works-placeholder">No pending repair works found. Click "+ Intake New Customer" to diagnose one!</div>`;
+        return;
+      }
+
+      pendingTickets.forEach(ticket => {
+        const card = document.createElement('div');
+        card.className = 'customer-work-card';
+        card.onclick = () => openCustomerModal(ticket);
+
+        card.innerHTML = `
+          <div class="work-info-group">
+            <span class="work-customer-name">${ticket.name}</span>
+            <span class="work-unit-name">💻 ${ticket.device}</span>
+            <span class="work-issue-snippet">Issue: ${ticket.issue}</span>
           </div>
-          <div class="ticket-actions-group">
-            <span class="status-badge ${sc}">${ticket.status || 'Pending'}</span>
-            <button class="btn-view" onclick="window.openModal('${ticket.id}')">Manage</button>
+          <div class="work-actions-group" onclick="event.stopPropagation()">
+            <button type="button" class="btn-view-diag" onclick="openCustomerModalById('${ticket.id}')">View Details</button>
+            <button type="button" class="btn-resolve-work" onclick="resolveTicket('${ticket.id}')">Fix Complete ✓</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function resolveTicket(ticketId) {
+      const ticket = allTickets.find(t => String(t.id) === String(ticketId));
+      if (!ticket) return;
+
+      ticket.status = 'Resolved';
+      localStorage.setItem('fixit_local_tickets', JSON.stringify(allTickets));
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('tickets').update({ status: 'Resolved' }).eq('id', ticketId);
+        } catch (e) {
+          console.warn("Supabase update error:", e);
+        }
+      }
+
+      showToast(`Work for ${ticket.name} marked as Fix Complete!`);
+      updateTicketCounters();
+      renderPendingWorks();
+    }
+
+    /* ========================================================
+       9. FIX COMPLETE / RESOLVED HISTORY VIEW
+       ======================================================== */
+    function renderCompletedWorks() {
+      const container = document.getElementById('completedWorksList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const doneTickets = allTickets.filter(t => t.status === 'Resolved');
+
+      if (doneTickets.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 48px; color: rgba(255,255,255,0.6);">No completed repair records yet. Resolve pending works to archive them here!</div>`;
+        return;
+      }
+
+      doneTickets.forEach(ticket => {
+        const item = document.createElement('div');
+        item.className = 'completed-item-card';
+
+        let formattedAi = (ticket.ai_log || 'Bench testing verified complete.').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        item.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.75rem; font-family:var(--font-mono); color:var(--lime-green);">#${String(ticket.id).slice(-8)}</span>
+              <span style="background:rgba(230,249,175,0.15); color:var(--lime-green); border:1px solid rgba(230,249,175,0.4); padding:3px 8px; border-radius:9999px; font-size:0.7rem; font-weight:700;">RESOLVED</span>
+            </div>
+            <h4 style="font-family:var(--font-heading); font-size:1.25rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${ticket.name}</h4>
+            <p style="color:var(--muted-teal); font-size:0.85rem; font-weight:600; margin-bottom:10px;">💻 ${ticket.device}</p>
+            <p style="color:rgba(255,255,255,0.75); font-size:0.84rem; line-height:1.4; margin-bottom:12px;"><strong>Reported:</strong> ${ticket.issue}</p>
+            <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px; font-size:0.8rem; color:rgba(255,255,255,0.85); line-height:1.45;">
+              ${formattedAi}
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.08);">
+            <button type="button" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.7); padding:6px 12px; border-radius:6px; font-size:0.75rem; cursor:pointer;" onclick="reopenTicket('${ticket.id}')">Re-open Work Order</button>
+            <span style="font-size:0.75rem; color:rgba(255,255,255,0.4);">Serviced &amp; Checked</span>
           </div>
         `;
         container.appendChild(item);
       });
     }
 
-    searchTickets.addEventListener('keyup', (e) => renderTickets(e.target.value));
-
-    // Modal Management
-    window.openModal = function(id) {
-      const ticket = ticketsArray.find(t => String(t.id) === String(id));
+    async function reopenTicket(ticketId) {
+      const ticket = allTickets.find(t => String(t.id) === String(ticketId));
       if (!ticket) return;
-      
-      let sc = ticket.status === 'In Progress' ? 'status-Progress' : (ticket.status === 'Resolved' ? 'status-Resolved' : 'status-Pending');
-      
-      let aiHtml = '';
-      if (ticket.ai_log) {
-        let formattedLog = ticket.ai_log.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--color-white);">$1</strong>');
-        formattedLog = formattedLog.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        formattedLog = formattedLog.replace(/([^\>])(\d+\.\s)/g, '$1<br><br>$2');
-        
-        aiHtml = `<div style="background:rgba(168,85,247,0.05); padding:16px; border-radius:8px; font-size:0.9rem; border:1px solid rgba(168,85,247,0.3); margin-bottom:16px; line-height:1.6;"><strong style="color:var(--color-ai);">✨ AI Diagnostic Log:</strong><br><br><span style="color:var(--color-white-70);">${formattedLog}</span></div>`;
+
+      ticket.status = 'Pending';
+      localStorage.setItem('fixit_local_tickets', JSON.stringify(allTickets));
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('tickets').update({ status: 'Pending' }).eq('id', ticketId);
+        } catch (e) {}
       }
 
-      const content = `
-        <button class="modal-close" onclick="document.getElementById('ticketModal').style.display='none'">&times;</button>
-        <div style="display:flex; justify-content:space-between; margin-bottom:16px; align-items:center;">
-          <span style="font-family:monospace; color:var(--color-white-70);">#${String(ticket.id)}</span>
-          <span class="status-badge ${sc}">${ticket.status || 'Pending'}</span>
-        </div>
-        <h3 style="font-family:var(--font-heading); font-size:1.5rem; margin-bottom:4px;">${ticket.name}</h3>
-        <p style="color:var(--color-white-70); margin-bottom:24px;">💻 ${ticket.device}</p>
-        <div style="background:var(--color-bg); padding:16px; border-radius:8px; border:1px solid var(--color-border); margin-bottom:16px; font-size:0.9rem;">
-          <strong>Issue:</strong> ${ticket.issue}
-        </div>
-        ${aiHtml}
-        <select class="status-select" onchange="window.updateStatus('${ticket.id}', this.value)">
-          <option value="Pending" ${ticket.status === 'Pending' ? 'selected' : ''}>Set Status: Pending</option>
-          <option value="In Progress" ${ticket.status === 'In Progress' ? 'selected' : ''}>Set Status: In Progress</option>
-          <option value="Resolved" ${ticket.status === 'Resolved' ? 'selected' : ''}>Set Status: Resolved</option>
-        </select>
-        <button onclick="window.deleteTicket('${ticket.id}')" style="width:100%; padding:10px; margin-top:12px; background:transparent; border:1px solid rgba(239,68,68,0.3); color:var(--color-danger); border-radius:6px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">Delete Ticket</button>
-      `;
-      document.getElementById('modalContent').innerHTML = content;
-      document.getElementById('ticketModal').style.display = 'flex';
-    };
-
-    window.updateStatus = async function(id, status) {
-      try {
-        await supabaseClient.from('tickets').update({ status }).eq('id', id);
-        showToast('Ticket status updated');
-        fetchTickets();
-        document.getElementById('ticketModal').style.display = 'none';
-      } catch (e) { showToast('Error updating status', 'error'); }
-    };
-
-    window.deleteTicket = async function(id) {
-      if(!confirm("Are you sure you want to permanently delete this ticket?")) return;
-      try {
-        await supabaseClient.from('tickets').delete().eq('id', id);
-        showToast('Ticket deleted permanently');
-        fetchTickets();
-        document.getElementById('ticketModal').style.display = 'none';
-      } catch (e) { showToast('Error deleting ticket', 'error'); }
-    };
-
-    // Initialize
-    fetchTickets();
-  </script>
-  <script>
-    // WebGL Topography Background Effect from 21st.dev
-    const topoCanvas = document.getElementById('topo-canvas');
-    if (topoCanvas) {
-      const gl = topoCanvas.getContext('webgl', { alpha: false, antialias: false, depth: false });
-      if (gl) {
-          const vsSource = `
-              attribute vec2 a_position;
-              void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
-          `;
-
-          const fsSource = `
-              precision highp float;
-              uniform vec2 u_resolution;
-              uniform float u_time;
-              uniform float u_dpr;
-
-              vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
-              float snoise(vec2 v){
-                  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                  vec2 i  = floor(v + dot(v, C.yy) );
-                  vec2 x0 = v -   i + dot(i, C.xx);
-                  vec2 i1; i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-                  vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
-                  i = mod(i, 289.0);
-                  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
-                  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-                  m = m*m; m = m*m;
-                  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-                  vec3 h = abs(x) - 0.5; vec3 ox = floor(x + 0.5);
-                  vec3 a0 = x - ox; m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-                  vec3 g; g.x  = a0.x  * x0.x  + h.x  * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-                  return 130.0 * dot(m, g);
-              }
-
-              void main() {
-                  vec2 st = gl_FragCoord.xy / u_resolution.xy;
-                  st.x *= u_resolution.x / u_resolution.y;
-
-                  // 1px physical grid rendering
-                  float gridSize = 48.0 * u_dpr;
-                  vec2 gridSt = gl_FragCoord.xy / gridSize;
-                  vec2 gridFract = fract(gridSt);
-                  float lineThickness = 1.0 / gridSize;
-                  float gridLines = step(1.0 - lineThickness, gridFract.x) + step(1.0 - lineThickness, gridFract.y);
-                  gridLines = clamp(gridLines, 0.0, 1.0) * 0.12; 
-
-                  // Ultra-thin Topographic Lines
-                  float noiseScale = 1.4;
-                  vec2 noisePos = st * noiseScale + vec2(u_time * 0.015, u_time * 0.025);
-                  float n = snoise(noisePos) * 0.5 + 0.5;
-                  float numBands = 10.0;
-                  float bandVal = n * numBands;
-                  float triangleWave = abs(fract(bandVal) - 0.5) * 2.0; 
-                  
-                  // Thinner smoothstep constraint for fine industrial aesthetic
-                  float topoLines = smoothstep(0.02, 0.00, triangleWave) * 0.45;
-
-                  vec3 color = vec3(0.0);
-                  color += vec3(1.0) * gridLines;
-                  color += vec3(1.0) * topoLines;
-
-                  // Neon cyan glow
-                  vec3 accent = vec3(0.36, 0.88, 0.90);
-                  gl_FragColor = vec4(color * mix(vec3(1.0), accent, 0.3), 1.0);
-              }
-          `;
-
-          function createShader(gl, type, source) {
-              const shader = gl.createShader(type);
-              gl.shaderSource(shader, source);
-              gl.compileShader(shader);
-              return shader;
-          }
-
-          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-          const program = gl.createProgram();
-          gl.attachShader(program, vertexShader);
-          gl.attachShader(program, fragmentShader);
-          gl.linkProgram(program);
-          gl.useProgram(program);
-
-          const positionBuffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-
-          const positionLocation = gl.getAttribLocation(program, "a_position");
-          gl.enableVertexAttribArray(positionLocation);
-          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-          const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-          const timeLocation = gl.getUniformLocation(program, "u_time");
-          const dprLocation = gl.getUniformLocation(program, "u_dpr");
-
-          function resizeCanvas() {
-              const dpr = window.devicePixelRatio || 1;
-              topoCanvas.width = window.innerWidth * dpr;
-              topoCanvas.height = window.innerHeight * dpr;
-              gl.viewport(0, 0, topoCanvas.width, topoCanvas.height);
-              gl.uniform2f(resolutionLocation, topoCanvas.width, topoCanvas.height);
-              gl.uniform1f(dprLocation, dpr);
-          }
-
-          window.addEventListener('resize', resizeCanvas);
-          resizeCanvas();
-
-          let startTime = performance.now();
-          function render(time) {
-              gl.uniform1f(timeLocation, (time - startTime) * 0.001);
-              gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-              requestAnimationFrame(render);
-          }
-          requestAnimationFrame(render);
-      }
+      showToast(`Work order for ${ticket.name} moved back to Pending!`);
+      updateTicketCounters();
+      renderCompletedWorks();
     }
+
+    /* ========================================================
+       10. CUSTOMER DETAIL MODAL
+       ======================================================== */
+    function openCustomerModalById(id) {
+      const ticket = allTickets.find(t => String(t.id) === String(id));
+      if (ticket) openCustomerModal(ticket);
+    }
+
+    function openCustomerModal(ticket) {
+      const modal = document.getElementById('customerDetailModal');
+      const body = document.getElementById('customerModalBody');
+
+      let formattedAi = (ticket.ai_log || 'Standard diagnosis log.').replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--lime-green);">$1</strong>');
+      formattedAi = formattedAi.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
+      body.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span style="font-family:var(--font-mono); color:var(--muted-teal); font-size:0.8rem;">#${String(ticket.id)}</span>
+          <span style="background:${ticket.status === 'Resolved' ? 'var(--lime-green)' : 'var(--metallic-gold)'}; color:var(--dark-amethyst); padding:4px 10px; border-radius:9999px; font-size:0.75rem; font-weight:800;">${ticket.status || 'Pending'}</span>
+        </div>
+        <h3 style="font-family:var(--font-heading); font-size:1.8rem; font-weight:900; color:#ffffff; margin-bottom:4px;">${ticket.name}</h3>
+        <p style="color:var(--muted-teal); font-size:1.05rem; font-weight:600; margin-bottom:20px;">💻 Unit: ${ticket.device}</p>
+        
+        <div style="background:rgba(24,49,79,0.7); border:1px solid rgba(139,190,178,0.25); border-radius:12px; padding:16px; margin-bottom:20px;">
+          <h5 style="color:var(--lime-green); font-size:0.85rem; font-weight:700; text-transform:uppercase; margin-bottom:6px;">Reported Customer Problem:</h5>
+          <p style="font-size:0.95rem; line-height:1.5; color:#ffffff;">${ticket.issue}</p>
+        </div>
+
+        <div style="background:rgba(202,172,75,0.15); border:1px solid var(--metallic-gold); border-radius:12px; padding:20px; margin-bottom:24px;">
+          <h5 style="color:var(--metallic-gold); font-size:0.9rem; font-weight:800; text-transform:uppercase; margin-bottom:10px;">✨ AI Diagnostic Summary &amp; Recommended Steps:</h5>
+          <div style="font-size:0.92rem; line-height:1.6; color:#ffffff;">${formattedAi}</div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:flex-end;">
+          ${ticket.status !== 'Resolved' ? `
+            <button type="button" class="btn-resolve-work" style="padding:12px 24px; font-size:0.9rem;" onclick="resolveTicket('${ticket.id}'); closeCustomerModal();">
+              Mark Fix Complete ✓
+            </button>
+          ` : `
+            <button type="button" style="background:transparent; border:1px solid rgba(255,255,255,0.3); color:#ffffff; padding:10px 18px; border-radius:9999px; font-size:0.85rem; cursor:pointer;" onclick="reopenTicket('${ticket.id}'); closeCustomerModal();">
+              Reopen Work Order
+            </button>
+          `}
+          <button type="button" class="btn-view-diag" style="padding:12px 20px;" onclick="closeCustomerModal()">Close Window</button>
+        </div>
+      `;
+
+      modal.classList.add('open');
+    }
+
+    function closeCustomerModal() {
+      const modal = document.getElementById('customerDetailModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCustomerModal();
+    });
+
+    // Initialize Database
+    syncDatabase();
   </script>
 </body>
 </html>
