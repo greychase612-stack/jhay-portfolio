@@ -5,10 +5,10 @@
   /* Colors */
   --color-bg:         #070707;
   --color-surface:    #161616;
-  --color-white:      #e8d8c9;
-  --color-white-90:   rgba(232, 216, 201, 0.9);
-  --color-white-70:   rgba(232, 216, 201, 0.7);
-  --color-white-50:   rgba(232, 216, 201, 0.5);
+  --color-white:      #ffffff;
+  --color-white-90:   rgba(255, 255, 255, 0.9);
+  --color-white-70:   rgba(255, 255, 255, 0.7);
+  --color-white-50:   rgba(255, 255, 255, 0.5);
   --color-white-20:   rgba(232, 216, 201, 0.2);
   --color-white-10:   rgba(232, 216, 201, 0.1);
   --color-white-05:   rgba(232, 216, 201, 0.05);
