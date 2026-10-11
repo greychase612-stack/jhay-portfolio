@@ -615,9 +615,11 @@ img {
 }
 
 .scroll-animation-section {
-  height: 240vh;
+  height: 320vh;
   position: relative;
   --scroll-progress: 0;
+  --pic-progress: 0;
+  --text-progress: 0;
 }
 
 .about-sticky-wrapper {
@@ -649,12 +651,13 @@ img {
   position: relative;
 }
 
+/* Picture starts centered & enlarged, then glides to left dock position */
 .about-image-wrap {
   position: relative;
-  transform: translateY(calc(30px * (1 - var(--scroll-progress)))) scale(calc(0.96 + 0.04 * var(--scroll-progress)));
-  opacity: calc(0.25 + 0.75 * var(--scroll-progress));
-  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
-  will-change: transform, opacity;
+  transform: translateX(calc(85% * (1 - var(--pic-progress, 0)))) scale(calc(1 + 0.15 * (1 - var(--pic-progress, 0))));
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+  z-index: 5;
 }
 
 .about-image-frame {
@@ -690,13 +693,14 @@ img {
   opacity: 0.3;
 }
 
+/* Staged Text: 100% invisible while picture is in the center, reveals after picture docks */
 .about-text {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  opacity: var(--scroll-progress);
-  transform: translateY(calc(30px * (1 - var(--scroll-progress))));
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  opacity: var(--text-progress, 0);
+  transform: translateX(calc(60px * (1 - var(--text-progress, 0))));
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
   will-change: transform, opacity;
 }
 
@@ -2099,6 +2103,10 @@ img {
   .about-grid {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+
+  .about-image-wrap {
+    transform: scale(calc(1 + 0.1 * (1 - var(--pic-progress, 0)))) !important;
   }
 
   .about-image {

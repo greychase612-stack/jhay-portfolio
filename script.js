@@ -309,21 +309,28 @@ function initAboutScrollAnimation() {
       section.style.setProperty('--about-curve', 0);
     }
 
-    // --- 2. Text Reveal Animation ---
+    // --- 2. Staged Scroll-to-Reveal Animation ---
     let progress = 0;
     // When the top of the section hits the top of the viewport
     if (rect.top <= 0) {
       const scrolled = -rect.top;
       const totalScrollable = rect.height - windowHeight;
       if (totalScrollable > 0) {
-        // Multiply by 1.5 to finish the animation before the section ends,
-        progress = (scrolled / totalScrollable) * 1.5;
+        progress = scrolled / totalScrollable;
       }
     }
     
     // Clamp between 0 and 1
     progress = Math.max(0, Math.min(1, progress));
     section.style.setProperty('--scroll-progress', progress);
+
+    // Stage 1: Picture glides from center to left dock position (0.0 to 0.50)
+    const picProgress = Math.min(1, progress / 0.50);
+    section.style.setProperty('--pic-progress', picProgress);
+
+    // Stage 2: Text reveals on the right AFTER picture clears center (0.45 to 0.85)
+    const textProgress = Math.max(0, Math.min(1, (progress - 0.45) / 0.40));
+    section.style.setProperty('--text-progress', textProgress);
   });
 }
 
