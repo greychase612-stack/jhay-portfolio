@@ -444,7 +444,7 @@ img {
    ABOUT SECTION
    ============================================ */
 .about-section {
-  background: linear-gradient(180deg, #A84400 0%, #4A1B00 100%);
+  background: #A84400;
   position: relative;
   z-index: 15;
   margin-top: -150px;
