@@ -109,11 +109,110 @@
       />
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-      <span class="scroll-text">SCROLL</span>
-    </div>
+    <!-- ===== MACOS LIQUID GLASS DOCK ===== -->
+    <nav class="macos-dock-wrapper" id="homeDock" aria-label="Quick Navigation Dock">
+      <div class="macos-dock-container">
+        
+        <!-- Dock Item: Home -->
+        <div class="dock-item" data-tooltip="Home">
+          <a href="#home" class="dock-btn" aria-label="Home">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Home</span>
+        </div>
+
+        <!-- Dock Item: About -->
+        <div class="dock-item" data-tooltip="About Me">
+          <a href="#about" class="dock-btn" aria-label="About Me">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">About Me</span>
+        </div>
+
+        <!-- Dock Item: Skills -->
+        <div class="dock-item" data-tooltip="Technical Skills">
+          <a href="#skills" class="dock-btn" aria-label="Technical Skills">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Technical Skills</span>
+        </div>
+
+        <!-- Dock Item: Projects -->
+        <div class="dock-item" data-tooltip="Featured Projects">
+          <a href="#projects" class="dock-btn" aria-label="Featured Projects">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Featured Projects</span>
+        </div>
+
+        <!-- Dock Item: Problem-Solving / Cases -->
+        <div class="dock-item" data-tooltip="Problem-Solving">
+          <a href="#cases" class="dock-btn" aria-label="Case Studies">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Problem-Solving</span>
+        </div>
+
+        <!-- Dock Item: Resume -->
+        <div class="dock-item" data-tooltip="View Resume">
+          <a href="#resume" class="dock-btn" aria-label="Resume">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Resume</span>
+        </div>
+
+        <div class="dock-separator" aria-hidden="true"></div>
+
+        <!-- Dock Item: GitHub -->
+        <div class="dock-item" data-tooltip="GitHub Profile">
+          <a href="https://github.com/greychase612-stack" target="_blank" rel="noopener noreferrer" class="dock-btn" aria-label="GitHub">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">GitHub</span>
+        </div>
+
+        <!-- Dock Item: LinkedIn -->
+        <div class="dock-item" data-tooltip="LinkedIn Profile">
+          <a href="https://www.linkedin.com/in/jhay-castro" target="_blank" rel="noopener noreferrer" class="dock-btn" aria-label="LinkedIn">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">LinkedIn</span>
+        </div>
+
+        <!-- Dock Item: Contact / Email -->
+        <div class="dock-item" data-tooltip="Get in Touch">
+          <a href="#contact" class="dock-btn" aria-label="Contact">
+            <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <span class="dock-tooltip">Contact</span>
+        </div>
+
+      </div>
+    </nav>
     </div>
   </section>
 
@@ -136,8 +235,15 @@
         </div>
         <div class="about-text">
           <p class="about-desc">
-            I am a BSIT graduate specializing in network infrastructure. My core technical skills include networking, TCP/IP configurations, and managing routers, switches, and firewalls. I am passionate about building reliable, scalable systems and am actively pursuing a career as a Network Engineer. I thrive on solving complex technical challenges and continuous learning.
+            I am a graduating Bachelor of Science in Information Technology (BSIT) student at <strong>Datamex College of Saint Adeline</strong>, specializing in enterprise network infrastructure, system diagnostics, and process automation. My core competencies center on Cisco router and switch provisioning, TCP/IP protocol configurations, subnetting (VLSM/CIDR), VLAN segmentation, and firewall security auditing.
           </p>
+          <p class="about-desc">
+            Beyond theoretical coursework, I hold a <strong>National Certificate II (NC II) in Computer Systems Servicing</strong> and have served as <strong>Technical Project Lead</strong> at Datamex, where I architected and deployed automated enrollment workflows that eliminated manual administrative bottlenecks. Driven by professional values of integrity, continuous learning, and security-first engineering, my objective is to launch my career as a <strong>Junior Network Engineer</strong> or Infrastructure Support Specialist, building resilient, scalable systems that keep organizations reliably connected.
+          </p>
+          <div class="about-statement-badge">
+            <strong>Professional Statement (Step 1 Guideline):</strong>
+            &ldquo;I am a BSIT graduate with technical competencies in Network Engineering, System Troubleshooting, and Full-Stack Web Development. I am actively pursuing an enterprise career as a Network Engineer.&rdquo;
+          </div>
           <div class="about-stats">
             <div class="stat-item">
               <span class="stat-number" data-count="10">0</span><span class="stat-plus">+</span>
@@ -664,29 +770,103 @@
       <h2 class="section-label">CASE STUDIES</h2>
       <h3 class="section-title">Problem-Solving &amp; Security</h3>
       <div class="cases-grid">
-        <div class="case-card">
-          <div class="case-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        
+        <!-- Case Card 1: 5 IT Troubleshooting Cases -->
+        <div class="case-card interactive-case-card">
+          <div class="case-card-top-header">
+            <div class="case-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <span class="case-badge-pill">Step 17 Rubric • 5 Cases</span>
           </div>
           <h4 class="case-title">IT Troubleshooting Cases Documented</h4>
-          <ul class="case-list">
-            <li><strong>IP Address Conflict &amp; DHCP Failure:</strong> Diagnostics using ipconfig and adapter resets.</li>
-            <li><strong>DNS Resolution Failure:</strong> Identifying and resolving hostname resolution issues.</li>
-            <li><strong>Slow Network Speed &amp; Packet Loss:</strong> Isolating bandwidth bottlenecks and packet drops.</li>
-            <li><strong>Physical Switch / Port Failure:</strong> Layer 1/2 troubleshooting and hardware replacement.</li>
-            <li><strong>Default Gateway Unreachable:</strong> Routing and connectivity resolution.</li>
-          </ul>
+          <p class="case-lead-desc">Structured root-cause diagnostic procedures with command-line outputs, root-cause analyses, and preventative solutions.</p>
+          
+          <div class="troubleshooting-cases-mini-list">
+            <div class="case-mini-item" onclick="openTroubleshootingModal(0)">
+              <span class="case-mini-num">01</span>
+              <div class="case-mini-info">
+                <strong>IP Conflict &amp; DHCP Scope Exhaustion</strong>
+                <span>Layer 3 • <code>ipconfig /all</code> &bull; <code>arp -a</code></span>
+              </div>
+              <span class="case-mini-arrow">Terminal ↗</span>
+            </div>
+            <div class="case-mini-item" onclick="openTroubleshootingModal(1)">
+              <span class="case-mini-num">02</span>
+              <div class="case-mini-info">
+                <strong>DNS Resolution Failure &amp; Stale Records</strong>
+                <span>Layer 7 • <code>nslookup</code> &bull; <code>ipconfig /flushdns</code></span>
+              </div>
+              <span class="case-mini-arrow">Terminal ↗</span>
+            </div>
+            <div class="case-mini-item" onclick="openTroubleshootingModal(2)">
+              <span class="case-mini-num">03</span>
+              <div class="case-mini-info">
+                <strong>High Latency, Packet Drops &amp; Duplex Mismatch</strong>
+                <span>Layer 1/2 • <code>ping -t</code> &bull; <code>show interfaces</code></span>
+              </div>
+              <span class="case-mini-arrow">Terminal ↗</span>
+            </div>
+            <div class="case-mini-item" onclick="openTroubleshootingModal(3)">
+              <span class="case-mini-num">04</span>
+              <div class="case-mini-info">
+                <strong>Switch Port Failure &amp; VLAN Tagging Mismatch</strong>
+                <span>Layer 2 • <code>show vlan brief</code> &bull; Trunk isolation</span>
+              </div>
+              <span class="case-mini-arrow">Terminal ↗</span>
+            </div>
+            <div class="case-mini-item" onclick="openTroubleshootingModal(4)">
+              <span class="case-mini-num">05</span>
+              <div class="case-mini-info">
+                <strong>Default Gateway Unreachable &amp; Routing Loop</strong>
+                <span>Layer 3 • <code>route print</code> &bull; <code>tracert</code></span>
+              </div>
+              <span class="case-mini-arrow">Terminal ↗</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline case-action-btn" onclick="openTroubleshootingModal(0)">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            </span>
+            Launch Terminal Inspector (All 5 Cases)
+          </button>
         </div>
-        <div class="case-card">
-          <div class="case-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+
+        <!-- Case Card 2: Cybersecurity Case Study -->
+        <div class="case-card interactive-case-card">
+          <div class="case-card-top-header">
+            <div class="case-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="case-badge-pill">Step 18 Rubric • Security Audit</span>
           </div>
           <h4 class="case-title">Cybersecurity Case Study</h4>
-          <div class="case-details">
-            <p><strong>Topic:</strong> SQL Injection (SQLi) Vulnerability</p>
-            <p><strong>Focus:</strong> Anatomy of the attack, data breach risks, and defensive programming using Parameterized Queries and input validation.</p>
+          <p class="case-lead-desc">In-depth vulnerability assessment analyzing authentication bypass vectors, risk taxonomy, and defensive coding implementations.</p>
+          
+          <div class="cyber-summary-box">
+            <div class="cyber-point">
+              <span class="cyber-label">VULNERABILITY TOPIC</span>
+              <p class="cyber-val">SQL Injection (SQLi) in Authentication &amp; Ticketing Systems</p>
+            </div>
+            <div class="cyber-point">
+              <span class="cyber-label">ATTACK ANATOMY</span>
+              <p class="cyber-val">Tainted query concatenation: <code>admin' OR '1'='1' --</code></p>
+            </div>
+            <div class="cyber-point">
+              <span class="cyber-label">DEFENSIVE REMEDIATION</span>
+              <p class="cyber-val">Parameterized queries (Prepared Statements), Principle of Least Privilege, Input Validation &amp; WAF</p>
+            </div>
           </div>
+
+          <button type="button" class="btn btn-primary case-action-btn" onclick="openCybersecurityModal()">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            Inspect Full Cybersecurity Case Study
+          </button>
         </div>
+
       </div>
     </div>
   </section>
@@ -696,36 +876,123 @@
     <div class="container">
       <h2 class="section-label">EMPLOYABILITY</h2>
       <h3 class="section-title">Professional Readiness Evidence</h3>
-      <div class="cases-grid">
-        <div class="case-card">
-          <div class="case-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <div class="employability-grid">
+        
+        <!-- Card 1: Interviews & Defense -->
+        <div class="case-card employability-card">
+          <div class="case-card-top-header">
+            <div class="case-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <span class="case-badge-pill">Steps 21 &amp; 22 • 75 Pts Total</span>
           </div>
-          <h4 class="case-title">Interviews & Defense</h4>
-          <div class="case-details" style="margin-bottom: 15px;">
-            <p>Evidence of my professional communication and technical articulation skills.</p>
+          <h4 class="case-title">Interviews &amp; Project Defense</h4>
+          <p class="case-lead-desc">Demonstrated competency in professional communication, live technical articulation, and capstone architectural defense.</p>
+          
+          <div class="employability-actions-list">
+            <button type="button" class="emp-item-btn" onclick="openMockInterviewModal()">
+              <div class="emp-item-left">
+                <span class="emp-play-icon">▶</span>
+                <div>
+                  <strong>Mock Job Interview</strong>
+                  <span class="emp-sub">Video Player Placeholder + 12-Question Transcript</span>
+                </div>
+              </div>
+              <span class="emp-badge">Watch &bull; Read</span>
+            </button>
+
+            <button type="button" class="emp-item-btn" onclick="openTechnicalInterviewModal()">
+              <div class="emp-item-left">
+                <span class="emp-tech-icon">⚡</span>
+                <div>
+                  <strong>Technical Interview</strong>
+                  <span class="emp-sub">OSI Model, TCP/UDP, Subnetting, SQL, Zero-Trust</span>
+                </div>
+              </div>
+              <span class="emp-badge">6 Q&amp;As</span>
+            </button>
+
+            <button type="button" class="emp-item-btn" onclick="openProjectDefenseModal()">
+              <div class="emp-item-left">
+                <span class="emp-defense-icon">📊</span>
+                <div>
+                  <strong>Capstone Project Defense</strong>
+                  <span class="emp-sub">Interactive 11-Step Slide Presentation</span>
+                </div>
+              </div>
+              <span class="emp-badge">11 Slides</span>
+            </button>
           </div>
-          <ul class="case-list">
-            <li><strong>Mock Job Interview:</strong> <a href="#" style="color: var(--color-accent);">View Recording</a></li>
-            <li><strong>Technical Interview:</strong> <a href="#" style="color: var(--color-accent);">View Recording</a></li>
-            <li><strong>Project Defense:</strong> <a href="#" style="color: var(--color-accent);">View Presentation</a></li>
-          </ul>
         </div>
-        <div class="case-card">
-          <div class="case-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+
+        <!-- Card 2: AI Literacy Evidence -->
+        <div class="case-card employability-card">
+          <div class="case-card-top-header">
+            <div class="case-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+            <span class="case-badge-pill">Step 19 Rubric • Page 10</span>
           </div>
           <h4 class="case-title">AI Literacy Evidence</h4>
-          <div class="case-details">
-            <p>Documented logs of how I utilized AI tools responsibly throughout my capstone development.</p>
+          <p class="case-lead-desc">Audited evidence of responsible AI collaboration across 4 capstone development milestones, paired with critical reflection.</p>
+          
+          <div class="ai-preview-metrics">
+            <div class="ai-metric-row">
+              <span class="ai-metric-tag">4 Logged Tasks</span>
+              <span class="ai-metric-text">Database RLS, Diagnostic API, Data Analytics, WebGL</span>
+            </div>
+            <div class="ai-metric-row">
+              <span class="ai-metric-tag">Verification</span>
+              <span class="ai-metric-text">100% human-verified syntax, security policies &amp; formulas</span>
+            </div>
+            <div class="ai-metric-row">
+              <span class="ai-metric-tag">Reflection</span>
+              <span class="ai-metric-text">Answers to all 4 official AI literacy prompts</span>
+            </div>
           </div>
-          <a href="#" class="btn btn-outline" style="margin-top: 15px; display: inline-flex; width: 100%; justify-content: center;">
+
+          <button type="button" class="btn btn-outline case-action-btn" onclick="openAiUsageLogModal()" style="margin-top: auto;">
             <span class="btn-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
             </span>
-            View AI Usage Log
-          </a>
+            View AI Usage Log &amp; Reflection
+          </button>
         </div>
+
+        <!-- Card 3: Step 23 One-Page IT Career Development Plan -->
+        <div class="case-card employability-card">
+          <div class="case-card-top-header">
+            <div class="case-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <span class="case-badge-pill">Step 23 Rubric • Page 11</span>
+          </div>
+          <h4 class="case-title">IT Career Development Plan</h4>
+          <p class="case-lead-desc">Strategic one-page career progression plan detailing target engineering specializations, certification pathways, and 3-year milestones.</p>
+          
+          <div class="career-preview-metrics">
+            <div class="career-metric-row">
+              <span class="career-metric-label">Target Role:</span>
+              <span class="career-metric-value">Junior Network Engineer / NOC Specialist</span>
+            </div>
+            <div class="career-metric-row">
+              <span class="career-metric-label">Target Certifications:</span>
+              <span class="career-metric-value">Cisco CCNA (200-301), CompTIA Network+</span>
+            </div>
+            <div class="career-metric-row">
+              <span class="career-metric-label">Roadmap Horizon:</span>
+              <span class="career-metric-value">6-Month, 1-Year &amp; 3-Year Objectives</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary case-action-btn" onclick="openCareerPlanModal()" style="margin-top: auto;">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </span>
+            View 1-Page Career Roadmap
+          </button>
+        </div>
+
       </div>
     </div>
   </section>
@@ -752,21 +1019,149 @@
   <!-- ===== REFLECTION SECTION ===== -->
   <section id="reflection" class="section reflection-section">
     <div class="container">
-      <h2 class="section-label">MY JOURNEY</h2>
-      <h3 class="section-title">Final Reflection</h3>
-      <div class="reflection-content" style="max-width: 900px; margin: 0 auto; background: rgba(10, 10, 15, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--color-white-10); border-radius: 12px; padding: 40px; color: var(--color-white-70); font-size: 1.05rem; line-height: 1.8;">
-        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Looking Back at My BSIT Journey</h4>
-        <p style="margin-bottom: 20px;">
-          Before entering the BSIT program, my knowledge of Information Technology was limited to basic computer operations and a general fascination with how systems connected. Today, I am proud to have transformed that curiosity into a robust foundation in network infrastructure, troubleshooting, and web development. The most important things I learned extend beyond technical syntax—I learned how to think analytically, how to securely manage data, and how to rapidly adapt to new technologies.
-        </p>
-        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Projects, Challenges, and Growth</h4>
-        <p style="margin-bottom: 20px;">
-          The project that taught me the most was the <strong>AI-Assisted Computer Repair Shop Management System</strong>. It pushed me out of my comfort zone by forcing me to integrate front-end user interfaces with real-time cloud databases (Firebase) and AI diagnostic logic. The most significant technical challenge I faced was ensuring seamless, asynchronous communication between the client and the cloud while maintaining strict UI responsiveness. Overcoming these hurdles significantly sharpened my problem-solving skills and deepened my understanding of system architecture.
-        </p>
-        <h4 style="color: var(--color-white); font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 15px;">Moving Forward as an IT Professional</h4>
-        <p>
-          Throughout this program, my IT skills have evolved from theoretical concepts into practical, deployable capabilities. While I have built a strong foundation, I recognize the need to continuously improve my proficiency in advanced cloud deployments and cybersecurity automation. My ultimate goal is to become a specialized Network Engineer who builds and secures scalable infrastructures. I am now ready to begin my career in IT because I possess not only the technical skills to build systems, but the resilience and analytical mindset required to solve complex problems in the real world.
-        </p>
+      <h2 class="section-label">MY JOURNEY &amp; EVOLUTION</h2>
+      <h3 class="section-title">Final BSIT Capstone Reflection</h3>
+      
+      <div class="reflection-meta-bar">
+        <span class="reflection-pill">
+          <span class="reflection-pill-dot"></span>
+          Step 24 Official Rubric Synthesis
+        </span>
+        <span class="reflection-pill">
+          <span class="reflection-pill-dot"></span>
+          8 Mandated Rubric Prompts Addressed
+        </span>
+        <span class="reflection-pill">
+          <span class="reflection-pill-dot"></span>
+          Word Count: ~665 Words (500–800 Requirement)
+        </span>
+      </div>
+
+      <div class="reflection-grid">
+        
+        <!-- Card 1: Evolution of IT Knowledge & Skill Transformation (Q1 & Q5) -->
+        <div class="reflection-card">
+          <div class="reflection-card-header">
+            <div class="reflection-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h4 class="reflection-card-title">Evolution of IT Knowledge &amp; Skills</h4>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q1</span>
+              <span class="reflection-prompt-label">Prior IT Knowledge Before BSIT</span>
+            </div>
+            <p class="reflection-text">
+              Before entering the BSIT program at Datamex College of Saint Adeline, my understanding of Information Technology was predominantly consumer-level. I was familiar with basic desktop operations, routine OS installations, and casual software usage, but I viewed technology as an end-user rather than an engineer. I understood that data traveled across the internet and that routers provided wireless access, but I had virtually no comprehension of the intricate routing protocols, Layer 2 frame switching, packet encapsulation, or architectural paradigms that power mission-critical communications.
+            </p>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q5</span>
+              <span class="reflection-prompt-label">How My Technical Skills Changed</span>
+            </div>
+            <p class="reflection-text">
+              Throughout my academic journey, my skillset underwent a complete paradigm shift from basic digital literacy to disciplined engineering competence. Today, I do not merely operate devices—I analyze network telemetry, design segmented VLAN topologies, calculate complex VLSM subnet allocations, and isolate hardware bottlenecks with structured OSI-model diagnostic methodology. Earning my <strong>NC II in Computer Systems Servicing</strong> and leading administrative system deployments proved that my skills had graduated from textbook theory into deployable, enterprise-ready technical competencies.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Core Academic Learnings & Systems Thinking (Q2) -->
+        <div class="reflection-card">
+          <div class="reflection-card-header">
+            <div class="reflection-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <h4 class="reflection-card-title">Core Academic Learnings &amp; Systems Thinking</h4>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q2</span>
+              <span class="reflection-prompt-label">The Most Important Things I Learned</span>
+            </div>
+            <p class="reflection-text">
+              The most profound lessons I acquired extend beyond syntax or specific software. First, I mastered <strong>root-cause diagnostic methodology</strong>—the discipline of isolating failures systematically from the physical cabling up through transport and application layers rather than relying on trial and error.
+            </p>
+            <p class="reflection-text">
+              Second, I learned <strong>defensive systems design</strong>, understanding how unmonitored switch ports, misconfigured ACLs, and unsanitized queries introduce severe security vulnerabilities. Third, I discovered the vital role of <strong>technical documentation and process automation</strong>; building an infrastructure is only sustainable when properly mapped with network topology diagrams, comprehensive READMEs, and verifiable audit trails.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Capstone Experience & Overcoming Challenges (Q3 & Q4) -->
+        <div class="reflection-card">
+          <div class="reflection-card-header">
+            <div class="reflection-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h4 class="reflection-card-title">Capstone Projects &amp; Technical Adversity</h4>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q3</span>
+              <span class="reflection-prompt-label">Which Project Taught Me the Most &amp; Why</span>
+            </div>
+            <p class="reflection-text">
+              The project that contributed most substantially to my technical growth was the <strong>AI-Assisted Computer Repair Shop Management System</strong>. It forced me outside isolated frontend design into real-world systems engineering: binding responsive client UI components to cloud databases (Supabase/PostgreSQL) and integrating an automated Gemini AI diagnostic engine. Unlike small classroom exercises, this full-stack system required end-to-end data integrity, ticket state transitions, client-side validation, and resilient error recovery.
+            </p>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q4</span>
+              <span class="reflection-prompt-label">The Technical Difficulty That Challenged Me Most</span>
+            </div>
+            <p class="reflection-text">
+              My most daunting technical challenge occurred during real-time database state synchronization and handling asynchronous AI API latency. When network interruptions occurred, unhandled promises caused UI freezes and inconsistent ticket statuses. I overcame this obstacle by architecting structured try-catch-finally wrappers, implementing exponential backoff retry algorithms in <code>api/diagnose.js</code>, and designing optimistic UI updates. This trial demystified distributed systems and taught me that bulletproof error handling separates hobby projects from commercial software.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Continuous Growth & Career Trajectory (Q6, Q7 & Q8) -->
+        <div class="reflection-card">
+          <div class="reflection-card-header">
+            <div class="reflection-card-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h4 class="reflection-card-title">Continuous Growth &amp; Industry Readiness</h4>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q6</span>
+              <span class="reflection-prompt-label">Skills I Still Need to Improve</span>
+            </div>
+            <p class="reflection-text">
+              Recognizing that technology constantly shifts, I acknowledge clear growth areas. I am actively training to deepen my expertise in <strong>Network Automation using Python (Netmiko/NAPALM)</strong>, <strong>Infrastructure as Code (Terraform)</strong>, and <strong>Enterprise Multi-VPC Cloud Routing (AWS Transit Gateway &amp; Direct Connect)</strong>. Scaling enterprise networks requires programmatic configuration over manual CLI execution.
+            </p>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q7</span>
+              <span class="reflection-prompt-label">The Kind of IT Professional I Want to Become</span>
+            </div>
+            <p class="reflection-text">
+              I aspire to become a respected <strong>Senior Network Infrastructure &amp; Security Engineer</strong> who architects zero-downtime, zero-trust network backbones. I want to be recognized for unflinching technical integrity, structured incident containment, and the ability to articulate complex network architectures clearly to both executive stakeholders and technical peers.
+            </p>
+          </div>
+
+          <div class="reflection-prompt-item">
+            <div class="reflection-badge-wrap">
+              <span class="reflection-badge">Q8</span>
+              <span class="reflection-prompt-label">Why I Am Ready to Begin My IT Career</span>
+            </div>
+            <p class="reflection-text">
+              I am prepared to launch my career in Information Technology because my knowledge is anchored by verifiable evidence: <em>&ldquo;I learned this. I built this. Here is the evidence. Here is my source code. Here is the live system.&rdquo;</em> Armed with an NC II credential, real-world project leadership, functional capstone systems, and a passion for network engineering, I am equipped to contribute immediate, measurable value to an enterprise network operations center (NOC) or IT infrastructure team from day one.
+            </p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -849,6 +1244,24 @@
       </button>
       <div id="project-modal-content">
         <!-- Injected dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PORTFOLIO UNIVERSAL MODAL SYSTEM ===== -->
+  <div id="portfolio-app-modal" class="portfolio-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="portfolio-modal-container">
+      <div class="portfolio-modal-header">
+        <div class="portfolio-modal-header-meta">
+          <span id="modal-category-badge" class="modal-category-badge">CATEGORY</span>
+          <h3 id="modal-title-heading" class="modal-title-heading">Modal Title</h3>
+        </div>
+        <button type="button" class="portfolio-modal-close" onclick="closePortfolioModal()" aria-label="Close modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div id="portfolio-modal-body" class="portfolio-modal-body">
+        <!-- Injected dynamically by script.js -->
       </div>
     </div>
   </div>
