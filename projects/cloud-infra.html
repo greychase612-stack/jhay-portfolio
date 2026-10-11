@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Enterprise Cloud &amp; Hybrid Network Infrastructure | Jhay Castro</title>
-  <meta name="description" content="Production-grade hybrid-cloud network architecture featuring Cisco routing, dual IPsec VPN tunnels, automated BGP dynamic failover, and VLSM subnet design." />
+  <title>Enterprise Office Network &amp; Server Infrastructure | Jhay Castro</title>
+  <meta name="description" content="Production-grade physical and logical office network deployment featuring Cat6 T568B structured cabling, 24-port patch panel termination, 802.1Q department VLANs, and Windows Server 2022 Active Directory &amp; DHCP." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -153,7 +153,7 @@
 
     .noc-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 2.6rem;
+      font-size: 2.5rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: #ffffff;
@@ -162,7 +162,7 @@
     }
 
     .noc-subtitle {
-      max-width: 860px;
+      max-width: 880px;
       font-size: 1.05rem;
       color: var(--text-muted);
       line-height: 1.65;
@@ -315,18 +315,89 @@
       background: #0369a1;
     }
 
-    .wb-btn.danger-toggle {
+    .wb-btn.secondary-action {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #a7f3d0;
+    }
+    .wb-btn.secondary-action:hover {
+      background: rgba(16, 185, 129, 0.2);
+      color: #ffffff;
+    }
+
+    .wb-btn.isolate-action {
       background: rgba(244, 63, 94, 0.1);
       border-color: rgba(244, 63, 94, 0.3);
       color: #fecdd3;
     }
-    .wb-btn.danger-toggle:hover {
+    .wb-btn.isolate-action:hover {
       background: rgba(244, 63, 94, 0.2);
-    }
-    .wb-btn.danger-toggle.active {
-      background: var(--accent-rose);
-      border-color: #fda4af;
       color: #ffffff;
+    }
+
+    /* Cable Tester LED Strip (Physical verification feature!) */
+    .cable-tester-bar {
+      background: #070a12;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .cable-tester-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cable-tester-label strong {
+      color: #ffffff;
+    }
+
+    .tester-leds-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #0d1322;
+      padding: 6px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .tester-led-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-dim);
+    }
+
+    .led-bulb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      transition: all 0.15s ease;
+    }
+
+    .led-bulb.lit {
+      background: #10b981;
+      border-color: #34d399;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .led-bulb.lit-active {
+      background: #38bdf8;
+      border-color: #7dd3fc;
+      box-shadow: 0 0 10px #38bdf8;
     }
 
     /* Interactive Topology Canvas */
@@ -354,10 +425,17 @@
     .topo-node:hover {
       transform: translateY(-2px);
     }
-    .topo-node.active rect {
+    .topo-node.active rect.node-box {
       stroke: var(--accent-cyan);
       stroke-width: 2.2px;
       filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.4));
+    }
+
+    .rack-group-bg {
+      fill: rgba(15, 23, 42, 0.4);
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-dasharray: 4 4;
+      rx: 10px;
     }
 
     .node-box {
@@ -378,16 +456,9 @@
       fill: #ffffff;
     }
 
-    .node-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      fill: var(--accent-cyan);
-      font-weight: 600;
-    }
-
     .node-desc {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
+      font-size: 9.5px;
       fill: #94a3b8;
     }
 
@@ -412,15 +483,14 @@
       animation: dash-flow 1.5s linear infinite;
     }
 
-    .topo-link.failover-link {
-      stroke: var(--accent-amber);
-      stroke-dasharray: 4 4;
+    .topo-link.vlan10-link {
+      stroke: #38bdf8;
     }
-
-    .topo-link.down-link {
-      stroke: var(--accent-rose);
-      stroke-dasharray: 3 3;
-      opacity: 0.5;
+    .topo-link.vlan20-link {
+      stroke: #10b981;
+    }
+    .topo-link.vlan30-link {
+      stroke: #f59e0b;
     }
 
     @keyframes dash-flow {
@@ -449,8 +519,8 @@
     /* Split Workbench Consoles */
     .workbench-split {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      min-height: 400px;
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: 420px;
       background: var(--bg-card);
     }
 
@@ -586,6 +656,38 @@
     .cli-prompt {
       color: var(--accent-emerald);
       font-weight: 700;
+    }
+
+    /* Wire pinout table */
+    .pinout-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      margin-top: 10px;
+    }
+    .pinout-table th {
+      background: #0f172a;
+      padding: 8px 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+    .pinout-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .wire-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .wire-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     /* Monospace Live Terminal Side */
@@ -813,7 +915,7 @@
 </head>
 <body>
 
-  <!-- Top NOC Technical Nav -->
+  <!-- Top Technical Nav -->
   <header class="noc-navbar">
     <div class="noc-nav-left">
       <a href="../index.html#projects" class="back-link">
@@ -821,19 +923,19 @@
         Back to Portfolio
       </a>
       <span style="color: var(--text-dim); font-size: 0.85rem;">/</span>
-      <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">Hybrid Infrastructure Engineering Spec</span>
+      <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">Corporate Branch Network &amp; Systems Spec</span>
     </div>
 
     <div class="noc-system-status">
-      <div class="status-indicator" id="top-status-badge">
-        <span class="status-dot-pulse" id="top-status-dot"></span>
-        <span id="top-status-text">BGP MESH: ESTABLISHED</span>
+      <div class="status-indicator">
+        <span class="status-dot-pulse"></span>
+        <span>DOMAIN: CORP.LOCAL ACTIVE</span>
       </div>
       <div class="noc-meta-stat">
-        UPTIME: <span>99.992%</span>
+        CABLING STANDARD: <span>TIA/EIA T568B</span>
       </div>
       <div class="noc-meta-stat">
-        TARGET SLA: <span>TIER-3 REDUNDANT</span>
+        DHCP LEASE HEALTH: <span>100% NORMAL</span>
       </div>
     </div>
   </header>
@@ -843,164 +945,195 @@
     <section class="noc-hero">
       <div class="noc-eyebrow">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-        Enterprise Hybrid-Cloud Routing Architecture
+        Physical Structured Cabling &bull; VLANs &bull; Windows Server 2022
       </div>
-      <h1 class="noc-title">Automated Cloud &amp; Hybrid Network Infrastructure</h1>
+      <h1 class="noc-title">Enterprise Office Network &amp; Server Infrastructure</h1>
       <p class="noc-subtitle">
-        A resilient production topology bridging physical on-premise Cisco switching and edge routing to multi-region cloud VPCs. Features dual IPsec AES-256 site-to-site tunnels, dynamic BGP path failover, automated VLSM subnetting, and Infrastructure-as-Code telemetry.
+        A complete physical and logical network deployment for a 50+ user corporate branch office. Engineered with Cat6 T568B structured cabling, 24-port patch panel distribution, managed 802.1Q department VLANs, and Windows Server 2022 Active Directory Domain Services, DHCP, and DNS.
       </p>
 
       <div class="tech-pill-rack">
-        <span class="tech-pill">Cisco IOS-XE</span>
-        <span class="tech-pill">BGP (AS 65001 ⇄ 65000)</span>
-        <span class="tech-pill">Dual IPsec AES-256</span>
-        <span class="tech-pill">VLSM Subnet Allocation</span>
-        <span class="tech-pill">802.1Q Inter-VLAN Routing</span>
-        <span class="tech-pill">Terraform IaC</span>
-        <span class="tech-pill">AWS Transit Gateway</span>
-        <span class="tech-pill">Prometheus Packet Telemetry</span>
+        <span class="tech-pill">Cat6 UTP Cabling</span>
+        <span class="tech-pill">T568B Pinout Termination</span>
+        <span class="tech-pill">24-Port Patch Panel</span>
+        <span class="tech-pill">Managed 24-Port Switch</span>
+        <span class="tech-pill">802.1Q Department VLANs</span>
+        <span class="tech-pill">Windows Server 2022</span>
+        <span class="tech-pill">Active Directory (corp.local)</span>
+        <span class="tech-pill">DHCP Server Scopes</span>
+        <span class="tech-pill">NTFS Shared Folders &amp; GPO</span>
       </div>
 
       <!-- Core Metrics Strip -->
       <div class="metrics-bar">
         <div class="metric-box">
-          <div class="metric-title">Target Network SLA</div>
-          <div class="metric-value">99.99%</div>
-          <div class="metric-sub">Zero-Single-Point-Of-Failure</div>
+          <div class="metric-title">Cabling Continuity SLA</div>
+          <div class="metric-value">100% Pass</div>
+          <div class="metric-sub">Certified 8/8 Pins T568B Wiremap</div>
         </div>
         <div class="metric-box">
-          <div class="metric-title">Primary Path Latency</div>
-          <div class="metric-value" id="stat-latency">11.4 ms</div>
-          <div class="metric-sub">Inter-VPC Direct Tunnel</div>
+          <div class="metric-title">LAN Backbone Latency</div>
+          <div class="metric-value">&lt; 1 ms</div>
+          <div class="metric-sub">Gigabit Core Switching</div>
         </div>
         <div class="metric-box">
-          <div class="metric-title">BGP Convergence Time</div>
-          <div class="metric-value">&lt; 48 ms</div>
-          <div class="metric-sub">BFD Sub-Second Failure Detect</div>
+          <div class="metric-title">Subnet &amp; VLAN Count</div>
+          <div class="metric-value">4 Segments</div>
+          <div class="metric-sub">Admin, Staff, Guest, Servers</div>
         </div>
         <div class="metric-box">
-          <div class="metric-title">Core Backbone Bandwidth</div>
-          <div class="metric-value">10 Gbps</div>
-          <div class="metric-sub">Multi-Chassis LACP EtherChannel</div>
+          <div class="metric-title">Server Domain Controller</div>
+          <div class="metric-value">corp.local</div>
+          <div class="metric-sub">Windows Server 2022 AD DS</div>
         </div>
       </div>
     </section>
 
-    <!-- Interactive NOC Workbench & Topology Sandbox -->
+    <!-- Interactive Office LAN & Server Workbench -->
     <section class="sandbox-container">
       <div class="workbench-card">
         
         <!-- Top Toolbar -->
         <div class="workbench-topbar">
           <div class="wb-title-group">
-            <span class="wb-badge">LIVE NOC SANDBOX</span>
-            <span class="wb-heading">Hybrid Topology Visualizer &amp; Route Telemetry</span>
+            <span class="wb-badge">LIVE LAB WORKBENCH</span>
+            <span class="wb-heading">Office LAN Topology &amp; Physical Diagnostics</span>
           </div>
 
           <div class="wb-controls">
-            <button type="button" class="wb-btn primary" id="btn-trace" onclick="runPacketTrace()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Send ICMP Ping &amp; Trace
+            <button type="button" class="wb-btn primary" id="btn-cable-test" onclick="runCableTester()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Test Cable Continuity (Pins 1-8)
             </button>
-            <button type="button" class="wb-btn danger-toggle" id="btn-failover" onclick="toggleLinkFailover()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
-              Simulate WAN Link Failure
+            <button type="button" class="wb-btn secondary-action" id="btn-ping" onclick="runPingTest()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Ping HR PC to Server (VLAN 10)
+            </button>
+            <button type="button" class="wb-btn isolate-action" id="btn-isolate" onclick="runGuestIsolationTest()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+              Test Guest Wi-Fi Isolation (VLAN 30)
             </button>
             <button type="button" class="wb-btn" onclick="clearTerminal()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              Clear Logs
+              Clear
             </button>
+          </div>
+        </div>
+
+        <!-- Cable Tester Hardware LED Strip -->
+        <div class="cable-tester-bar">
+          <div class="cable-tester-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <strong>RJ45 Wiremap Tester:</strong> <span id="tester-status-txt">Ready &bull; Standard TIA/EIA-568-B</span>
+          </div>
+
+          <div class="tester-leds-row">
+            <div class="tester-led-item"><span>1 (W-O)</span><span class="led-bulb" id="led-1"></span></div>
+            <div class="tester-led-item"><span>2 (O)</span><span class="led-bulb" id="led-2"></span></div>
+            <div class="tester-led-item"><span>3 (W-G)</span><span class="led-bulb" id="led-3"></span></div>
+            <div class="tester-led-item"><span>4 (BL)</span><span class="led-bulb" id="led-4"></span></div>
+            <div class="tester-led-item"><span>5 (W-BL)</span><span class="led-bulb" id="led-5"></span></div>
+            <div class="tester-led-item"><span>6 (G)</span><span class="led-bulb" id="led-6"></span></div>
+            <div class="tester-led-item"><span>7 (W-BR)</span><span class="led-bulb" id="led-7"></span></div>
+            <div class="tester-led-item"><span>8 (BR)</span><span class="led-bulb" id="led-8"></span></div>
           </div>
         </div>
 
         <!-- SVG Topology Diagram -->
         <div class="topology-viewport">
           <div class="topology-svg-wrap">
-            <svg id="topo-svg" viewBox="0 0 1060 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
+            <svg id="topo-svg" viewBox="0 0 1060 320" width="100%" height="320" xmlns="http://www.w3.org/2000/svg">
+              
+              <!-- Server Closet / Rack Enclosure Boundary -->
+              <rect x="20" y="20" width="460" height="280" class="rack-group-bg" />
+              <text x="35" y="44" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">SERVER ROOM / 9U WALL RACK CLOSET</text>
 
-              <!-- Connection Lines (Paths) -->
-              <!-- Link 1: Workstation to Core Switch -->
-              <line id="link-ws-sw" x1="120" y1="150" x2="250" y2="150" class="topo-link active-link" />
-              <!-- Link 2: Core Switch to Edge Router -->
-              <line id="link-sw-rtr" x1="370" y1="150" x2="470" y2="150" class="topo-link active-link" />
-              <!-- Link 3: Edge Router to Transit Gateway (PRIMARY TUNNEL 1 - UPPER) -->
-              <path id="link-primary" d="M 570 135 C 630 80, 680 80, 740 135" class="topo-link active-link" />
-              <!-- Link 4: Edge Router to Transit Gateway (SECONDARY TUNNEL 2 - LOWER) -->
-              <path id="link-secondary" d="M 570 165 C 630 220, 680 220, 740 165" class="topo-link failover-link" />
-              <!-- Link 5: Transit Gateway to App VPC -->
-              <line id="link-tgw-app" x1="840" y1="135" x2="930" y2="90" class="topo-link active-link" />
-              <!-- Link 6: Transit Gateway to DB VPC (via App VPC Peering) -->
-              <line id="link-tgw-db" x1="840" y1="165" x2="930" y2="210" class="topo-link active-link" />
+              <!-- Departments Enclosure Boundary -->
+              <rect x="520" y="20" width="520" height="280" class="rack-group-bg" />
+              <text x="535" y="44" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700">OFFICE DEPARTMENTS &amp; WI-FI ZONES</text>
 
-              <!-- Link Status Labels -->
-              <text x="655" y="75" class="link-badge" id="lbl-primary">Tunnel 1 (Active • 11ms • BGP)</text>
-              <text x="655" y="240" class="link-badge" id="lbl-secondary">Tunnel 2 (Hot Standby • AES-256)</text>
+              <!-- Inter-Rack Links -->
+              <!-- Gateway to Switch -->
+              <line x1="140" y1="115" x2="210" y2="175" class="topo-link active-link" />
+              <!-- Patch Panel to Switch (Patch Cords) -->
+              <line x1="330" y1="115" x2="270" y2="175" class="topo-link active-link" />
+              <!-- Switch to Server (VLAN 99 SVI Trunk) -->
+              <line x1="240" y1="235" x2="240" y2="255" class="topo-link active-link" />
+
+              <!-- Structured Cabling Trunk Links from Patch Panel to Departments -->
+              <!-- Link to HR PC (VLAN 10) -->
+              <path d="M 400 95 C 470 95, 500 80, 560 80" class="topo-link vlan10-link active-link" />
+              <!-- Link to Staff PC (VLAN 20) -->
+              <path d="M 400 105 C 470 105, 500 170, 560 170" class="topo-link vlan20-link active-link" />
+              <!-- Link to Access Point (VLAN 30) -->
+              <path d="M 400 115 C 470 115, 500 255, 560 255" class="topo-link vlan30-link active-link" />
 
               <!-- Animated Packet Circle -->
-              <circle id="packet-dot" cx="120" cy="150" r="6" />
+              <circle id="packet-dot" cx="700" cy="80" r="6" />
 
-              <!-- NODE 1: HQ Workstation (Client) -->
-              <g class="topo-node" id="node-ws" onclick="selectNode('ws')">
-                <rect x="20" y="115" width="100" height="70" class="node-box" />
-                <rect x="20" y="115" width="100" height="22" class="node-header-bg" rx="8" />
-                <text x="30" y="130" class="node-title">HQ Client</text>
-                <text x="30" y="152" class="node-desc">VLAN 10 Workstation</text>
-                <text x="30" y="168" class="node-ip">192.168.10.25</text>
+              <!-- RACK NODE 1: ISP Gateway Router -->
+              <g class="topo-node" id="node-gw" onclick="selectNode('gw')">
+                <rect x="40" y="65" width="130" height="60" class="node-box" />
+                <rect x="40" y="65" width="130" height="20" class="node-header-bg" rx="8" />
+                <text x="50" y="79" class="node-title">Gateway Router</text>
+                <text x="50" y="99" class="node-desc">WAN NAT / Firewall</text>
+                <text x="50" y="113" class="node-ip">192.168.1.1 (LAN)</text>
               </g>
 
-              <!-- NODE 2: Cisco Catalyst 3850 (Core Switch) -->
-              <g class="topo-node" id="node-sw" onclick="selectNode('sw')">
-                <rect x="250" y="110" width="120" height="80" class="node-box" />
-                <rect x="250" y="110" width="120" height="22" class="node-header-bg" rx="8" />
-                <text x="260" y="125" class="node-title">Cisco 3850 Core</text>
-                <text x="260" y="146" class="node-desc">802.1Q Trunk / L3 SVI</text>
-                <text x="260" y="161" class="node-desc">RSTP Priority 4096</text>
-                <text x="260" y="177" class="node-ip">192.168.10.1 /24</text>
+              <!-- RACK NODE 2: 24-Port Cat6 Patch Panel -->
+              <g class="topo-node" id="node-patch" onclick="selectNode('patch')">
+                <rect x="270" y="65" width="180" height="60" class="node-box" />
+                <rect x="270" y="65" width="180" height="20" class="node-header-bg" rx="8" />
+                <text x="280" y="79" class="node-title">24-Port Cat6 Patch Panel</text>
+                <text x="280" y="99" class="node-desc">T568B 110 Punch-Down</text>
+                <text x="280" y="113" class="node-ip">Ports 1-24 Terminated</text>
               </g>
 
-              <!-- NODE 3: Cisco ASR 1001-X (Edge Router) -->
-              <g class="topo-node active" id="node-rtr" onclick="selectNode('rtr')">
-                <rect x="470" y="110" width="120" height="80" class="node-box" />
-                <rect x="470" y="110" width="120" height="22" class="node-header-bg" rx="8" />
-                <text x="480" y="125" class="node-title">HQ-R1 Edge Router</text>
-                <text x="480" y="146" class="node-desc">BGP ASN 65001</text>
-                <text x="480" y="161" class="node-desc">Dual Crypto Maps</text>
-                <text x="480" y="177" class="node-ip">10.255.0.1 (WAN)</text>
+              <!-- RACK NODE 3: Managed 24-Port Switch -->
+              <g class="topo-node active" id="node-sw" onclick="selectNode('sw')">
+                <rect x="150" y="165" width="190" height="70" class="node-box" />
+                <rect x="150" y="165" width="190" height="20" class="node-header-bg" rx="8" />
+                <text x="160" y="179" class="node-title">Managed 24-Port Switch</text>
+                <text x="160" y="201" class="node-desc">802.1Q VLAN 10/20/30/99</text>
+                <text x="160" y="217" class="node-ip">192.168.99.2 (Mgmt SVI)</text>
               </g>
 
-              <!-- NODE 4: Cloud Transit Gateway -->
-              <g class="topo-node" id="node-tgw" onclick="selectNode('tgw')">
-                <rect x="740" y="110" width="120" height="80" class="node-box" />
-                <rect x="740" y="110" width="120" height="22" class="node-header-bg" rx="8" />
-                <text x="750" y="125" class="node-title">Transit Gateway</text>
-                <text x="750" y="146" class="node-desc">BGP ASN 65000</text>
-                <text x="750" y="161" class="node-desc">Multi-AZ Hub</text>
-                <text x="750" y="177" class="node-ip">10.0.0.0/16 Route Table</text>
+              <!-- RACK NODE 4: Windows Server 2022 -->
+              <g class="topo-node" id="node-server" onclick="selectNode('server')">
+                <rect x="150" y="245" width="190" height="50" class="node-box" />
+                <rect x="150" y="245" width="190" height="18" class="node-header-bg" rx="8" />
+                <text x="160" y="258" class="node-title">Windows Server 2022 (DC01)</text>
+                <text x="160" y="274" class="node-desc">AD DS &bull; DHCP &bull; DNS &bull; SMB</text>
+                <text x="160" y="287" class="node-ip">192.168.99.10 (Static)</text>
               </g>
 
-              <!-- NODE 5: Production App VPC -->
-              <g class="topo-node" id="node-app" onclick="selectNode('app')">
-                <rect x="930" y="55" width="115" height="70" class="node-box" />
-                <rect x="930" y="55" width="115" height="22" class="node-header-bg" rx="8" />
-                <text x="940" y="70" class="node-title">App VPC (Public)</text>
-                <text x="940" y="92" class="node-desc">ALB + Web Instances</text>
-                <text x="940" y="108" class="node-ip">10.0.1.50 /24</text>
+              <!-- DEPT NODE 5: HR / Admin Workstation (VLAN 10) -->
+              <g class="topo-node" id="node-hr" onclick="selectNode('hr')">
+                <rect x="560" y="55" width="180" height="65" class="node-box" />
+                <rect x="560" y="55" width="180" height="20" class="node-header-bg" rx="8" />
+                <text x="570" y="69" class="node-title">HR &amp; Executive Office</text>
+                <text x="570" y="90" class="node-desc">VLAN 10 &bull; Secure Port 1-8</text>
+                <text x="570" y="105" class="node-ip">192.168.10.25 (DHCP Lease)</text>
               </g>
 
-              <!-- NODE 6: Database VPC (Private) -->
-              <g class="topo-node" id="node-db" onclick="selectNode('db')">
-                <rect x="930" y="175" width="115" height="70" class="node-box" />
-                <rect x="930" y="175" width="115" height="22" class="node-header-bg" rx="8" />
-                <text x="940" y="190" class="node-title">DB VPC (Private)</text>
-                <text x="940" y="212" class="node-desc">RDS Isolated Subnet</text>
-                <text x="940" y="228" class="node-ip">10.0.2.100 /24</text>
+              <!-- DEPT NODE 6: Operations & Staff (VLAN 20) -->
+              <g class="topo-node" id="node-staff" onclick="selectNode('staff')">
+                <rect x="560" y="145" width="180" height="65" class="node-box" />
+                <rect x="560" y="145" width="180" height="20" class="node-header-bg" rx="8" />
+                <text x="570" y="159" class="node-title">Operations &amp; Staff Floor</text>
+                <text x="570" y="180" class="node-desc">VLAN 20 &bull; Workstations Port 9-16</text>
+                <text x="570" y="195" class="node-ip">192.168.20.45 (DHCP Lease)</text>
               </g>
+
+              <!-- DEPT NODE 7: Guest Wi-Fi Access Point (VLAN 30) -->
+              <g class="topo-node" id="node-guest" onclick="selectNode('guest')">
+                <rect x="560" y="230" width="180" height="65" class="node-box" />
+                <rect x="560" y="230" width="180" height="20" class="node-header-bg" rx="8" />
+                <text x="570" y="244" class="node-title">Guest Wi-Fi Access Point</text>
+                <text x="570" y="265" class="node-desc">VLAN 30 &bull; Isolated Port 17</text>
+                <text x="570" y="280" class="node-ip">192.168.30.15 (DHCP Lease)</text>
+              </g>
+
             </svg>
           </div>
         </div>
@@ -1013,141 +1146,152 @@
             <div class="pane-tabs">
               <button type="button" class="pane-tab-btn active" onclick="switchPaneTab('device')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-                Node Inspector
+                Device Inspector
               </button>
-              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('cisco-cli')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                Cisco IOS-XE Config
+              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('win-server')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                Windows Server (AD DS)
               </button>
-              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('terraform')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                Terraform IaC
+              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('t568b')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                T568B Cabling Guide
               </button>
             </div>
 
-            <!-- Tab 1: Node Details -->
+            <!-- Tab 1: Device Details -->
             <div class="pane-tab-content active" id="tab-device">
               <div class="device-header">
                 <div class="device-title-wrap">
-                  <h4 id="disp-node-title">HQ-R1 Edge Router (Cisco ASR 1001-X)</h4>
-                  <p id="disp-node-sub">Campus Perimeter Gateway &bull; Autonomous System 65001</p>
+                  <h4 id="disp-node-title">Managed 24-Port Gigabit Switch</h4>
+                  <p id="disp-node-sub">Distribution Layer &bull; 802.1Q Department VLAN Segmentation</p>
                 </div>
                 <span class="device-role-tag" id="disp-node-status">OPERATIONAL</span>
               </div>
 
               <div class="device-props-grid">
                 <div class="device-prop">
-                  <div class="device-prop-label">Primary Interface</div>
-                  <div class="device-prop-val" id="disp-node-iface">GigabitEthernet0/0/0</div>
+                  <div class="device-prop-label">Physical Location</div>
+                  <div class="device-prop-val" id="disp-node-loc">Server Room Rack Unit 2U</div>
                 </div>
                 <div class="device-prop">
-                  <div class="device-prop-label">Assigned IP / CIDR</div>
-                  <div class="device-prop-val" id="disp-node-cidr">10.255.0.1 /30</div>
+                  <div class="device-prop-label">Management IP / Mask</div>
+                  <div class="device-prop-val" id="disp-node-ip">192.168.99.2 (255.255.255.0)</div>
                 </div>
                 <div class="device-prop">
-                  <div class="device-prop-label">Active Routing Protocol</div>
-                  <div class="device-prop-val" id="disp-node-proto">eBGP (Neighbor: 169.254.0.1)</div>
+                  <div class="device-prop-label">Port Allocation</div>
+                  <div class="device-prop-val" id="disp-node-ports">Ports 1-8 (V10), 9-16 (V20), 17 (V30)</div>
                 </div>
                 <div class="device-prop">
-                  <div class="device-prop-label">Hardware Profile</div>
-                  <div class="device-prop-val" id="disp-node-hw">Cisco ASR 1001-X (IOS-XE 17.6)</div>
+                  <div class="device-prop-label">Uplink / Trunking</div>
+                  <div class="device-prop-val" id="disp-node-uplink">Port 24 (802.1Q Trunk to Router)</div>
                 </div>
               </div>
 
               <div class="cli-box" id="disp-node-summary">
-                <span class="cli-prompt">HQ-R1#</span> show ip bgp summary
-BGP router identifier 10.255.0.1, local AS number 65001
-BGP table version is 14, main routing table version 14
-Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-169.254.10.1    4 65000   48212   48210       14    0    0 06:14:22        2
-169.254.20.1    4 65000   48208   48205       14    0    0 06:14:19        2
+                <span class="cli-prompt">Switch-01#</span> show vlan brief
+VLAN  Name                             Status    Ports
+----  -------------------------------- --------- -------------------------------
+1     default                          active    Gi0/18, Gi0/19, Gi0/20
+10    ADMIN_HR                         active    Gi0/1, Gi0/2, Gi0/3, Gi0/4, Gi0/5, Gi0/6, Gi0/7, Gi0/8
+20    STAFF_OPS                        active    Gi0/9, Gi0/10, Gi0/11, Gi0/12, Gi0/13, Gi0/14, Gi0/15, Gi0/16
+30    GUEST_WIFI                       active    Gi0/17
+99    MANAGEMENT                       active    Gi0/21, Gi0/22, Gi0/23
               </div>
             </div>
 
-            <!-- Tab 2: Cisco IOS-XE CLI -->
-            <div class="pane-tab-content" id="tab-cisco-cli">
+            <!-- Tab 2: Windows Server (AD DS) -->
+            <div class="pane-tab-content" id="tab-win-server">
               <div class="cli-box">
-<span class="cli-prompt">HQ-R1#</span> show running-config | section router bgp
-!
-crypto ikev2 proposal IKEV2-PROP-AWS
- encryption aes-gcm-256
- prf sha384
- group 19
-!
-interface Tunnel1
- description AWS Transit Gateway Primary Tunnel
- ip address 169.254.10.2 255.255.255.252
- tunnel source GigabitEthernet0/0/0
- tunnel mode ipsec ipv4
- tunnel destination 52.95.120.44
- tunnel protection ipsec profile IPSEC-PROF-AWS
- ip tcp adjust-mss 1379
-!
-interface Tunnel2
- description AWS Transit Gateway Failover Tunnel
- ip address 169.254.20.2 255.255.255.252
- tunnel source GigabitEthernet0/0/0
- tunnel mode ipsec ipv4
- tunnel destination 52.95.120.45
- tunnel protection ipsec profile IPSEC-PROF-AWS
-!
-router bgp 65001
- bgp log-neighbor-changes
- neighbor 169.254.10.1 remote-as 65000
- neighbor 169.254.10.1 timers 10 30
- neighbor 169.254.10.1 route-map RM-PRIMARY-IN in
- neighbor 169.254.20.1 remote-as 65000
- neighbor 169.254.20.1 route-map RM-BACKUP-IN in
- !
- address-family ipv4
-  network 192.168.0.0 mask 255.255.0.0
-  neighbor 169.254.10.1 activate
-  neighbor 169.254.20.1 activate
- exit-address-family
-!
+<span class="cli-prompt">PS C:\Users\Administrator></span> Get-ADDomain
+AllowedDNSSuffixes                 : {}
+DomainControllersContainer         : OU=Domain Controllers,DC=corp,DC=local
+DomainMode                         : Windows2016Domain
+Forest                             : corp.local
+Name                               : corp
+NetBIOSName                        : CORP
+PDCEmulator                        : DC01.corp.local
+UsersContainer                     : CN=Users,DC=corp,DC=local
+
+<span class="cli-prompt">PS C:\Users\Administrator></span> Get-DhcpServerv4Scope
+ScopeId         SubnetMask      Name            State    StartRange      EndRange
+-------         ----------      ----            -----    ----------      --------
+192.168.10.0    255.255.255.0   Scope-VLAN10-HR Active   192.168.10.50   192.168.10.200
+192.168.20.0    255.255.255.0   Scope-VLAN20-OP Active   192.168.20.50   192.168.20.200
+192.168.30.0    255.255.255.0   Scope-VLAN30-GW Active   192.168.30.20   192.168.30.150
+
+<span class="cli-prompt">PS C:\Users\Administrator></span> Get-SmbShare -Name "HR_Confidential"
+Name            ScopeName Path                 Description
+----            --------- ----                 -----------
+HR_Confidential *         D:\Shares\HR_Docs    Restricted to CORP\HR_Staff (NTFS)
               </div>
             </div>
 
-            <!-- Tab 3: Terraform IaC -->
-            <div class="pane-tab-content" id="tab-terraform">
-              <div class="cli-box">
-<span class="cli-prompt">terraform/</span> cat network_hybrid.tf
-# Provision Multi-AZ Production VPC
-resource "aws_vpc" "prod_vpc" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  tags = {
-    Name        = "Enterprise-Prod-VPC"
-    Environment = "Production"
-    ManagedBy   = "Terraform-IaC"
-  }
-}
-
-# Attach to AWS Transit Gateway
-resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach" {
-  transit_gateway_id = aws_ec2_transit_gateway.corp_hub.id
-  vpc_id             = aws_vpc.prod_vpc.id
-  subnet_ids         = [aws_subnet.prod_pub_1a.id, aws_subnet.prod_pub_1b.id]
-
-  tags = {
-    Name = "TGW-Attachment-ProdVPC"
-  }
-}
-
-# BGP VPN Gateway Connection to Cisco On-Prem Edge
-resource "aws_vpn_connection" "onprem_cisco" {
-  customer_gateway_id = aws_customer_gateway.cisco_edge.id
-  transit_gateway_id  = aws_ec2_transit_gateway.corp_hub.id
-  type                = "ipsec.1"
-  static_routes_only  = false # Dynamic BGP Peering Enabled
-
-  tags = {
-    Name = "Site-to-Site-Cisco-ASR1001X"
-  }
-}
-              </div>
+            <!-- Tab 3: T568B Cabling Guide -->
+            <div class="pane-tab-content" id="tab-t568b">
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
+                <strong>TIA/EIA-568-B Wiring Color Code:</strong> Industry standard termination used on all RJ45 keystone jacks and 24-port patch panel 110 punch-down blocks.
+              </p>
+              
+              <table class="pinout-table">
+                <thead>
+                  <tr>
+                    <th>Pin #</th>
+                    <th>Color Code</th>
+                    <th>Signal Pair</th>
+                    <th>Function</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pin 1</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: repeating-linear-gradient(45deg, #ff7a00, #ff7a00 3px, #fff 3px, #fff 6px);"></span> White / Orange</span></td>
+                    <td>Pair 2</td>
+                    <td>Transmit (Tx +)</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 2</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: #ff7a00;"></span> Orange</span></td>
+                    <td>Pair 2</td>
+                    <td>Transmit (Tx -)</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 3</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: repeating-linear-gradient(45deg, #10b981, #10b981 3px, #fff 3px, #fff 6px);"></span> White / Green</span></td>
+                    <td>Pair 3</td>
+                    <td>Receive (Rx +)</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 4</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: #3b82f6;"></span> Blue</span></td>
+                    <td>Pair 1</td>
+                    <td>Bi-directional</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 5</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: repeating-linear-gradient(45deg, #3b82f6, #3b82f6 3px, #fff 3px, #fff 6px);"></span> White / Blue</span></td>
+                    <td>Pair 1</td>
+                    <td>Bi-directional</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 6</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: #10b981;"></span> Green</span></td>
+                    <td>Pair 3</td>
+                    <td>Receive (Rx -)</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 7</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: repeating-linear-gradient(45deg, #854d0e, #854d0e 3px, #fff 3px, #fff 6px);"></span> White / Brown</span></td>
+                    <td>Pair 4</td>
+                    <td>Bi-directional</td>
+                  </tr>
+                  <tr>
+                    <td>Pin 8</td>
+                    <td><span class="wire-badge"><span class="wire-color-dot" style="background: #854d0e;"></span> Brown</span></td>
+                    <td>Pair 4</td>
+                    <td>Bi-directional</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
           </div>
@@ -1162,16 +1306,17 @@ resource "aws_vpn_connection" "onprem_cisco" {
               </div>
               <div class="terminal-title">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                telemetry-console &bull; jhay@noc-monitor:~$
+                diagnostics-cmd &bull; Administrator@DC01:
               </div>
-              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #475569;">BASH 5.2</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #475569;">PS 7.4</span>
             </div>
 
             <div class="terminal-body" id="term-logs">
-              <div class="log-line"><span class="log-ts">[22:48:02]</span> <span class="log-info">SYSTEM:</span> Initializing Network Operations telemetry daemon...</div>
-              <div class="log-line"><span class="log-ts">[22:48:02]</span> <span class="log-info">BGP:</span> Peering established with Neighbor 169.254.10.1 (AS 65000). Table syncd.</div>
-              <div class="log-line"><span class="log-ts">[22:48:03]</span> <span class="log-success">IPSEC:</span> Tunnel1 (AES-256-GCM / SHA384) SA active. Lifetime 28800s.</div>
-              <div class="log-line"><span class="log-ts">[22:48:03]</span> <span class="log-success">STATUS:</span> Topology operational. Ready for packet trace inspection.</div>
+              <div class="log-line"><span class="log-ts">[23:05:01]</span> <span class="log-info">SYSTEM:</span> Initializing Windows Server 2022 Core Diagnostics...</div>
+              <div class="log-line"><span class="log-ts">[23:05:01]</span> <span class="log-success">ACTIVE DIRECTORY:</span> Domain controller DC01.corp.local verified online.</div>
+              <div class="log-line"><span class="log-ts">[23:05:02]</span> <span class="log-success">DHCP SERVICE:</span> 3 Active Scopes bound. Relay agents listening on VLAN SVIs.</div>
+              <div class="log-line"><span class="log-ts">[23:05:02]</span> <span class="log-info">PATCH PANEL:</span> 24 Cat6 drops punched and continuity tested (T568B).</div>
+              <div class="log-line"><span class="log-ts">[23:05:02]</span> <span class="log-success">STATUS:</span> Workbench ready. Click actions above to verify network layer.</div>
             </div>
           </div>
 
@@ -1183,9 +1328,9 @@ resource "aws_vpn_connection" "onprem_cisco" {
     <!-- Architecture & VLSM Specifications -->
     <section class="specs-section">
       <div class="section-title-wrap">
-        <h3 class="section-h3">VLSM Subnet Allocation &amp; Routing Plan</h3>
+        <h3 class="section-h3">Departmental VLAN &amp; Subnet Allocation Plan</h3>
         <p class="section-p">
-          Production IP addressing architecture calculated using Variable Length Subnet Masking (VLSM). Allocates non-overlapping CIDR blocks to prevent address space exhaustion and enforce departmental security boundaries.
+          Structured IP addressing plan segmenting corporate departments into isolated broadcast domains. Enforces least-privilege security between administrative staff, general operations, and external guests.
         </p>
       </div>
 
@@ -1193,103 +1338,85 @@ resource "aws_vpn_connection" "onprem_cisco" {
         <table class="vlsm-table">
           <thead>
             <tr>
-              <th>Zone / Segment</th>
-              <th>VLAN / Tag</th>
+              <th>Zone / Department</th>
+              <th>VLAN ID</th>
               <th>Network CIDR</th>
               <th>Usable Host Range</th>
               <th>Subnet Mask</th>
               <th>Gateway IP</th>
-              <th>Security Tier</th>
+              <th>Access Policy</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Campus IT &amp; Engineering</strong></td>
+              <td><strong>HR &amp; Executive Management</strong></td>
               <td><span class="vlan-pill">VLAN 10</span></td>
               <td class="cidr-code">192.168.10.0/24</td>
               <td>192.168.10.1 &ndash; 192.168.10.254</td>
               <td>255.255.255.0</td>
               <td>192.168.10.1</td>
-              <td>Internal Trusted</td>
+              <td>Full Access to DC01 &amp; HR Shares</td>
             </tr>
             <tr>
-              <td><strong>Enterprise Operations</strong></td>
+              <td><strong>General Staff &amp; Operations</strong></td>
               <td><span class="vlan-pill">VLAN 20</span></td>
               <td class="cidr-code">192.168.20.0/24</td>
               <td>192.168.20.1 &ndash; 192.168.20.254</td>
               <td>255.255.255.0</td>
               <td>192.168.20.1</td>
-              <td>Internal Standard</td>
+              <td>Access to Staff Shares &amp; Printers</td>
             </tr>
             <tr>
-              <td><strong>Network Management (OOBM)</strong></td>
+              <td><strong>Guest Wi-Fi (Isolated)</strong></td>
+              <td><span class="vlan-pill">VLAN 30</span></td>
+              <td class="cidr-code">192.168.30.0/24</td>
+              <td>192.168.30.1 &ndash; 192.168.30.254</td>
+              <td>255.255.255.0</td>
+              <td>192.168.30.1</td>
+              <td>Internet Only (Blocked from DC01 &amp; Shares)</td>
+            </tr>
+            <tr>
+              <td><strong>Server Farm &amp; Switch Management</strong></td>
               <td><span class="vlan-pill">VLAN 99</span></td>
               <td class="cidr-code">192.168.99.0/24</td>
               <td>192.168.99.1 &ndash; 192.168.99.254</td>
               <td>255.255.255.0</td>
               <td>192.168.99.1</td>
-              <td>Restricted Admin (MFA)</td>
-            </tr>
-            <tr>
-              <td><strong>IPsec WAN Interconnect (Point-to-Point)</strong></td>
-              <td><span class="vlan-pill">Tunnel 1/2</span></td>
-              <td class="cidr-code">169.254.10.0/30</td>
-              <td>169.254.10.1 &ndash; 169.254.10.2</td>
-              <td>255.255.255.252</td>
-              <td>Point-to-Point</td>
-              <td>Encrypted Transport</td>
-            </tr>
-            <tr>
-              <td><strong>Cloud Production Application VPC</strong></td>
-              <td><span class="vlan-pill">AWS Multi-AZ</span></td>
-              <td class="cidr-code">10.0.1.0/24</td>
-              <td>10.0.1.1 &ndash; 10.0.1.254</td>
-              <td>255.255.255.0</td>
-              <td>10.0.1.1</td>
-              <td>DMZ / Public Load Balanced</td>
-            </tr>
-            <tr>
-              <td><strong>Cloud Isolated Database VPC</strong></td>
-              <td><span class="vlan-pill">VPC Peered</span></td>
-              <td class="cidr-code">10.0.2.0/24</td>
-              <td>10.0.2.1 &ndash; 10.0.2.254</td>
-              <td>255.255.255.0</td>
-              <td>10.0.2.1</td>
-              <td>Private Isolated (Zero Egress)</td>
+              <td>Static IP Only &bull; IT Admin Restricted</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Three Pillars of Senior IT Network Design -->
+      <!-- Three Pillars of Practical Network Engineering -->
       <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h4 class="pillar-h4">Structured Cabling &amp; Rack Dressing</h4>
+          <p class="pillar-p">
+            Cat6 UTP cables run inside cable raceways, bundled with Velcro cable wraps, and terminated into a 24-Port RJ45 Patch Panel using TIA/EIA T568B color pinouts. Certified with zero wiremap transpositions or open pairs.
+          </p>
+        </div>
+
         <div class="pillar-card">
           <div class="pillar-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
-          <h4 class="pillar-h4">Zero Single-Point-of-Failure</h4>
+          <h4 class="pillar-h4">802.1Q Department Isolation</h4>
           <p class="pillar-p">
-            Dual transit tunnels engineered with active/standby BGP routing. Should an ISP fiber cut occur, Bidirectional Forwarding Detection (BFD) triggers automatic route withdrawal and reroutes traffic within 48 milliseconds.
+            Switch ports are grouped into dedicated VLANs (HR, Staff, Guest). Isolates broadcast noise and enforces firewall ACLs so visiting guests on Wi-Fi cannot scan, ping, or access internal company servers or confidential shared drives.
           </p>
         </div>
 
         <div class="pillar-card">
           <div class="pillar-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           </div>
-          <h4 class="pillar-h4">Dynamic BGP Route Filtering</h4>
+          <h4 class="pillar-h4">Centralized Windows Server Services</h4>
           <p class="pillar-p">
-            Route-maps and prefix-lists enforce strict ingress/egress filtering. On-premise only advertises RFC 1918 campus routes (`192.168.0.0/16`), preventing accidental route leaking to upstream transit providers.
-          </p>
-        </div>
-
-        <div class="pillar-card">
-          <div class="pillar-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          </div>
-          <h4 class="pillar-h4">Declarative Infrastructure (IaC)</h4>
-          <p class="pillar-p">
-            VPCs, subnets, route tables, and transit gateway attachments are codified in Terraform. Reduces deployment drift, guarantees audit compliance, and allows full disaster recovery redeployment in under 4 minutes.
+            Windows Server 2022 domain controller (`corp.local`) centralizes user authentication (AD DS), dynamically provisions IP configurations via DHCP scopes, handles internal DNS resolution, and secures shared folders using NTFS permissions.
           </p>
         </div>
       </div>
@@ -1297,122 +1424,134 @@ resource "aws_vpn_connection" "onprem_cisco" {
   </main>
 
   <script>
-    // State management for interactive topology & telemetry
-    let isFailoverActive = false;
-    let isTracing = false;
+    // State management for interactive office lab
+    let isTestingCable = false;
+    let isTestingPing = false;
 
     const nodeData = {
-      'ws': {
-        title: 'Campus Workstation (VLAN 10)',
-        sub: 'Department Endpoint &bull; Engineering Segment',
-        status: 'OPERATIONAL',
-        iface: 'eth0 (Realtek RTL8111)',
-        cidr: '192.168.10.25 /24',
-        proto: 'DHCP Client (Option 3 / 6)',
-        hw: 'Workstation / Ubuntu 22.04 LTS',
-        cli: `jhay@workstation-vlan10:~$ ip addr show eth0
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default
-    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff
-    inet 192.168.10.25/24 brd 192.168.10.255 scope global eth0
-    valid_lft forever preferred_lft forever
-jhay@workstation-vlan10:~$ ip route show
-default via 192.168.10.1 dev eth0 proto dhcp metric 100 
-192.168.10.0/24 dev eth0 proto kernel scope link src 192.168.10.25`
+      'gw': {
+        title: 'Gateway Router & NAT Firewall',
+        sub: 'Edge Perimeter &bull; ISP Fiber Demarcation',
+        status: 'ONLINE',
+        loc: 'Server Rack Top Shelf (1U)',
+        ip: '192.168.1.1 (LAN Gateway)',
+        ports: 'WAN1 (ISP Fiber), LAN1 (Trunk to Switch)',
+        uplink: 'Gigabit Port 24 Trunk Link',
+        cli: `Router> show ip interface brief
+Interface          IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0 120.29.88.42    YES DHCP   up                    up (WAN)
+GigabitEthernet0/1 192.168.1.1     YES manual up                    up (LAN Trunk)
+Router> show ip nat translations
+Pro Inside global      Inside local       Outside local      Outside global
+tcp 120.29.88.42:51201 192.168.10.25:443  142.250.190.46:443 142.250.190.46:443`
+      },
+      'patch': {
+        title: '24-Port Cat6 RJ45 Patch Panel',
+        sub: 'Physical Layer &bull; TIA/EIA T568B Termination',
+        status: 'VERIFIED',
+        loc: 'Server Rack 2U (Above Switch)',
+        ip: 'Passive Layer 1 Device',
+        ports: '24 Keystone RJ45 Ports (110 Punch)',
+        uplink: 'Cat6 Patch Cords to Switch Gi0/1-24',
+        cli: `PHYSICAL WIREMAP VERIFICATION:
+Standard: TIA/EIA-568-B (Cat6 UTP 250MHz)
+Port 01-08: Terminated to HR Department Wall Faceplates
+Port 09-16: Terminated to Operations Floor Cubicles
+Port 17-20: Terminated to Ceiling Access Points (PoE)
+Port 21-24: Terminated to Server Closet Outlets
+Continuity Test: 24/24 Drops Passed Continuity & Resistance Spec.`
       },
       'sw': {
-        title: 'Cisco Catalyst 3850-24T (Core Switch)',
-        sub: 'Campus Distribution &bull; L3 SVI & 802.1Q',
+        title: 'Managed 24-Port Gigabit Switch',
+        sub: 'Distribution Layer &bull; 802.1Q Department VLAN Segmentation',
         status: 'OPERATIONAL',
-        iface: 'TenGigabitEthernet1/1/1 (Trunk)',
-        cidr: '192.168.10.1 /24 (SVI VLAN 10)',
-        proto: 'RSTP / 802.1Q Inter-VLAN Routing',
-        hw: 'Cisco Catalyst WS-C3850-24T-L',
-        cli: `Core-SW-01# show vlan brief
+        loc: 'Server Room Rack Unit 2U',
+        ip: '192.168.99.2 (255.255.255.0)',
+        ports: 'Ports 1-8 (V10), 9-16 (V20), 17 (V30)',
+        uplink: 'Port 24 (802.1Q Trunk to Router)',
+        cli: `Switch-01# show vlan brief
+VLAN  Name                             Status    Ports
+----  -------------------------------- --------- -------------------------------
+1     default                          active    Gi0/18, Gi0/19, Gi0/20
+10    ADMIN_HR                         active    Gi0/1, Gi0/2, Gi0/3, Gi0/4, Gi0/5, Gi0/6, Gi0/7, Gi0/8
+20    STAFF_OPS                        active    Gi0/9, Gi0/10, Gi0/11, Gi0/12, Gi0/13, Gi0/14, Gi0/15, Gi0/16
+30    GUEST_WIFI                       active    Gi0/17
+99    MANAGEMENT                       active    Gi0/21, Gi0/22, Gi0/23`
+      },
+      'server': {
+        title: 'Windows Server 2022 (DC01.corp.local)',
+        sub: 'Enterprise Domain Controller & Network Services',
+        status: 'ONLINE',
+        loc: 'Server Rack Unit 4U (Dell PowerEdge)',
+        ip: '192.168.99.10 (Static IPv4)',
+        ports: 'NIC1 (Team 10Gbps to Switch Trunk)',
+        uplink: 'VLAN 99 Server Management Segment',
+        cli: `C:\\Windows\\system32> dcdiag /test:dns
+Running enterprise DNS verification on DC01...
+[DNS] Test passed successfully. DC01 responding on 192.168.99.10:53.
+C:\\Windows\\system32> net share
+Share name   Resource                        Remark
+-------------------------------------------------------------------------------
+NETLOGON     C:\\Windows\\SYSVOL\\sysvol\\corp.local\\scripts
+SYSVOL       C:\\Windows\\SYSVOL\\sysvol
+HR_Docs      D:\\Shares\\HR_Docs             NTFS Protected
+Staff_Public D:\\Shares\\Public_Share        Read-Only Public`
+      },
+      'hr': {
+        title: 'HR & Executive PC (Workstation-HR01)',
+        sub: 'VLAN 10 Department Client &bull; High Security',
+        status: 'CONNECTED',
+        loc: 'Room 201 (HR Executive Suite)',
+        ip: '192.168.10.25 (DHCP Lease: DC01)',
+        ports: 'Wall Jack HR-01 &rarr; Patch Panel Port 1',
+        uplink: 'Switch Port Gi0/1 (Access VLAN 10)',
+        cli: `C:\\Users\\HR_Manager> ipconfig /all
+Windows IP Configuration
+   Host Name . . . . . . . . . . . . : HR-DESKTOP-01
+   Primary Dns Suffix  . . . . . . . : corp.local
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
 
-VLAN Name                             Status    Ports
----- -------------------------------- --------- -------------------------------
-1    default                          active    Gi1/0/23, Gi1/0/24
-10   ENGINEERING                      active    Gi1/0/1, Gi1/0/2, Gi1/0/3
-20   OPERATIONS                       active    Gi1/0/4, Gi1/0/5, Gi1/0/6
-99   MANAGEMENT_OOB                   active    Gi1/0/21, Gi1/0/22
+Ethernet adapter Local Area Connection:
+   Connection-specific DNS Suffix  . : corp.local
+   IPv4 Address. . . . . . . . . . . : 192.168.10.25
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.10.1
+   DHCP Server . . . . . . . . . . . : 192.168.99.10
+   DNS Servers . . . . . . . . . . . : 192.168.99.10`
+      },
+      'staff': {
+        title: 'Operations Workstation (Staff-PC04)',
+        sub: 'VLAN 20 Department Client &bull; Standard Access',
+        status: 'CONNECTED',
+        loc: 'Floor 1 Operations Cubicle Row B',
+        ip: '192.168.20.45 (DHCP Lease: DC01)',
+        ports: 'Wall Jack OPS-04 &rarr; Patch Panel Port 10',
+        uplink: 'Switch Port Gi0/10 (Access VLAN 20)',
+        cli: `C:\\Users\\Staff_Ops> ipconfig
+Ethernet adapter Ethernet 1:
+   IPv4 Address. . . . . . . . . . . : 192.168.20.45
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.20.1
+C:\\Users\\Staff_Ops> net use Z: \\\\dc01.corp.local\\Staff_Public
+The command completed successfully. Drive Z: mapped.`
+      },
+      'guest': {
+        title: 'Guest Wi-Fi Access Point (AP-Ceiling-01)',
+        sub: 'VLAN 30 Isolated Zone &bull; Guest Internet Only',
+        status: 'ISOLATED',
+        loc: 'Visitor Lobby Ceiling (PoE Powered)',
+        ip: '192.168.30.15 (DHCP Lease)',
+        ports: 'Drop AP-01 &rarr; Patch Panel Port 17',
+        uplink: 'Switch Port Gi0/17 (Access VLAN 30)',
+        cli: `AP-Lobby# show clients
+MAC Address       IP Address     SSID         VLAN  Signal  Status
+e4:aa:ea:12:34:56 192.168.30.101 CORP_GUEST   30    -52dBm  Authenticated
 
-Core-SW-01# show spanning-tree vlan 10
-VLAN0010
-  Spanning tree enabled protocol rstp
-  Root ID    Priority    4106
-             Address     002a.10ab.4400
-             This bridge is the root`
-      },
-      'rtr': {
-        title: 'HQ-R1 Edge Router (Cisco ASR 1001-X)',
-        sub: 'Campus Perimeter Gateway &bull; Autonomous System 65001',
-        status: 'OPERATIONAL',
-        iface: 'GigabitEthernet0/0/0',
-        cidr: '10.255.0.1 /30',
-        proto: 'eBGP (Neighbor: 169.254.0.1)',
-        hw: 'Cisco ASR 1001-X (IOS-XE 17.6)',
-        cli: `HQ-R1# show ip bgp summary
-BGP router identifier 10.255.0.1, local AS number 65001
-BGP table version is 14, main routing table version 14
-Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-169.254.10.1    4 65000   48212   48210       14    0    0 06:14:22        2
-169.254.20.1    4 65000   48208   48205       14    0    0 06:14:19        2`
-      },
-      'tgw': {
-        title: 'AWS Transit Gateway (TGW-Hub)',
-        sub: 'Cloud Network Hub &bull; Autonomous System 65000',
-        status: 'OPERATIONAL',
-        iface: 'tgw-attach-0987fec1',
-        cidr: '10.0.0.0/16 Route Hub',
-        proto: 'BGP Dynamic ASN 65000',
-        hw: 'Managed AWS Transit Gateway Hub',
-        cli: `tgw-admin@aws-cli:~$ aws ec2 get-transit-gateway-route-table-propagations \\
-  --transit-gateway-route-table-id tgw-rtb-01a2b3c4d5
-{
-    "TransitGatewayRouteTablePropagations": [
-        {
-            "TransitGatewayAttachmentId": "tgw-attach-vpn-cisco-01",
-            "ResourceId": "vpn-01a2b3c4d5",
-            "ResourceType": "vpn",
-            "State": "enabled"
-        }
-    ]
-}`
-      },
-      'app': {
-        title: 'App VPC (Public Workload Subnet)',
-        sub: 'Dual-AZ Application Tier &bull; Port 80/443',
-        status: 'OPERATIONAL',
-        iface: 'eni-09ab12cd (10.0.1.50)',
-        cidr: '10.0.1.0/24 (Subnet A)',
-        proto: 'HTTPS / TLS 1.3 / Ingress ALB',
-        hw: 'AWS EC2 c6i.xlarge (Multi-AZ)',
-        cli: `app-node-01:~$ netstat -tuln | grep -E ':(80|443)'
-tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN     
-tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN     
-app-node-01:~$ curl -I http://127.0.0.1/health
-HTTP/1.1 200 OK
-Date: Sun, 11 Oct 2026 14:48:00 GMT
-Server: nginx/1.24.0
-Content-Type: application/json`
-      },
-      'db': {
-        title: 'DB VPC (Private Isolated Subnet)',
-        sub: 'Enterprise Database Tier &bull; Zero Public Egress',
-        status: 'OPERATIONAL',
-        iface: 'eni-0456ef78 (10.0.2.100)',
-        cidr: '10.0.2.0/24 (Subnet B)',
-        proto: 'PostgreSQL TCP 5432 (Internal Only)',
-        hw: 'AWS Aurora PostgreSQL Multi-AZ',
-        cli: `db-primary:~$ sudo -u postgres psql -c "\\l"
-                                  List of databases
-   Name    |  Owner   | Encoding |   Collate   |    Ctype    | Access privileges 
------------+----------+----------+-------------+-------------+-------------------
- prod_corp | db_admin | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =Tc/db_admin     
-(1 row)
-
-# Security Group Ingress Rule:
-# Port 5432 ONLY permitted from 10.0.1.0/24 (App VPC CIDR)`
+# Switch Port ACL (Access-List 130 applied):
+# permit ip 192.168.30.0 0.0.0.255 any (Internet Only)
+# deny ip 192.168.30.0 0.0.0.255 192.168.10.0 0.0.0.255 (BLOCK HR)
+# deny ip 192.168.30.0 0.0.0.255 192.168.99.0 0.0.0.255 (BLOCK SERVER)`
       }
     };
 
@@ -1427,17 +1566,17 @@ Content-Type: application/json`
       document.getElementById('disp-node-title').textContent = data.title;
       document.getElementById('disp-node-sub').innerHTML = data.sub;
       document.getElementById('disp-node-status').textContent = data.status;
-      document.getElementById('disp-node-iface').textContent = data.iface;
-      document.getElementById('disp-node-cidr').textContent = data.cidr;
-      document.getElementById('disp-node-proto').textContent = data.proto;
-      document.getElementById('disp-node-hw').textContent = data.hw;
+      document.getElementById('disp-node-loc').textContent = data.loc;
+      document.getElementById('disp-node-ip').textContent = data.ip;
+      document.getElementById('disp-node-ports').textContent = data.ports;
+      document.getElementById('disp-node-uplink').textContent = data.uplink;
       document.getElementById('disp-node-summary').textContent = data.cli;
 
-      logTerminal(`INSPECT: Selected device [${data.title}] - Specs refreshed.`, 'info');
+      logTerminal(`INSPECT: Selected node [${data.title}] - Hardware profile loaded.`, 'info');
     }
 
     function switchPaneTab(tabName) {
-      const tabs = ['device', 'cisco-cli', 'terraform'];
+      const tabs = ['device', 'win-server', 't568b'];
       tabs.forEach(t => {
         const btn = document.querySelector(`.pane-tab-btn[onclick="switchPaneTab('${t}')"]`);
         const content = document.getElementById('tab-' + t);
@@ -1473,123 +1612,123 @@ Content-Type: application/json`
       const container = document.getElementById('term-logs');
       if (container) {
         container.innerHTML = '';
-        logTerminal('Console cleared. Ready for operator inspection.', 'info');
+        logTerminal('Console cleared. Ready for diagnostic tests.', 'info');
       }
     }
 
-    // Interactive Packet Trace Simulation
-    function runPacketTrace() {
-      if (isTracing) return;
-      isTracing = true;
-      const btn = document.getElementById('btn-trace');
+    // Diagnostic 1: Cable Continuity Hardware Simulation
+    function runCableTester() {
+      if (isTestingCable) return;
+      isTestingCable = true;
+      const btn = document.getElementById('btn-cable-test');
       btn.disabled = true;
 
-      const targetIp = '10.0.1.50';
-      logTerminal(`$ traceroute -m 5 -w 1 ${targetIp}`, 'cmd');
+      logTerminal(`$ fluke-tester --wiremap --standard T568B --cable "Drop-HR01"`, 'cmd');
+      const statusTxt = document.getElementById('tester-status-txt');
+      statusTxt.textContent = 'Scanning Pins 1-8 in sequence...';
 
-      const packetDot = document.getElementById('packet-dot');
-      packetDot.style.opacity = '1';
+      // Reset bulbs
+      for (let i = 1; i <= 8; i++) {
+        const bulb = document.getElementById('led-' + i);
+        if (bulb) {
+          bulb.className = 'led-bulb';
+        }
+      }
 
-      // Define hops based on active state (Primary vs Failover)
-      const hops = [
-        { x: 120, y: 150, ip: '192.168.10.1', host: 'core-sw-01.corp', rtt: '0.42 ms', hopNum: 1 },
-        { x: 310, y: 150, ip: '10.255.0.1', host: 'hq-r1-edge.corp', rtt: '0.88 ms', hopNum: 2 },
-        isFailoverActive 
-          ? { x: 655, y: 220, ip: '169.254.20.1', host: 'tun2-failover.aws', rtt: '23.8 ms', hopNum: 3 }
-          : { x: 655, y: 80, ip: '169.254.10.1', host: 'tun1-primary.aws', rtt: '11.4 ms', hopNum: 3 },
-        { x: 800, y: 150, ip: '10.0.0.1', host: 'tgw-hub.us-east-1', rtt: isFailoverActive ? '24.2 ms' : '11.8 ms', hopNum: 4 },
-        { x: 990, y: 90, ip: '10.0.1.50', host: 'app-svc-prod-01', rtt: isFailoverActive ? '24.6 ms' : '12.1 ms', hopNum: 5 }
+      let currentPin = 1;
+      const pinColors = [
+        'White/Orange', 'Orange', 'White/Green', 'Blue',
+        'White/Blue', 'Green', 'White/Brown', 'Brown'
       ];
 
-      let currentStep = 0;
-
-      function stepHop() {
-        if (currentStep >= hops.length) {
+      function stepPin() {
+        if (currentPin > 8) {
           setTimeout(() => {
-            packetDot.style.opacity = '0';
-            logTerminal(`SUCCESS: Destination reached in ${hops.length} hops. 0% packet loss.`, 'success');
-            isTracing = false;
+            statusTxt.textContent = 'PASSED • 8/8 Pins Continuous • Zero Split Pairs';
+            logTerminal(`TEST RESULTS: All 8 pins passed continuity, pair twists, and wiremap.`, 'success');
+            logTerminal(`ATTENUATION: 0.12 dB/m (Cat6 Certified up to 1000BASE-T Gigabit).`, 'success');
+            isTestingCable = false;
             btn.disabled = false;
           }, 300);
           return;
         }
 
-        const hop = hops[currentStep];
-        packetDot.setAttribute('cx', hop.x);
-        packetDot.setAttribute('cy', hop.y);
+        const bulb = document.getElementById('led-' + currentPin);
+        if (bulb) {
+          bulb.classList.add('lit');
+        }
 
-        logTerminal(` ${hop.hopNum}  ${hop.host} (${hop.ip})  ${hop.rtt}`, 'normal');
-        currentStep++;
-        setTimeout(stepHop, 500);
+        logTerminal(` PIN ${currentPin} (${pinColors[currentPin - 1]}): CONTINUITY OK [1.2 Ohms]`, 'info');
+        currentPin++;
+        setTimeout(stepPin, 220);
       }
 
-      stepHop();
+      stepPin();
     }
 
-    // Toggle Link Failover Simulation
-    function toggleLinkFailover() {
-      isFailoverActive = !isFailoverActive;
-      const btn = document.getElementById('btn-failover');
-      const primaryLink = document.getElementById('link-primary');
-      const secondaryLink = document.getElementById('link-secondary');
-      const lblPrimary = document.getElementById('lbl-primary');
-      const lblSecondary = document.getElementById('lbl-secondary');
-      const statLatency = document.getElementById('stat-latency');
-      const topBadge = document.getElementById('top-status-badge');
-      const topText = document.getElementById('top-status-text');
-      const topDot = document.getElementById('top-status-dot');
+    // Diagnostic 2: Ping HR Workstation to Windows Server
+    function runPingTest() {
+      if (isTestingPing) return;
+      isTestingPing = true;
+      const btn = document.getElementById('btn-ping');
+      btn.disabled = true;
 
-      if (isFailoverActive) {
-        btn.classList.add('active');
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Restore Primary Link`;
+      logTerminal(`C:\\Users\\HR_Manager> ping 192.168.99.10 -n 4`, 'cmd');
 
-        primaryLink.className.baseVal = 'topo-link down-link';
-        secondaryLink.className.baseVal = 'topo-link active-link';
+      const packetDot = document.getElementById('packet-dot');
+      packetDot.style.opacity = '1';
 
-        lblPrimary.textContent = 'Tunnel 1 (DOWN / CUT • TIMEOUT)';
-        lblPrimary.style.fill = '#f43f5e';
+      // Path from HR (x:650, y:80) to Switch (x:245, y:200) to Server (x:245, y:270)
+      const hops = [
+        { x: 650, y: 80 },
+        { x: 380, y: 95 },
+        { x: 245, y: 200 },
+        { x: 245, y: 270 }
+      ];
 
-        lblSecondary.textContent = 'Tunnel 2 (ACTIVE FAILOVER • 24ms • BGP)';
-        lblSecondary.style.fill = '#38bdf8';
+      let step = 0;
+      function animHop() {
+        if (step >= hops.length) {
+          setTimeout(() => {
+            packetDot.style.opacity = '0';
+            logTerminal(`Reply from 192.168.99.10: bytes=32 time<1ms TTL=128`, 'success');
+            logTerminal(`Reply from 192.168.99.10: bytes=32 time<1ms TTL=128`, 'success');
+            logTerminal(`Reply from 192.168.99.10: bytes=32 time<1ms TTL=128`, 'success');
+            logTerminal(`Reply from 192.168.99.10: bytes=32 time<1ms TTL=128`, 'success');
+            logTerminal(`Ping statistics for 192.168.99.10:`, 'normal');
+            logTerminal(`    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)`, 'success');
+            logTerminal(`    Approximate round trip times in milli-seconds: Minimum = 0ms, Maximum = 0ms, Average = 0ms`, 'normal');
+            isTestingPing = false;
+            btn.disabled = false;
+          }, 200);
+          return;
+        }
 
-        statLatency.textContent = '24.6 ms';
-
-        topBadge.style.color = '#f59e0b';
-        topBadge.style.background = 'rgba(245, 158, 11, 0.1)';
-        topBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
-        topDot.style.background = '#f59e0b';
-        topDot.style.boxShadow = '0 0 6px #f59e0b';
-        topText.textContent = 'BGP: FAILOVER CONVERGED';
-
-        logTerminal(`ALERT: Primary WAN Link (Tunnel1) severed. Keepalive missed.`, 'error');
-        logTerminal(`BGP: %BGP-5-ADJCHANGE: neighbor 169.254.10.1 Down (Hold Timer Expired)`, 'warn');
-        logTerminal(`BGP: Recalculating path. Rerouting 10.0.0.0/16 via Tunnel2 (169.254.20.1) in 42ms.`, 'info');
-        logTerminal(`ROUTING: High-availability secondary path engaged. Zero dropped packets.`, 'success');
-      } else {
-        btn.classList.remove('active');
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Simulate WAN Link Failure`;
-
-        primaryLink.className.baseVal = 'topo-link active-link';
-        secondaryLink.className.baseVal = 'topo-link failover-link';
-
-        lblPrimary.textContent = 'Tunnel 1 (Active • 11ms • BGP)';
-        lblPrimary.style.fill = '#94a3b8';
-
-        lblSecondary.textContent = 'Tunnel 2 (Hot Standby • AES-256)';
-        lblSecondary.style.fill = '#94a3b8';
-
-        statLatency.textContent = '11.4 ms';
-
-        topBadge.style.color = '#10b981';
-        topBadge.style.background = 'rgba(16, 185, 129, 0.08)';
-        topBadge.style.borderColor = 'rgba(16, 185, 129, 0.25)';
-        topDot.style.background = '#10b981';
-        topDot.style.boxShadow = '0 0 6px #10b981';
-        topText.textContent = 'BGP MESH: ESTABLISHED';
-
-        logTerminal(`NOTICE: Primary WAN Link restored. IKEv2 SA re-negotiated.`, 'info');
-        logTerminal(`BGP: %BGP-5-ADJCHANGE: neighbor 169.254.10.1 Up. Preferred metric restored.`, 'success');
+        packetDot.setAttribute('cx', hops[step].x);
+        packetDot.setAttribute('cy', hops[step].y);
+        step++;
+        setTimeout(animHop, 250);
       }
+
+      animHop();
+    }
+
+    // Diagnostic 3: Test Guest Wi-Fi Security Isolation
+    function runGuestIsolationTest() {
+      const btn = document.getElementById('btn-isolate');
+      btn.disabled = true;
+
+      logTerminal(`C:\\Users\\Guest_Visitor> ping 192.168.99.10 -n 3`, 'cmd');
+      logTerminal(`Pinging 192.168.99.10 with 32 bytes of data:`, 'normal');
+
+      setTimeout(() => {
+        logTerminal(`Request timed out. (Dropped by Switch ACL 130)`, 'error');
+        logTerminal(`Request timed out. (Dropped by Switch ACL 130)`, 'error');
+        logTerminal(`Request timed out. (Dropped by Switch ACL 130)`, 'error');
+        logTerminal(`SECURITY VERIFICATION PASSED: Guest VLAN 30 is strictly isolated from Server Farm VLAN 99.`, 'success');
+        logTerminal(`Confidential company shares and DC01 cannot be scanned by guest devices.`, 'info');
+        btn.disabled = false;
+      }, 600);
     }
   </script>
 </body>

@@ -509,17 +509,17 @@ const projectModalData = {
     }
   },
   'cloud-infra': {
-    title: 'Enterprise Cloud & Network Infrastructure',
-    badge: 'Network Engineering • Cloud DevOps',
-    description: 'A scalable multi-VPC cloud network topology engineered for zero-single-point-of-failure operations, dynamic BGP routing, and automated infrastructure deployment.',
+    title: 'Enterprise Office Network & Server Infrastructure',
+    badge: 'Network Infrastructure • Systems Administration',
+    description: 'A full-scale physical and logical network deployment for a corporate office. Engineered with Cat6 T568B structured cabling, 24-port patch panel distribution, managed 802.1Q department VLANs, and Windows Server 2022 Active Directory & DHCP services.',
     specs: [
-      { label: 'Topology', val: 'Dual Transit Gateway, Multi-AZ Peering' },
-      { label: 'Reliability', val: '99.99% SLA Automated Subnet Failover' },
-      { label: 'Automation', val: 'Terraform IaC, Ansible Configuration Playbooks' },
-      { label: 'Monitoring', val: 'Prometheus Telemetry, Flow Log Packet Inspection' }
+      { label: 'Physical Layer', val: 'Cat6 UTP, T568B Termination, 24-Port Patch Panel' },
+      { label: 'Segmentation', val: 'VLAN 10 (Admin), VLAN 20 (Staff), VLAN 30 (Guest)' },
+      { label: 'Server Services', val: 'Active Directory (corp.local), DHCP Scopes, DNS' },
+      { label: 'Security & Access', val: 'Guest Wi-Fi Isolation, NTFS Permissions, GPO Drive Mapping' }
     ],
     primaryAction: {
-      text: 'View Full Architecture Blueprint ↗',
+      text: 'Launch Interactive Network Workbench ↗',
       url: 'projects/cloud-infra.html'
     }
   },
