@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=13" />
+  <link rel="stylesheet" href="style.css?v=15" />
 </head>
 <body>
   <!-- ===== NAVIGATION ===== -->
@@ -622,76 +622,355 @@
     </div>
   </section>
 
-  <!-- ===== RESUME SECTION ===== -->
-  <section id="resume" class="section resume-section">
-    <div class="container">
-      <h2 class="section-label">RESUME</h2>
-      <h3 class="section-title">Education & Experience</h3>
-      <div class="resume-grid">
-        <!-- Education -->
-        <div class="resume-col">
-          <h4 class="resume-col-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
-            Education
-          </h4>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="timeline-date">Expected Jul 2027</span>
-              <h5 class="timeline-title">BS Information Technology</h5>
-              <p class="timeline-place">Datamex College of Saint Adeline</p>
-              <p class="timeline-desc">Consistent Dean's Lister (1.20 - 1.80 GWA). Coursework includes Database Systems (SQL), Information Management, and Computer Systems Maintenance. Hold a National Certificate II (NC II) in Computer Systems Servicing.</p>
+  <!-- ===== RESUME & IMPACT EXPERIENCE SECTION ===== -->
+  <section id="resume" class="section resume-section impact-experience-section">
+    <div class="container impact-container">
+      
+      <!-- Section Header -->
+      <div class="impact-header-block">
+        <div class="impact-header-badge">
+          <span class="impact-badge-dot"></span>
+          <span>CAREER TIMELINE &amp; CREDENTIALS</span>
+        </div>
+        <h2 class="impact-main-title">Education &amp; Experience</h2>
+        <p class="impact-subtitle">
+          An interactive chronicle of academic milestones, institutional leadership roles, and technical infrastructure projects.
+        </p>
+      </div>
+
+      <!-- Liquid Glass Tab Controls -->
+      <div class="impact-tabs-wrapper" role="tablist" aria-label="Resume categories">
+        <button class="impact-tab-btn active" data-filter="all" role="tab" aria-selected="true">
+          <span class="tab-label">All Records</span>
+          <span class="tab-count">5</span>
+        </button>
+        <button class="impact-tab-btn" data-filter="experience" role="tab" aria-selected="false">
+          <span class="tab-label">Work Experience</span>
+          <span class="tab-count">3</span>
+        </button>
+        <button class="impact-tab-btn" data-filter="education" role="tab" aria-selected="false">
+          <span class="tab-label">Education &amp; Academics</span>
+          <span class="tab-count">1</span>
+        </button>
+        <button class="impact-tab-btn" data-filter="trajectory" role="tab" aria-selected="false">
+          <span class="tab-label">Career Trajectory</span>
+          <span class="tab-count">1</span>
+        </button>
+      </div>
+
+      <!-- Experience & Education List (21st.dev 12-Column Layout) -->
+      <div class="impact-exp-list">
+        
+        <!-- ITEM 1: Technical Project Lead (Experience) -->
+        <article class="impact-exp-card" data-category="experience">
+          <div class="impact-exp-glow" aria-hidden="true"></div>
+          <div class="impact-exp-inner">
+            <!-- Left Column (Col 1-3) -->
+            <div class="impact-col-left">
+              <div class="impact-org-badge">
+                <span class="org-status-indicator pulse-green"></span>
+                <span class="org-status-text">CURRENT ROLE</span>
+              </div>
+              <h3 class="impact-org-name">Datamex College of Saint Adeline</h3>
+              <p class="impact-org-tagline">Process Automation &amp; Workflow Optimization</p>
+              <div class="impact-date-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Apr 2026 — Present</span>
+              </div>
             </div>
+
+            <!-- Middle Column (Col 4-7): Key-Value Metadata Grid -->
+            <div class="impact-col-mid">
+              <div class="impact-meta-grid">
+                <div class="meta-field">
+                  <span class="meta-label">Position</span>
+                  <span class="meta-val highlight">Technical Project Lead</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Location</span>
+                  <span class="meta-val">Fairview, Quezon City</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Domain</span>
+                  <span class="meta-val">Administrative Automation</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Core Pipeline</span>
+                  <span class="meta-val meta-link">Google Workspace &amp; AutoCrat ↗</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column (Col 8-12): Detailed Impact Narrative -->
+            <div class="impact-col-right">
+              <p class="impact-desc-para">
+                Architected and deployed an automated student enrollment pipeline combining Google Forms, structured Google Sheets databases, and AutoCrat document generation. Streamlined registration processing times by replacing manual paperwork with automated credential dispatch.
+              </p>
+              <p class="impact-desc-para">
+                Collaborated directly with departmental administrators to audit student submission records, troubleshoot synchronization edge cases, and maintain high data integrity during peak academic admissions.
+              </p>
+              <div class="impact-tag-row">
+                <span class="impact-tag">Process Automation</span>
+                <span class="impact-tag">Workflow Optimization</span>
+                <span class="impact-tag">G-Suite Systems</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ITEM 2: Official Event Photographer (Experience) -->
+        <article class="impact-exp-card" data-category="experience">
+          <div class="impact-exp-glow" aria-hidden="true"></div>
+          <div class="impact-exp-inner">
+            <!-- Left Column (Col 1-3) -->
+            <div class="impact-col-left">
+              <div class="impact-org-badge">
+                <span class="org-status-indicator pulse-green"></span>
+                <span class="org-status-text">ACTIVE ROLE</span>
+              </div>
+              <h3 class="impact-org-name">Datamex College of Saint Adeline</h3>
+              <p class="impact-org-tagline">Media Documentation &amp; Digital Archival</p>
+              <div class="impact-date-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Dec 2025 — Present</span>
+              </div>
+            </div>
+
+            <!-- Middle Column (Col 4-7) -->
+            <div class="impact-col-mid">
+              <div class="impact-meta-grid">
+                <div class="meta-field">
+                  <span class="meta-label">Position</span>
+                  <span class="meta-val highlight">Official Event Photographer</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Location</span>
+                  <span class="meta-val">On-Campus / Academic Events</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Specialization</span>
+                  <span class="meta-val">Media &amp; Visual Communications</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Asset Scope</span>
+                  <span class="meta-val meta-link">Institutional Publications ↗</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column (Col 8-12) -->
+            <div class="impact-col-right">
+              <p class="impact-desc-para">
+                Spearheaded comprehensive photographic and media coverage for collegiate commencement rites, student leadership summits, sports meets, and academic ceremonies, delivering publication-ready visuals.
+              </p>
+              <p class="impact-desc-para">
+                Managed digital image cataloging, multi-camera lighting arrangements, and color grading workflows. Established an organized digital archival system ensuring quick asset retrieval for institutional press releases.
+              </p>
+              <div class="impact-tag-row">
+                <span class="impact-tag">Event Documentation</span>
+                <span class="impact-tag">Digital Asset Management</span>
+                <span class="impact-tag">Visual Media</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ITEM 3: Student Assistant (Experience) -->
+        <article class="impact-exp-card" data-category="experience">
+          <div class="impact-exp-glow" aria-hidden="true"></div>
+          <div class="impact-exp-inner">
+            <!-- Left Column (Col 1-3) -->
+            <div class="impact-col-left">
+              <div class="impact-org-badge">
+                <span class="org-status-indicator pulse-green"></span>
+                <span class="org-status-text">ACTIVE ROLE</span>
+              </div>
+              <h3 class="impact-org-name">Datamex College of Saint Adeline</h3>
+              <p class="impact-org-tagline">Campus IT Maintenance &amp; Department Support</p>
+              <div class="impact-date-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Aug 2024 — Present</span>
+              </div>
+            </div>
+
+            <!-- Middle Column (Col 4-7) -->
+            <div class="impact-col-mid">
+              <div class="impact-meta-grid">
+                <div class="meta-field">
+                  <span class="meta-label">Position</span>
+                  <span class="meta-val highlight">Student Assistant (IT Support)</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Location</span>
+                  <span class="meta-val">Computer Laboratories &amp; Admin</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Primary Scope</span>
+                  <span class="meta-val">Hardware Maintenance &amp; Servicing</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Infrastructure</span>
+                  <span class="meta-val meta-link">Campus Lab Stations ↗</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column (Col 8-12) -->
+            <div class="impact-col-right">
+              <p class="impact-desc-para">
+                Performed routine PC hardware diagnostics, component replacements, operating system re-imaging, and cable testing across student computer laboratories to maintain 100% workstation uptime.
+              </p>
+              <p class="impact-desc-para">
+                Managed departmental administrative filing, student inquiry assistance, and crafted digital graphic announcements for collegiate events and social celebrations.
+              </p>
+              <div class="impact-tag-row">
+                <span class="impact-tag">Hardware Diagnostics</span>
+                <span class="impact-tag">Lab Station Servicing</span>
+                <span class="impact-tag">Technical Support</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ITEM 4: BS Information Technology (Education) -->
+        <article class="impact-exp-card" data-category="education">
+          <div class="impact-exp-glow" aria-hidden="true"></div>
+          <div class="impact-exp-inner">
+            <!-- Left Column (Col 1-3) -->
+            <div class="impact-col-left">
+              <div class="impact-org-badge">
+                <span class="org-status-indicator pulse-amber"></span>
+                <span class="org-status-text">IN PROGRESS · DEAN'S LIST</span>
+              </div>
+              <h3 class="impact-org-name">Datamex College of Saint Adeline</h3>
+              <p class="impact-org-tagline">Dean's Lister (1.20 – 1.80 GWA)</p>
+              <div class="impact-date-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+                <span>2023 — Expected Jul 2027</span>
+              </div>
+            </div>
+
+            <!-- Middle Column (Col 4-7) -->
+            <div class="impact-col-mid">
+              <div class="impact-meta-grid">
+                <div class="meta-field">
+                  <span class="meta-label">Degree</span>
+                  <span class="meta-val highlight">BS Information Technology</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Major Focus</span>
+                  <span class="meta-val">Network Engineering &amp; Systems</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Campus Location</span>
+                  <span class="meta-val">Fairview, Quezon City</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">National Credential</span>
+                  <span class="meta-val meta-link">TESDA NC II Certified (CSS) ↗</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column (Col 8-12) -->
+            <div class="impact-col-right">
+              <p class="impact-desc-para">
+                Maintaining a consistent Dean's Honor Roll standing (1.20 – 1.80 GWA) with comprehensive coursework in Cisco Routing &amp; Switching, Network Security Protocols, Relational Database Systems (SQL), Operating Systems, and IT Infrastructure.
+              </p>
+              <p class="impact-desc-para">
+                Holds a National Certificate II (NC II) in Computer Systems Servicing issued by TESDA, demonstrating evaluated competency in installing and configuring computer systems, setup and configuration of computer networks, and maintaining and repairing computer systems and networks.
+              </p>
+              <div class="impact-tag-row">
+                <span class="impact-tag">Dean's Lister</span>
+                <span class="impact-tag">TESDA NC II Certified</span>
+                <span class="impact-tag">Network Architecture</span>
+                <span class="impact-tag">SQL Databases</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ITEM 5: Career Trajectory (Trajectory) -->
+        <article class="impact-exp-card" data-category="trajectory">
+          <div class="impact-exp-glow" aria-hidden="true"></div>
+          <div class="impact-exp-inner">
+            <!-- Left Column (Col 1-3) -->
+            <div class="impact-col-left">
+              <div class="impact-org-badge">
+                <span class="org-status-indicator pulse-cyan"></span>
+                <span class="org-status-text">CAREER ROADMAP</span>
+              </div>
+              <h3 class="impact-org-name">Enterprise Infrastructure Focus</h3>
+              <p class="impact-org-tagline">Network Engineering &amp; Systems Administration</p>
+              <div class="impact-date-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                <span>Immediate / Post-Graduation</span>
+              </div>
+            </div>
+
+            <!-- Middle Column (Col 4-7) -->
+            <div class="impact-col-mid">
+              <div class="impact-meta-grid">
+                <div class="meta-field">
+                  <span class="meta-label">Target Role</span>
+                  <span class="meta-val highlight">Junior Network Engineer / IT Specialist</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Target Environment</span>
+                  <span class="meta-val">Enterprise IT / NOC / Datacenter</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Core Competencies</span>
+                  <span class="meta-val">Cisco IOS, VLANs, AD DS, DHCP/DNS</span>
+                </div>
+                <div class="meta-field">
+                  <span class="meta-label">Readiness</span>
+                  <span class="meta-val meta-link">Lab-Tested &amp; Certified ↗</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column (Col 8-12) -->
+            <div class="impact-col-right">
+              <p class="impact-desc-para">
+                Targeting an enterprise IT infrastructure or Network Operations Center (NOC) role where I can deploy routed/switched corporate topologies, implement secure VLAN segmentation, administer Windows Server Active Directory domains, and support mission-critical uptime.
+              </p>
+              <p class="impact-desc-para">
+                Bringing practical hands-on capability in physical rack mounting, structured UTP patch cabling, MikroTik/Cisco router provisioning, and automated administrative workflow design.
+              </p>
+              <div class="impact-tag-row">
+                <span class="impact-tag">Cisco IOS</span>
+                <span class="impact-tag">Windows Server AD</span>
+                <span class="impact-tag">VLAN Routing</span>
+                <span class="impact-tag">Network Diagnostics</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Liquid Glass Resume Download Bar -->
+      <div class="impact-resume-bar">
+        <div class="resume-bar-left">
+          <div class="resume-bar-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="resume-bar-info">
+            <h4 class="resume-bar-title">Complete Professional Resume</h4>
+            <p class="resume-bar-desc">Formatted in Harvard standard with detailed IT coursework, hardware laboratory credentials, and verifiable references.</p>
           </div>
         </div>
-        <!-- Experience -->
-        <div class="resume-col">
-          <h4 class="resume-col-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            Experience
-          </h4>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="timeline-date">Apr 2026 — Present</span>
-              <h5 class="timeline-title">Technical Project Lead</h5>
-              <p class="timeline-place">Datamex College of Saint Adeline</p>
-              <p class="timeline-desc">Developed and deployed an automated student enrollment system using Google Forms and AutoCrat, significantly streamlining administrative workflows and data entry.</p>
-            </div>
-            <div class="timeline-item">
-              <span class="timeline-date">Dec 2025 — Present</span>
-              <h5 class="timeline-title">Official Event Photographer</h5>
-              <p class="timeline-place">Datamex College of Saint Adeline</p>
-              <p class="timeline-desc">Managed official photography for school functions, ensuring high-quality visual documentation and organizing digital assets for publications.</p>
-            </div>
-            <div class="timeline-item">
-              <span class="timeline-date">Aug 2024 — Present</span>
-              <h5 class="timeline-title">Student Assistant</h5>
-              <p class="timeline-place">Datamex College of Saint Adeline</p>
-              <p class="timeline-desc">Managed administrative records, performed routine PC hardware maintenance, and designed promotional visual assets for school events and pageants.</p>
-            </div>
-          </div>
-          
-          <h4 class="resume-col-title" style="margin-top: 48px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Career Development Plan
-          </h4>
-          <div class="timeline">
-            <div class="timeline-item">
-              <span class="timeline-date">Next 6 Months</span>
-              <h5 class="timeline-title">Target: Administrative Assistant</h5>
-              <p class="timeline-place">Career Goal</p>
-              <p class="timeline-desc">Secure a remote or flexible Administrative Assistant role to leverage my technical IT skills and process automation experience to improve office efficiency and workflow management.</p>
-            </div>
-          </div>
+        <div class="resume-bar-right">
+          <a href="Profile/Jhay_Castro_Harvard_Resume.pdf" download="Jhay_Castro_Resume.pdf" class="btn btn-primary impact-download-btn">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </span>
+            <span>DOWNLOAD HARVARD RESUME (PDF)</span>
+          </a>
         </div>
       </div>
-      <div class="resume-download">
-        <a href="Profile/Jhay_Castro_Harvard_Resume.pdf" download="Jhay_Castro_Resume.pdf" class="btn btn-primary">
-          <span class="btn-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          </span>
-          DOWNLOAD FULL RESUME
-        </a>
-      </div>
+
     </div>
   </section>
 
@@ -1234,7 +1513,7 @@
     </div>
   </section>
 
-  <script src="script.js?v=13"></script>
+  <script src="script.js?v=15"></script>
 
 
   <!-- ===== PROJECT QUICK MODAL ===== -->

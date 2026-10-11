@@ -1543,109 +1543,555 @@ img {
 }
 
 /* ============================================
-   RESUME SECTION (EDUCATION & EXPERIENCE)
+   RESUME & IMPACT EXPERIENCE SECTION (21ST.DEV INSPIRATION)
    ============================================ */
-.resume-section {
+.impact-experience-section {
   position: relative;
   z-index: 5;
   background-color: #000000;
-  background: #000000; /* Solid black color - completely hides animated topographic canvas */
-  padding-top: 80px;
-  padding-bottom: 80px;
+  background: #000000;
+  padding-top: 100px;
+  padding-bottom: 110px;
 }
 
-.resume-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+.impact-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.resume-col {
-  background: rgba(10, 10, 15, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-white-10);
-  border-radius: 16px;
-  padding: 36px 32px;
+/* Section Header Block */
+.impact-header-block {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 48px;
 }
 
-.resume-col-title {
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
+.impact-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-white);
+  letter-spacing: 0.16em;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.impact-badge-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-accent);
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.impact-main-title {
+  font-family: var(--font-heading);
+  font-size: 2.85rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.impact-subtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Liquid Glass Tab Controls */
+.impact-tabs-wrapper {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(18, 22, 34, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 6px;
+  width: fit-content;
+  margin: 0 auto 52px;
+  box-shadow: 0 14px 35px -10px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.impact-tab-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 28px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--color-accent);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-.resume-col-title svg {
+.impact-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.impact-tab-btn.active {
+  color: #ffffff;
+  background: rgba(245, 158, 11, 0.16);
+  box-shadow: 0 0 24px rgba(217, 119, 6, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.impact-tab-btn .tab-count {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.impact-tab-btn.active .tab-count {
+  background: var(--color-accent);
+  color: #0b0e14;
+}
+
+/* Experience Cards Container */
+.impact-exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Each Liquid Glass Card */
+.impact-exp-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background: rgba(14, 18, 28, 0.65);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 20px 0 rgba(255, 255, 255, 0.015),
+    0 20px 45px -15px rgba(0, 0, 0, 0.65);
+  transition: 
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease;
+}
+
+.impact-exp-card:hover {
+  border-color: rgba(245, 158, 11, 0.42);
+  transform: translateY(-3px);
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.25),
+    0 30px 60px -15px rgba(0, 0, 0, 0.8),
+    0 0 35px -8px rgba(217, 119, 6, 0.25);
+}
+
+.impact-exp-card.is-filtered-out {
+  display: none !important;
+}
+
+.impact-exp-card.anim-enter {
+  animation: cardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Liquid Ambient Glow Layer (21st.dev signature mouse/hover light) */
+.impact-exp-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 22px;
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  background: 
+    radial-gradient(
+      650px circle at var(--mouse-x, 30%) var(--mouse-y, 40%),
+      rgba(217, 119, 6, 0.24) 0%,
+      rgba(245, 158, 11, 0.12) 35%,
+      transparent 70%
+    ),
+    radial-gradient(
+      450px circle at 85% 65%,
+      rgba(251, 191, 36, 0.10) 0%,
+      transparent 60%
+    );
+}
+
+.impact-exp-card:hover .impact-exp-glow {
+  opacity: 1;
+}
+
+/* 12-Column Responsive Inner Grid */
+.impact-exp-inner {
+  position: relative;
+  z-index: 2;
+  padding: 42px 46px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+/* --- Left Column: Col 1-3 --- */
+.impact-col-left {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.impact-org-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+}
+
+.org-status-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pulse-green {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.pulse-amber {
+  background: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+}
+
+.pulse-cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+}
+
+.org-status-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.impact-org-name {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.impact-org-tagline {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.impact-date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.impact-date-pill svg {
+  stroke: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* --- Middle Column: Col 4-7 (Key-Value Metadata Grid) --- */
+.impact-col-mid {
+  grid-column: span 4;
+}
+
+.impact-meta-grid {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) 1fr;
+  gap: 16px 14px;
+  align-items: baseline;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.meta-field {
+  display: contents;
+}
+
+.meta-label {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.meta-val {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.4;
+}
+
+.meta-val.highlight {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.meta-val.meta-link {
+  color: var(--color-accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- Right Column: Col 8-12 (Detailed Narrative & Tags) --- */
+.impact-col-right {
+  grid-column: span 5;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.impact-desc-para {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.impact-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.impact-tag {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.impact-exp-card:hover .impact-tag {
+  border-color: rgba(245, 158, 11, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* --- Liquid Glass Resume Download Bar --- */
+.impact-resume-bar {
+  margin-top: 48px;
+  background: rgba(18, 22, 34, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 22px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.impact-resume-bar:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.8), 0 0 30px -8px rgba(217, 119, 6, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.resume-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.resume-bar-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.resume-bar-icon svg {
   stroke: var(--color-accent);
 }
 
-.timeline {
-  position: relative;
-  padding-left: 28px;
-  border-left: 2px solid var(--color-white-10);
-}
-
-.timeline-item {
-  position: relative;
-  padding-bottom: 32px;
-}
-
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -33px;
-  top: 6px;
-  width: 12px;
-  height: 12px;
-  background: var(--color-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--color-surface), 0 0 12px rgba(92, 225, 230, 0.3);
-}
-
-.timeline-date {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  color: var(--color-accent);
-  margin-bottom: 6px;
-  display: block;
-}
-
-.timeline-title {
+.resume-bar-title {
   font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-white);
-  margin-bottom: 4px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px;
 }
 
-.timeline-place {
-  font-size: 0.85rem;
-  color: var(--color-white-50);
-  margin-bottom: 8px;
-  font-style: italic;
+.resume-bar-desc {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  line-height: 1.5;
 }
 
-.timeline-desc {
-  font-size: 0.85rem;
-  line-height: 1.7;
-  color: var(--color-white-50);
+.impact-download-btn {
+  white-space: nowrap;
+  padding: 14px 28px;
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.4);
 }
 
-.resume-download {
-  text-align: center;
-  margin-top: 48px;
+/* ============================================
+   RESPONSIVE DESIGN FOR IMPACT EXPERIENCE
+   ============================================ */
+@media (max-width: 1100px) {
+  .impact-exp-inner {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 28px;
+    padding: 34px 32px;
+  }
+  .impact-col-left {
+    grid-column: span 12;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .impact-col-mid {
+    grid-column: span 6;
+  }
+  .impact-col-right {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 768px) {
+  .impact-experience-section {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .impact-main-title {
+    font-size: 2.1rem;
+  }
+  .impact-tabs-wrapper {
+    width: 100%;
+    border-radius: 16px;
+    justify-content: flex-start;
+  }
+  .impact-tab-btn {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+  .impact-exp-inner {
+    padding: 26px 20px;
+    gap: 22px;
+  }
+  .impact-col-left {
+    grid-column: span 12;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .impact-col-mid {
+    grid-column: span 12;
+  }
+  .impact-col-right {
+    grid-column: span 12;
+  }
+  .impact-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+  .meta-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 8px;
+  }
+  .meta-field:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .impact-resume-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+  }
+  .impact-download-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ============================================

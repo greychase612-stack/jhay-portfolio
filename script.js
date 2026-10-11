@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroShrinkAnimation();
   initHeroMouseParallax();
   initMacOsDock();
+  initImpactExperience();
 });
 
 /* ---------- Navbar scroll effect ---------- */
@@ -1896,3 +1897,65 @@ function initMacOsDock() {
     });
   });
 }
+
+/* ========================================================
+   21ST.DEV IMPACT EXPERIENCE: TABS & DYNAMIC CURSOR GLOW
+   ======================================================== */
+function initImpactExperience() {
+  const container = document.querySelector('.impact-experience-section');
+  if (!container) return;
+
+  const cards = container.querySelectorAll('.impact-exp-card');
+  const tabButtons = container.querySelectorAll('.impact-tab-btn');
+
+  // 1. Dynamic Cursor-Tracking Glow Effect on Cards
+  cards.forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Set CSS variables for smooth radial background glow centering
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      // Gracefully reset to default origin
+      card.style.setProperty('--mouse-x', '30%');
+      card.style.setProperty('--mouse-y', '40%');
+    });
+  });
+
+  // 2. Interactive Category Tab Switching
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetBtn = e.target.closest('.impact-tab-btn');
+      if (!targetBtn) return;
+      const filter = targetBtn.getAttribute('data-filter');
+
+      // Update active tab button state
+      tabButtons.forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      targetBtn.classList.add('active');
+      targetBtn.setAttribute('aria-selected', 'true');
+
+      // Filter cards smoothly
+      cards.forEach((card) => {
+        const category = card.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          card.classList.remove('is-filtered-out');
+          card.classList.remove('anim-enter');
+          void card.offsetWidth; // Force reflow for clean re-trigger
+          card.classList.add('anim-enter');
+        } else {
+          card.classList.add('is-filtered-out');
+        }
+      });
+    });
+  });
+}
+
