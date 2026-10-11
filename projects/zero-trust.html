@@ -3,329 +3,1509 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zero-Trust Security &amp; Threat Detection | Jhay Castro</title>
-  <meta name="description" content="Cybersecurity case study and Zero-Trust architecture specification featuring automated threat detection, granular access controls, and SIEM logging." />
+  <title>Smart Automatic Tollgate System (Arduino Uno) | Jhay Castro</title>
+  <meta name="description" content="Physical hardware prototype of an automated tollgate access system featuring an Arduino Uno microcontroller, HC-SR04 ultrasonic distance sensing, SG90 servo motor actuation, and playable video demo." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
   <style>
     :root {
-      --color-bg-deep: #08090e;
-      --color-surface-card: #12141f;
-      --color-emerald: #10b981;
-      --color-emerald-glow: rgba(16, 185, 129, 0.25);
+      --bg-base: #090d16;
+      --bg-card: #0f1523;
+      --bg-card-hover: #131b2e;
+      --bg-panel: #0b101c;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(245, 158, 11, 0.4);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-amber: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --accent-blue: #3b82f6;
     }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background-color: var(--color-bg-deep);
-      color: #e2e8f0;
-      min-height: 100vh;
+      background-color: var(--bg-base);
+      color: var(--text-main);
       font-family: 'Inter', sans-serif;
-      padding-bottom: 80px;
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 90px;
     }
-    .sec-header-nav {
+
+    /* Top Technical Nav */
+    .noc-navbar {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      background: rgba(8, 9, 14, 0.85);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 18px 32px;
+      background: rgba(9, 13, 22, 0.92);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .back-btn {
-      display: inline-flex;
+
+    .noc-nav-left {
+      display: flex;
       align-items: center;
-      gap: 10px;
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.25s ease;
+      gap: 16px;
     }
-    .back-btn:hover {
-      background: #ffffff;
-      color: #08090e;
-      transform: translateX(-3px);
-    }
-    .status-badge {
+
+    .back-link {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 6px 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      transform: translateX(-2px);
+    }
+
+    .noc-system-status {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 5px 12px;
       border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--color-emerald);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 600;
     }
-    .status-dot {
-      width: 8px;
-      height: 8px;
+
+    .status-dot-pulse {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--color-emerald);
-      box-shadow: 0 0 8px var(--color-emerald);
-      animation: pulse-dot 2s infinite;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 6px var(--accent-emerald);
+      animation: pulse-dot 2s infinite ease-in-out;
     }
+
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
-    .page-hero {
-      max-width: 1080px;
-      margin: 60px auto 40px;
-      padding: 0 24px;
-      text-align: center;
-    }
-    .page-eyebrow {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      color: var(--color-emerald);
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .page-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 3rem;
-      font-weight: 800;
-      line-height: 1.15;
-      color: #ffffff;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-    .page-lead {
-      max-width: 760px;
-      margin: 0 auto 36px;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #94a3b8;
-    }
-    .tags-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 48px;
-    }
-    .sec-tag {
+
+    .noc-meta-stat {
+      color: var(--text-dim);
       font-size: 0.75rem;
+    }
+    .noc-meta-stat span {
+      color: var(--text-muted);
       font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #e2e8f0;
-      letter-spacing: 0.04em;
     }
-    .content-grid {
-      max-width: 1080px;
-      margin: 0 auto;
+
+    /* Hero Section */
+    .noc-hero {
+      max-width: 1200px;
+      margin: 44px auto 32px;
       padding: 0 24px;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 36px;
     }
-    @media (max-width: 900px) {
-      .content-grid { grid-template-columns: 1fr; }
-      .page-title { font-size: 2.2rem; }
-    }
-    .showcase-card {
-      background: var(--color-surface-card);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    }
-    .showcase-banner {
-      width: 100%;
-      height: 380px;
-      object-fit: cover;
-      display: block;
-    }
-    .showcase-body {
-      padding: 36px;
-    }
-    .showcase-h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #ffffff;
+
+    .noc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      padding: 4px 10px;
+      border-radius: 4px;
       margin-bottom: 16px;
     }
-    .showcase-p {
-      color: #94a3b8;
-      line-height: 1.75;
+
+    .noc-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.18;
+      margin-bottom: 14px;
+    }
+
+    .noc-subtitle {
+      max-width: 880px;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.65;
       margin-bottom: 24px;
     }
-    .sidebar-card {
-      background: var(--color-surface-card);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 32px;
+
+    .tech-pill-rack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      background: #111726;
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: 4px;
+    }
+
+    /* Core Metrics Strip */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .metric-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .metric-title {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .metric-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent-amber);
+    }
+
+    /* Video & Physical Model Showcase Grid */
+    .video-showcase-section {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .video-showcase-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
       gap: 24px;
     }
-    .stat-metric {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 16px;
-    }
-    .stat-metric:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .stat-val {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2rem;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1;
-    }
-    .stat-lbl {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-top: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .specs-list {
-      list-style: none;
-      padding: 0;
+
+    .video-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
       display: flex;
       flex-direction: column;
+    }
+
+    .video-card-topbar {
+      background: #0d121f;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .video-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .video-badge-live {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .video-player-wrap {
+      background: #000000;
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo-video {
+      width: 100%;
+      height: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+
+    .model-photo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .model-img-wrap {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: #070a12;
+    }
+
+    .model-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .model-img:hover {
+      transform: scale(1.03);
+    }
+
+    .model-details {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .model-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .model-p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .model-spec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .spec-micro-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+    }
+
+    /* Sandbox Container */
+    .sandbox-container {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .workbench-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Workbench Header / Controls */
+    .workbench-topbar {
+      background: #0d121f;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
-    .specs-list li {
+
+    .wb-title-group {
       display: flex;
       align-items: center;
       gap: 10px;
-      color: #cbd5e1;
-      font-size: 0.9rem;
     }
-    .specs-list svg {
-      color: var(--color-emerald);
-      flex-shrink: 0;
+
+    .wb-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      text-transform: uppercase;
     }
-    .coming-soon-notice {
-      margin-top: 40px;
-      padding: 24px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%);
-      border: 1px dashed rgba(16, 185, 129, 0.35);
-      text-align: center;
-    }
-    .coming-soon-notice h4 {
-      font-family: 'Outfit', sans-serif;
+
+    .wb-heading {
+      font-size: 0.95rem;
+      font-weight: 700;
       color: #ffffff;
+    }
+
+    .wb-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wb-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: #151d30;
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .wb-btn:hover {
+      background: #1c2742;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .wb-btn.primary {
+      background: #d97706;
+      border-color: #f59e0b;
+      color: #ffffff;
+    }
+    .wb-btn.primary:hover {
+      background: #b45309;
+    }
+
+    .wb-btn.secondary-action {
+      background: rgba(6, 182, 212, 0.12);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: #a5f3fc;
+    }
+    .wb-btn.secondary-action:hover {
+      background: rgba(6, 182, 212, 0.2);
+      color: #ffffff;
+    }
+
+    /* Live Sensor Readout Bar */
+    .sensor-readout-strip {
+      background: #070a12;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .readout-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--text-dim);
+    }
+    .readout-item strong {
+      color: #ffffff;
+    }
+    .readout-val {
+      color: var(--accent-amber);
+      font-weight: 700;
+    }
+    .readout-val.open {
+      color: var(--accent-emerald);
+    }
+    .readout-val.closed {
+      color: var(--accent-rose);
+    }
+
+    /* Interactive Topology Canvas */
+    .topology-viewport {
+      position: relative;
+      background: #080c14;
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+      padding: 30px 20px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      overflow-x: auto;
+    }
+
+    .topology-svg-wrap {
+      min-width: 980px;
+      position: relative;
+    }
+
+    /* SVG Digital Twin Styling */
+    .roadway-bg {
+      fill: #151a24;
+      stroke: #252d3d;
+      stroke-width: 2px;
+      rx: 6px;
+    }
+
+    .roadway-dashed {
+      stroke: #ffffff;
+      stroke-width: 3px;
+      stroke-dasharray: 14 12;
+    }
+
+    .booth-bg {
+      fill: #f59e0b;
+      stroke: #b45309;
+      stroke-width: 2px;
+      rx: 8px;
+    }
+
+    .booth-canopy {
+      fill: #1e293b;
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1.5px;
+      rx: 6px;
+    }
+
+    /* Barrier Boom Arm with Smooth Rotation */
+    #boom-barrier-arm {
+      transform-origin: 520px 180px;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    #boom-barrier-arm.open {
+      transform: rotate(-90deg);
+    }
+
+    /* Ultrasonic Sound Pulses */
+    .acoustic-wave {
+      stroke: var(--accent-cyan);
+      stroke-width: 2px;
+      fill: none;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .acoustic-wave.active-ping {
+      animation: wave-pulse 1.2s infinite ease-out;
+    }
+
+    @keyframes wave-pulse {
+      0% { opacity: 0.8; r: 10px; }
+      100% { opacity: 0; r: 60px; }
+    }
+
+    /* Vehicle Car Element */
+    #sim-car-group {
+      transform: translateX(0px);
+      transition: transform 2.2s cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    /* Split Workbench Consoles */
+    .workbench-split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: 420px;
+      background: var(--bg-card);
+    }
+
+    /* Tabbed Inspector Side */
+    .inspector-pane {
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pane-tabs {
+      display: flex;
+      background: #0c111c;
+      border-bottom: 1px solid var(--border-subtle);
+      overflow-x: auto;
+    }
+
+    .pane-tab-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 11px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .pane-tab-btn:hover {
+      color: var(--text-muted);
+    }
+
+    .pane-tab-btn.active {
+      color: #ffffff;
+      border-bottom-color: var(--accent-amber);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pane-tab-content {
+      display: none;
+      padding: 22px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .pane-tab-content.active {
+      display: block;
+    }
+
+    /* CLI snippet block */
+    .cli-box {
+      background: #070a10;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .cli-prompt {
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
+
+    /* Pinout table */
+    .pinout-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      margin-top: 10px;
+    }
+    .pinout-table th {
+      background: #0f172a;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+    .pinout-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+    }
+
+    /* Monospace Live Terminal Side */
+    .terminal-pane {
+      background: #080c14;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-topbar {
+      background: #0b0f19;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .terminal-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .t-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .t-dot.red { background: #ef4444; }
+    .t-dot.yellow { background: #f59e0b; }
+    .t-dot.green { background: #10b981; }
+
+    .terminal-body {
+      padding: 16px;
+      flex: 1;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      line-height: 1.65;
+      color: #94a3b8;
+      max-height: 480px;
+    }
+
+    .log-line {
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+    .log-ts {
+      color: #475569;
+    }
+    .log-info {
+      color: #38bdf8;
+    }
+    .log-success {
+      color: #34d399;
+    }
+    .log-warn {
+      color: #fbbf24;
+    }
+    .log-error {
+      color: #f87171;
+    }
+    .log-cmd {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Specs Section */
+    .specs-section {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    .section-title-wrap {
+      margin-bottom: 24px;
+    }
+
+    .section-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .section-p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 800px;
+    }
+
+    /* Three Pillars Grid */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .pillar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 24px;
+      transition: border-color 0.2s ease;
+    }
+
+    .pillar-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .pillar-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-amber);
+      margin-bottom: 16px;
+    }
+
+    .pillar-h4 {
+      font-family: 'Outfit', sans-serif;
       font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
       margin-bottom: 8px;
     }
-    .coming-soon-notice p {
-      color: #94a3b8;
-      font-size: 0.88rem;
+
+    .pillar-p {
+      font-size: 0.86rem;
+      color: var(--text-muted);
       line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .video-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+      .metrics-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .workbench-split {
+        grid-template-columns: 1fr;
+      }
+      .inspector-pane {
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .pillars-grid {
+        grid-template-columns: 1fr;
+      }
+      .noc-navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="sec-header-nav">
-    <a href="../index.html#projects" class="back-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      Back to Portfolio
-    </a>
-    <div class="status-badge">
-      <span class="status-dot"></span>
-      Stage 4 &bull; Security Spec
+
+  <!-- Top Technical Nav -->
+  <header class="noc-navbar">
+    <div class="noc-nav-left">
+      <a href="../index.html#projects" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back to Portfolio
+      </a>
+      <span style="color: var(--text-dim); font-size: 0.85rem;">/</span>
+      <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">Arduino Uno Embedded Hardware Spec</span>
+    </div>
+
+    <div class="noc-system-status">
+      <div class="status-indicator">
+        <span class="status-dot-pulse"></span>
+        <span>ATMEGA328P: RUNNING @ 16MHZ</span>
+      </div>
+      <div class="noc-meta-stat">
+        SENSOR: <span>HC-SR04 (40kHz ULTRASOUND)</span>
+      </div>
+      <div class="noc-meta-stat">
+        ACTUATOR: <span>SG90 SERVO (PWM D11)</span>
+      </div>
     </div>
   </header>
 
   <main>
-    <section class="page-hero">
-      <p class="page-eyebrow">Defensive Cyber Operations</p>
-      <h1 class="page-title">Zero-Trust Security &amp; Threat Detection</h1>
-      <p class="page-lead">
-        A comprehensive defensive cybersecurity framework enforcing continuous mutual authentication, least-privilege network segmentation, automated firewall rule auditing, and real-time SIEM alerting.
+    <!-- Hero Section -->
+    <section class="noc-hero">
+      <div class="noc-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        Embedded Systems &bull; Hardware Prototyping &bull; Physical Computing
+      </div>
+      <h1 class="noc-title">Smart Automatic Tollgate System</h1>
+      <p class="noc-subtitle">
+        A physical road access and barrier automation system powered by an Arduino Uno (ATmega328P) microcontroller, HC-SR04 ultrasonic echolocation distance sensing, and TowerPro SG90 micro-servo motor actuation. Includes live hardware video demonstration, physical model specs, and embedded C++ telemetry.
       </p>
-      <div class="tags-row">
-        <span class="sec-tag">Zero-Trust (ZTNA)</span>
-        <span class="sec-tag">Next-Gen Firewalls</span>
-        <span class="sec-tag">SIEM Telemetry</span>
-        <span class="sec-tag">Vulnerability Auditing</span>
-        <span class="sec-tag">Intrusion Prevention</span>
+
+      <div class="tech-pill-rack">
+        <span class="tech-pill">Arduino Uno R3</span>
+        <span class="tech-pill">Microchip ATmega328P</span>
+        <span class="tech-pill">HC-SR04 Ultrasonic Sensor</span>
+        <span class="tech-pill">SG90 9g Micro-Servo</span>
+        <span class="tech-pill">Embedded C++</span>
+        <span class="tech-pill">Servo.h PWM Control</span>
+        <span class="tech-pill">Physical Model Construction</span>
+        <span class="tech-pill">UART Serial Telemetry (9600 Baud)</span>
+      </div>
+
+      <!-- Core Metrics Strip -->
+      <div class="metrics-bar">
+        <div class="metric-box">
+          <div class="metric-title">Ultrasonic Frequency</div>
+          <div class="metric-value">40 kHz</div>
+          <div class="metric-sub">8-Cycle Burst Pulse</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-title">Trigger Threshold</div>
+          <div class="metric-value">&lt; 10 cm</div>
+          <div class="metric-sub">Vehicle Presence Detection</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-title">Servo Actuation Angle</div>
+          <div class="metric-value">0&deg; &rarr; 90&deg;</div>
+          <div class="metric-sub">0.10s / 60&deg; High-Speed Transit</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-title">Gate Clearance Hold</div>
+          <div class="metric-value">3.00 sec</div>
+          <div class="metric-sub">Vehicle Transit Safety Delay</div>
+        </div>
       </div>
     </section>
 
-    <div class="content-grid">
-      <div class="showcase-card">
-        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&auto=format&fit=crop&q=80" alt="Cyber Security Operations" class="showcase-banner" />
-        <div class="showcase-body">
-          <h3 class="showcase-h3">Zero Implicit Trust Perimeter</h3>
-          <p class="showcase-p">
-            Replaces outdated castle-and-moat models with continuous cryptographic verification on all requests. Implements micro-segmentation so lateral movement is completely blocked even if an endpoint on the subnet is compromised.
-          </p>
+    <!-- Video Showcase & Physical Model Section -->
+    <section class="video-showcase-section">
+      <div class="video-showcase-grid">
+        
+        <!-- Video Card -->
+        <div class="video-card">
+          <div class="video-card-topbar">
+            <div class="video-card-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Physical Demonstration Video (Working Prototype)
+            </div>
+            <span class="video-badge-live">LIVE WORKING DEMO</span>
+          </div>
 
-          <h3 class="showcase-h3" style="margin-top: 32px;">Automated Security Auditing &amp; Incident Logs</h3>
-          <p class="showcase-p">
-            Centralized telemetry ingestion monitors packet anomalies, port scan probes, and SQL injection payloads. Correlates indicators of compromise (IoC) to trigger automated containment rules before threats reach production databases.
-          </p>
-
-          <div class="coming-soon-notice">
-            <h4>Live Threat Simulation Environment Under Setup</h4>
-            <p>
-              Interactive terminal demo featuring packet capture analysis (Wireshark/Suricata) and automated quarantine response scripts will be released soon.
-            </p>
+          <div class="video-player-wrap">
+            <video class="demo-video" controls playsinline preload="metadata" poster="arduino/tollgate-model.png">
+              <source src="arduino/tollgate-demo.mp4" type="video/mp4" />
+              Your browser does not support HTML5 video tag.
+            </video>
           </div>
         </div>
-      </div>
 
-      <div class="sidebar-card">
-        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: #ffffff;">Defensive Benchmark</h3>
+        <!-- Physical Model Details Card -->
+        <div class="model-photo-card">
+          <div class="model-img-wrap">
+            <img src="arduino/tollgate-model.png" alt="Physical Arduino Tollgate Model" class="model-img" />
+          </div>
+          <div class="model-details">
+            <div>
+              <h3 class="model-h3">Physical Model Construction</h3>
+              <p class="model-p">
+                Miniature highway toll booth constructed with rigid foam-board and realistic signage. Features a motorized boom barrier with octagonal "STOP" sign, dual HC-SR04 acoustic transducers positioned at vehicle bumper height, and an enclosed servo gearbox drive.
+              </p>
+            </div>
+            <div class="model-spec-tags">
+              <span class="spec-micro-tag">Foam-board &amp; Vinyl</span>
+              <span class="spec-micro-tag">SG90 Direct-Drive Pivot</span>
+              <span class="spec-micro-tag">5V Regulated Rail</span>
+              <span class="spec-micro-tag">USB Type-B Comms</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Digital Twin Tollgate Simulator -->
+    <section class="sandbox-container">
+      <div class="workbench-card">
         
-        <div class="stat-metric">
-          <div class="stat-val">0</div>
-          <div class="stat-lbl">Implicit Trust Tolerated</div>
-        </div>
-        <div class="stat-metric">
-          <div class="stat-val">&lt; 300ms</div>
-          <div class="stat-lbl">Threat Quarantine Trigger</div>
-        </div>
-        <div class="stat-metric">
-          <div class="stat-val">100%</div>
-          <div class="stat-lbl">Micro-Segmented Endpoints</div>
+        <!-- Top Toolbar -->
+        <div class="workbench-topbar">
+          <div class="wb-title-group">
+            <span class="wb-badge">DIGITAL TWIN LAB</span>
+            <span class="wb-heading">Interactive Tollgate Simulator &amp; Serial Monitor</span>
+          </div>
+
+          <div class="wb-controls">
+            <button type="button" class="wb-btn primary" id="btn-drive" onclick="simulateDriveVehicle()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Drive Vehicle to Toll Gate
+            </button>
+            <button type="button" class="wb-btn secondary-action" id="btn-servo-toggle" onclick="toggleServoManual()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Manual Servo Toggle (0&deg; &harr; 90&deg;)
+            </button>
+            <button type="button" class="wb-btn" onclick="clearTerminal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Clear Logs
+            </button>
+          </div>
         </div>
 
-        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: #ffffff; margin-top: 16px;">Defensive Protocol Stack</h3>
-        <ul class="specs-list">
-          <li>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Micro-Segmentation &amp; VLAN ACLs
-          </li>
-          <li>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Automated Suricata IDS/IPS Rules
-          </li>
-          <li>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            WAF SQLi / XSS Sanitization
-          </li>
-          <li>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Centralized Syslog / SIEM Pipelines
-          </li>
-        </ul>
+        <!-- Sensor & Gate Telemetry Strip -->
+        <div class="sensor-readout-strip">
+          <div class="readout-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <strong>HC-SR04 Distance:</strong>
+            <span class="readout-val" id="disp-distance">28.4 cm</span>
+          </div>
+
+          <div class="readout-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <strong>Servo Position:</strong>
+            <span class="readout-val" id="disp-servo-angle">0&deg; (HORIZONTAL)</span>
+          </div>
+
+          <div class="readout-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <strong>Gate Status:</strong>
+            <span class="readout-val closed" id="disp-gate-status">BARRIER CLOSED [STOP]</span>
+          </div>
+
+          <div class="readout-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+            <strong>Serial COM:</strong>
+            <span style="color: var(--accent-emerald);">9600 BAUD OK</span>
+          </div>
+        </div>
+
+        <!-- SVG Digital Twin Canvas -->
+        <div class="topology-viewport">
+          <div class="topology-svg-wrap">
+            <svg id="tollgate-svg" viewBox="0 0 1060 300" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+              
+              <!-- Roadway Asphalt Surface -->
+              <rect x="20" y="140" width="1020" height="120" class="roadway-bg" />
+              <!-- Roadway Center Dashed Markings -->
+              <line x1="20" y1="200" x2="1040" y2="200" class="roadway-dashed" />
+
+              <!-- Road Signs: "STOP AT TOLL GATES" -->
+              <g id="road-sign-group" transform="translate(930, 90)">
+                <rect x="0" y="0" width="90" height="45" fill="#ffffff" stroke="#1e293b" stroke-width="2" rx="4" />
+                <text x="45" y="16" fill="#1e293b" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" text-anchor="middle">STOP AT</text>
+                <text x="45" y="28" fill="#1e293b" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" text-anchor="middle">TOLL</text>
+                <text x="45" y="40" fill="#1e293b" font-family="'Outfit', sans-serif" font-size="9" font-weight="800" text-anchor="middle">GATES</text>
+                <line x1="45" y1="45" x2="45" y2="140" stroke="#94a3b8" stroke-width="3" />
+              </g>
+
+              <!-- Toll Booth Structure (Yellow Booth with Canopy) -->
+              <!-- Overhead Canopy -->
+              <rect x="460" y="30" width="220" height="35" class="booth-canopy" />
+              <rect x="480" y="37" width="180" height="21" fill="#f59e0b" rx="3" />
+              <text x="570" y="52" fill="#090d16" font-family="'Outfit', sans-serif" font-size="14" font-weight="900" text-anchor="middle" letter-spacing="2">TOLL</text>
+
+              <!-- Canopy Support Pillars -->
+              <rect x="475" y="65" width="16" height="75" fill="#475569" rx="2" />
+              <rect x="650" y="65" width="16" height="75" fill="#475569" rx="2" />
+
+              <!-- Toll Operator Cabin (Yellow & Glass) -->
+              <rect x="520" y="75" width="130" height="75" class="booth-bg" />
+              <!-- Window Graphic -->
+              <rect x="535" y="85" width="100" height="30" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" rx="3" />
+              <!-- Blue 'P' Parking Sign above booth -->
+              <rect x="570" y="62" width="24" height="20" fill="#1e293b" stroke="#ffffff" stroke-width="1.5" rx="3" />
+              <text x="582" y="77" fill="#ffffff" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" text-anchor="middle">P</text>
+
+              <!-- HC-SR04 Ultrasonic Sensor on front face of booth -->
+              <g id="hc-sr04-group" transform="translate(545, 122)">
+                <rect x="0" y="0" width="80" height="22" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4" />
+                <!-- Ultrasonic Transmitter Transducer -->
+                <circle cx="22" cy="11" r="7.5" fill="#94a3b8" stroke="#475569" stroke-width="1.5" />
+                <circle cx="22" cy="11" r="3.5" fill="#1e293b" />
+                <!-- Ultrasonic Receiver Transducer -->
+                <circle cx="58" cy="11" r="7.5" fill="#94a3b8" stroke="#475569" stroke-width="1.5" />
+                <circle cx="58" cy="11" r="3.5" fill="#1e293b" />
+              </g>
+
+              <!-- Acoustic Wave Pulses emitted from HC-SR04 -->
+              <circle id="wave-1" cx="540" cy="133" r="15" class="acoustic-wave" />
+              <circle id="wave-2" cx="530" cy="133" r="30" class="acoustic-wave" />
+
+              <!-- Servo Gearbox Base (Black Tower) -->
+              <rect x="505" y="145" width="30" height="45" fill="#0f172a" stroke="#334155" stroke-width="2" rx="4" />
+              <circle cx="520" cy="180" r="7" fill="#f59e0b" stroke="#ffffff" stroke-width="2" />
+
+              <!-- Boom Barrier Arm with Red/White Stripes & STOP Sign -->
+              <!-- Pivot point is cx=520, cy=180 -->
+              <g id="boom-barrier-arm">
+                <!-- Arm Rectangle (Extends to the left over the incoming lane) -->
+                <rect x="300" y="174" width="220" height="12" fill="#ffffff" stroke="#b91c1c" stroke-width="1.5" rx="3" />
+                <!-- Red Diagonal Hazard Stripes on Barrier -->
+                <polygon points="320,174 335,174 320,186 305,186" fill="#ef4444" />
+                <polygon points="360,174 375,174 360,186 345,186" fill="#ef4444" />
+                <polygon points="400,174 415,174 400,186 385,186" fill="#ef4444" />
+                <polygon points="440,174 455,174 440,186 425,186" fill="#ef4444" />
+                <polygon points="480,174 495,174 480,186 465,186" fill="#ef4444" />
+
+                <!-- Octagonal Red STOP Sign on Boom Arm -->
+                <polygon points="390,165 410,165 420,175 420,195 410,205 390,205 380,195 380,175" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
+                <text x="400" y="188" fill="#ffffff" font-family="'Outfit', sans-serif" font-size="10" font-weight="900" text-anchor="middle">STOP</text>
+              </g>
+
+              <!-- Vehicle (Approaching Car Group) -->
+              <!-- Starts at x=40, drives to x=320, then x=700 -->
+              <g id="sim-car-group" transform="translate(60, 0)">
+                <!-- Car Body -->
+                <rect x="0" y="165" width="120" height="42" fill="#2563eb" stroke="#1d4ed8" stroke-width="2" rx="8" />
+                <!-- Car Cabin Roof -->
+                <polygon points="25,165 45,145 90,145 105,165" fill="#1e40af" stroke="#1d4ed8" stroke-width="1.5" />
+                <!-- Windows -->
+                <polygon points="32,163 48,148 70,148 70,163" fill="#93c5fd" />
+                <polygon points="75,163 75,148 88,148 98,163" fill="#93c5fd" />
+                <!-- Wheels -->
+                <circle cx="28" cy="207" r="10" fill="#0f172a" stroke="#475569" stroke-width="3" />
+                <circle cx="95" cy="207" r="10" fill="#0f172a" stroke="#475569" stroke-width="3" />
+                <!-- Headlight -->
+                <circle cx="118" cy="180" r="4" fill="#fef08a" />
+              </g>
+
+            </svg>
+          </div>
+        </div>
+
+        <!-- Split Workbench: Left Inspector, Right Terminal -->
+        <div class="workbench-split">
+          
+          <!-- Inspector Tabs -->
+          <div class="inspector-pane">
+            <div class="pane-tabs">
+              <button type="button" class="pane-tab-btn active" onclick="switchPaneTab('bom')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                Hardware Pinout &amp; BOM
+              </button>
+              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('arduino-code')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Arduino C++ Sketch (.ino)
+              </button>
+              <button type="button" class="pane-tab-btn" onclick="switchPaneTab('physics')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                Ultrasonic Physics &amp; Math
+              </button>
+            </div>
+
+            <!-- Tab 1: Pinout & BOM -->
+            <div class="pane-tab-content active" id="tab-bom">
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                Arduino Uno R3 Pinout Wiring Map
+              </h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
+                Jumper connection schematic connecting the ATmega328P microcontroller to the HC-SR04 ultrasonic transducer and SG90 servo motor.
+              </p>
+
+              <table class="pinout-table">
+                <thead>
+                  <tr>
+                    <th>Peripheral</th>
+                    <th>Component Pin</th>
+                    <th>Arduino Uno Pin</th>
+                    <th>Electrical Signal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>HC-SR04 Sensor</strong></td>
+                    <td>VCC Pin</td>
+                    <td><span style="color: #f87171; font-weight: 600;">5V Power Rail</span></td>
+                    <td>+5V DC Regulated Power</td>
+                  </tr>
+                  <tr>
+                    <td><strong>HC-SR04 Sensor</strong></td>
+                    <td>GND Pin</td>
+                    <td><span style="color: #94a3b8; font-weight: 600;">GND Rail</span></td>
+                    <td>Common Ground 0V</td>
+                  </tr>
+                  <tr>
+                    <td><strong>HC-SR04 Sensor</strong></td>
+                    <td>Trig Pin</td>
+                    <td><span style="color: var(--accent-amber); font-weight: 600;">Digital Pin 9</span></td>
+                    <td>10 &micro;s HIGH Trigger Pulse</td>
+                  </tr>
+                  <tr>
+                    <td><strong>HC-SR04 Sensor</strong></td>
+                    <td>Echo Pin</td>
+                    <td><span style="color: var(--accent-cyan); font-weight: 600;">Digital Pin 10</span></td>
+                    <td>Pulse-Width Transit Measurement</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SG90 Micro-Servo</strong></td>
+                    <td>Power (Red)</td>
+                    <td><span style="color: #f87171; font-weight: 600;">5V Power Rail</span></td>
+                    <td>+4.8V to +5V DC Supply</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SG90 Micro-Servo</strong></td>
+                    <td>Ground (Brown)</td>
+                    <td><span style="color: #94a3b8; font-weight: 600;">GND Rail</span></td>
+                    <td>Common Ground 0V</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SG90 Micro-Servo</strong></td>
+                    <td>Signal (Orange)</td>
+                    <td><span style="color: #34d399; font-weight: 600;">Digital Pin 11 (PWM)</span></td>
+                    <td>50Hz PWM Duty Cycle (0&deg;&ndash;90&deg;)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Tab 2: Arduino C++ Sketch -->
+            <div class="pane-tab-content" id="tab-arduino-code">
+              <div class="cli-box">
+<span class="cli-prompt">// Smart Automatic Tollgate System with Arduino Uno</span>
+<span class="cli-prompt">// Author: Jhay Castro - BSIT Network & Systems Engineering</span>
+
+#include &lt;Servo.h&gt;
+
+const int trigPin = 9;       <span style="color: #64748b;">// HC-SR04 Trigger Pin</span>
+const int echoPin = 10;      <span style="color: #64748b;">// HC-SR04 Echo Pin</span>
+const int servoPin = 11;     <span style="color: #64748b;">// SG90 Servo PWM Pin</span>
+
+Servo gateServo;
+long duration;
+int distance;
+const int TRIGGER_DISTANCE = 10; <span style="color: #64748b;">// Vehicle detected at &lt; 10 cm</span>
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
+  gateServo.attach(servoPin);
+  gateServo.write(0); <span style="color: #64748b;">// Initial Position: Gate Closed (0 degrees)</span>
+  
+  Serial.println(F("[SYSTEM INITIALIZED] Automatic Tollgate Online"));
+}
+
+void loop() {
+  <span style="color: #64748b;">// 1. Clear trigger pin</span>
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  
+  <span style="color: #64748b;">// 2. Emit 10 microsecond ultrasonic burst</span>
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  <span style="color: #64748b;">// 3. Measure echo return duration in microseconds</span>
+  duration = pulseIn(echoPin, HIGH);
+  
+  <span style="color: #64748b;">// 4. Calculate distance in centimeters (Speed of sound = 0.0343 cm/us)</span>
+  distance = duration * 0.0343 / 2;
+  
+  <span style="color: #64748b;">// 5. Telemetry streaming</span>
+  Serial.print(F("Distance: "));
+  Serial.print(distance);
+  Serial.print(F(" cm | Gate: "));
+  
+  <span style="color: #64748b;">// 6. Access Control Logic</span>
+  if (distance &gt; 0 && distance &lt;= TRIGGER_DISTANCE) {
+    Serial.println(F("[OPEN] - Vehicle detected. Lifting barrier..."));
+    gateServo.write(90); <span style="color: #64748b;">// Open gate to 90 degrees</span>
+    delay(3000);         <span style="color: #64748b;">// Vehicle transit safety delay</span>
+  } else {
+    Serial.println(F("[CLOSED] - Scanning roadway..."));
+    gateServo.write(0);  <span style="color: #64748b;">// Keep barrier down</span>
+  }
+  
+  delay(100); <span style="color: #64748b;">// Polling interval</span>
+}
+              </div>
+            </div>
+
+            <!-- Tab 3: Ultrasonic Physics & Math -->
+            <div class="pane-tab-content" id="tab-physics">
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                Ultrasonic Echolocation Principles &amp; Mathematics
+              </h4>
+              <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px;">
+                The HC-SR04 operates on acoustic echolocation similar to bat navigation. The transmitter emits an 8-cycle sonic burst at 40 kHz.
+              </p>
+
+              <div class="cli-box" style="margin-bottom: 16px;">
+<span class="cli-prompt">Mathematical Formula:</span>
+Distance (cm) = (Time Duration in &micro;s &times; Speed of Sound) &divide; 2
+
+Where:
+&bull; Speed of Sound in Dry Air at 20&deg;C = 343 m/s = 0.0343 cm/&micro;s
+&bull; Division by 2 accounts for the sound wave's round trip:
+  (Transmitter &rarr; Vehicle &rarr; Receiver)
+
+Example Calculation:
+&bull; Echo duration measured: 580 &micro;s
+&bull; Distance = (580 &times; 0.0343) &divide; 2 = 9.95 cm
+&bull; 9.95 cm &lt; 10 cm &rarr; TRIGGER THRESHOLD MET &rarr; OPEN SERVO
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Terminal Side -->
+          <div class="terminal-pane">
+            <div class="terminal-topbar">
+              <div class="terminal-dots">
+                <span class="t-dot red"></span>
+                <span class="t-dot yellow"></span>
+                <span class="t-dot green"></span>
+              </div>
+              <div class="terminal-title">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Serial Monitor &bull; COM3 (9600 Baud)
+              </div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #475569;">UART 8-N-1</span>
+            </div>
+
+            <div class="terminal-body" id="term-logs">
+              <div class="log-line"><span class="log-ts">[COM3]</span> <span class="log-info">INIT:</span> ATmega328P Core Booted. Clock source: 16MHz Crystal.</div>
+              <div class="log-line"><span class="log-ts">[COM3]</span> <span class="log-success">SERVO:</span> SG90 calibrated to 0&deg; (Horizontal Boom Barrier).</div>
+              <div class="log-line"><span class="log-ts">[COM3]</span> <span class="log-success">HC-SR04:</span> Transducers initialized. Triggering 10us pulses.</div>
+              <div class="log-line"><span class="log-ts">[COM3]</span> Distance: 28.4 cm | Gate: [CLOSED] - Scanning roadway...</div>
+              <div class="log-line"><span class="log-ts">[COM3]</span> Distance: 28.1 cm | Gate: [CLOSED] - Scanning roadway...</div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
-    </div>
+    </section>
+
+    <!-- Engineering Specs & Three Pillars -->
+    <section class="specs-section">
+      <div class="section-title-wrap">
+        <h3 class="section-h3">Hardware Bill of Materials &amp; Electrical Characteristics</h3>
+        <p class="section-p">
+          Component architecture detailing operational voltages, current consumption, and signal characteristics for the automated barrier gate.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+          </div>
+          <h4 class="pillar-h4">Microcontroller Timing &amp; Interrupts</h4>
+          <p class="pillar-p">
+            The ATmega328P handles microsecond timer captures via `pulseIn()`. Precision timing ensures that ambient noise and reflection echoes do not trigger accidental gate opening.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h4 class="pillar-h4">Acoustic Echolocation Sensing</h4>
+          <p class="pillar-p">
+            Dual piezoelectric transducers generate 40 kHz ultrasound. Works reliably regardless of vehicle color, paint reflectivity, or ambient lighting conditions that confuse optical cameras.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          </div>
+          <h4 class="pillar-h4">PWM Motor Actuation &amp; Gearbox</h4>
+          <p class="pillar-p">
+            The SG90 servo utilizes a 50 Hz PWM control signal (1ms to 2ms pulse width). Operates the boom barrier arm with smooth mechanical acceleration, minimizing mechanical stress on the physical pivot.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <script>
+    // State management for interactive tollgate digital twin
+    let isServoOpen = false;
+    let isSimulatingDrive = false;
+
+    function switchPaneTab(tabName) {
+      const tabs = ['bom', 'arduino-code', 'physics'];
+      tabs.forEach(t => {
+        const btn = document.querySelector(`.pane-tab-btn[onclick="switchPaneTab('${t}')"]`);
+        const content = document.getElementById('tab-' + t);
+        if (btn) btn.classList.toggle('active', t === tabName);
+        if (content) content.classList.toggle('active', t === tabName);
+      });
+    }
+
+    function logTerminal(msg, type = 'normal') {
+      const container = document.getElementById('term-logs');
+      if (!container) return;
+
+      const line = document.createElement('div');
+      line.className = 'log-line';
+
+      const d = new Date();
+      const ts = `[${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}]`;
+
+      let styledType = '';
+      if (type === 'cmd') styledType = `<span class="log-cmd">${msg}</span>`;
+      else if (type === 'success') styledType = `<span class="log-success">${msg}</span>`;
+      else if (type === 'warn') styledType = `<span class="log-warn">${msg}</span>`;
+      else if (type === 'error') styledType = `<span class="log-error">${msg}</span>`;
+      else if (type === 'info') styledType = `<span class="log-info">${msg}</span>`;
+      else styledType = msg;
+
+      line.innerHTML = `<span class="log-ts">${ts}</span> ${styledType}`;
+      container.appendChild(line);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function clearTerminal() {
+      const container = document.getElementById('term-logs');
+      if (container) {
+        container.innerHTML = '';
+        logTerminal('Serial console cleared. COM3 listening at 9600 baud.', 'info');
+      }
+    }
+
+    function updateGateUI(isOpen, distanceCm) {
+      isServoOpen = isOpen;
+      const barrierArm = document.getElementById('boom-barrier-arm');
+      const dispDistance = document.getElementById('disp-distance');
+      const dispServo = document.getElementById('disp-servo-angle');
+      const dispStatus = document.getElementById('disp-gate-status');
+
+      if (distanceCm !== undefined) {
+        dispDistance.textContent = `${distanceCm.toFixed(1)} cm`;
+      }
+
+      if (isOpen) {
+        barrierArm.classList.add('open');
+        dispServo.textContent = '90° (VERTICAL / OPEN)';
+        dispServo.style.color = '#10b981';
+        dispStatus.textContent = 'BARRIER OPEN [PASS]';
+        dispStatus.className = 'readout-val open';
+      } else {
+        barrierArm.classList.remove('open');
+        dispServo.textContent = '0° (HORIZONTAL / CLOSED)';
+        dispServo.style.color = '#f59e0b';
+        dispStatus.textContent = 'BARRIER CLOSED [STOP]';
+        dispStatus.className = 'readout-val closed';
+      }
+    }
+
+    function toggleServoManual() {
+      if (isSimulatingDrive) return;
+      const targetState = !isServoOpen;
+      updateGateUI(targetState);
+      if (targetState) {
+        logTerminal(`MANUAL OVERRIDE: gateServo.write(90) -> BARRIER OPEN`, 'success');
+      } else {
+        logTerminal(`MANUAL OVERRIDE: gateServo.write(0) -> BARRIER CLOSED`, 'warn');
+      }
+    }
+
+    function simulateDriveVehicle() {
+      if (isSimulatingDrive) return;
+      isSimulatingDrive = true;
+      const btn = document.getElementById('btn-drive');
+      btn.disabled = true;
+
+      const carGroup = document.getElementById('sim-car-group');
+      const wave1 = document.getElementById('wave-1');
+      const wave2 = document.getElementById('wave-2');
+
+      // Start ultrasound emission pulses
+      wave1.classList.add('active-ping');
+      wave2.classList.add('active-ping');
+
+      logTerminal(`VEHICLE: Approaching toll lane. Ultrasonic ping active.`, 'cmd');
+
+      // Stage 1: Car moves towards booth (x: 60 -> x: 260)
+      carGroup.style.transform = 'translateX(260px)';
+
+      setTimeout(() => {
+        updateGateUI(false, 18.2);
+        logTerminal(`Distance: 18.2 cm | Gate: [CLOSED] - Approaching...`, 'normal');
+      }, 700);
+
+      setTimeout(() => {
+        updateGateUI(false, 8.4);
+        logTerminal(`Distance: 8.4 cm | THRESHOLD MET (<10cm)`, 'warn');
+        logTerminal(`TRIGGER: Vehicle at toll gate! gateServo.write(90)`, 'success');
+        updateGateUI(true, 8.4);
+
+        // Stage 2: Car drives through open gate (x: 260 -> x: 750)
+        setTimeout(() => {
+          carGroup.style.transform = 'translateX(750px)';
+          logTerminal(`VEHICLE: Crossing through toll gate under boom arm...`, 'info');
+        }, 800);
+
+        // Stage 3: Vehicle clears gate (distance returns to clear, barrier closes)
+        setTimeout(() => {
+          updateGateUI(false, 28.5);
+          wave1.classList.remove('active-ping');
+          wave2.classList.remove('active-ping');
+          logTerminal(`SAFETY TIMER: 3000ms elapsed. Vehicle cleared gate.`, 'info');
+          logTerminal(`RESET: gateServo.write(0) -> Barrier returned to 0 degrees [STOP].`, 'warn');
+
+          // Reset car position smoothly for next test
+          setTimeout(() => {
+            carGroup.style.transition = 'none';
+            carGroup.style.transform = 'translateX(0px)';
+            setTimeout(() => {
+              carGroup.style.transition = 'transform 2.2s cubic-bezier(0.45, 0, 0.55, 1)';
+              isSimulatingDrive = false;
+              btn.disabled = false;
+            }, 100);
+          }, 1200);
+
+        }, 3600);
+
+      }, 1600);
+    }
+  </script>
 </body>
 </html>

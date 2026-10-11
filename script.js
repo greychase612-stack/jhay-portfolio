@@ -524,17 +524,17 @@ const projectModalData = {
     }
   },
   'zero-trust': {
-    title: 'Zero-Trust Security & Threat Detection',
-    badge: 'Defensive Operations • Threat Telemetry',
-    description: 'An enterprise defensive security architecture implementing micro-segmentation, continuous cryptographic authentication, and automated SIEM threat containment.',
+    title: 'Smart Automatic Tollgate System (Arduino Uno & IoT)',
+    badge: 'Embedded Systems • Hardware Automation',
+    description: 'An automated vehicle access control prototype powered by an ATmega328P microcontroller (Arduino Uno). Integrates an HC-SR04 ultrasonic distance sensor for vehicle detection and an SG90 micro-servo motor to actuate the boom barrier with non-blocking timing routines.',
     specs: [
-      { label: 'Access Model', val: 'Zero Implicit Trust (ZTNA), Mutual TLS' },
-      { label: 'Intrusion Defense', val: 'Automated Suricata IDS/IPS Rules & Containment' },
-      { label: 'Containment Speed', val: '< 300ms Automated Network Quarantine' },
-      { label: 'Compliance', val: 'Least-Privilege RBAC, Immutable Audit Logs' }
+      { label: 'Microcontroller', val: 'Arduino Uno R3 (ATmega328P @ 16MHz, 5V Logic)' },
+      { label: 'Ultrasonic Sensor', val: 'HC-SR04 (40kHz, 2cm–400cm, 3mm Precision)' },
+      { label: 'Actuator Motor', val: 'TowerPro SG90 Micro-Servo (0° to 90° Sweep)' },
+      { label: 'Firmware Logic', val: 'Embedded C++, Servo.h PWM, 9600 Baud Telemetry' }
     ],
     primaryAction: {
-      text: 'Open Security Protocol Suite ↗',
+      text: 'Launch Hardware Demo & Video ↗',
       url: 'projects/zero-trust.html'
     }
   }
