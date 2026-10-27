@@ -717,39 +717,63 @@ img {
 
 .about-stats {
   display: flex;
-  gap: 32px;
-  margin-top: 20px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(28px, 4vw, 48px);
+  margin-top: 24px;
   padding-top: 28px;
-  border-top: 1px solid var(--color-white-10);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+}
+
+.stat-value-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
 }
 
 .stat-number {
   font-family: var(--font-heading);
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: var(--color-white);
+  font-size: clamp(2.2rem, 3.2vw, 2.8rem);
+  font-weight: 900;
+  color: #ffffff;
   line-height: 1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .stat-plus {
   font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-weight: 800;
   color: var(--color-accent);
+  line-height: 1;
+  margin-left: 2px;
+  text-shadow: 0 0 16px rgba(243, 112, 30, 0.4);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  color: var(--color-white-50);
-  margin-top: 6px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Statement Badge */
@@ -2002,11 +2026,64 @@ img {
 }
 
 .impact-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   white-space: nowrap;
-  padding: 14px 28px;
+  padding: 15px 30px;
+  font-family: var(--font-heading);
   font-size: 0.88rem;
-  letter-spacing: 0.05em;
-  box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.4);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%), #151b2c;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(243, 112, 30, 0.75);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.85), 0 0 24px -2px rgba(243, 112, 30, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.impact-download-btn .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(243, 112, 30, 0.16);
+  border: 1px solid rgba(243, 112, 30, 0.4);
+  color: #f3701e;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.impact-download-btn .btn-icon svg {
+  stroke: currentColor;
+}
+
+.impact-download-btn:hover {
+  background: linear-gradient(135deg, #f3701e 0%, #d95d08 100%) !important;
+  color: #ffffff !important;
+  border-color: #f3701e !important;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 44px -4px rgba(243, 112, 30, 0.75), 0 0 36px rgba(243, 112, 30, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.impact-download-btn:hover .btn-icon {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  transform: translateY(2px);
+}
+
+.impact-download-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(243, 112, 30, 0.5);
 }
 
 /* ============================================
@@ -2650,7 +2727,7 @@ img {
    CERTIFICATES / ACHIEVEMENTS SECTION (CLASSIC CENTER INTRO + SIDE PARALLAX)
    ============================================ */
 .cert-scroll-section {
-  height: 400vh;
+  height: 450vh;
   position: relative;
   background-color: #000000;
   background: #000000;

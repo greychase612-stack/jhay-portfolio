@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20" />
+  <link rel="stylesheet" href="style.css?v=30" />
 </head>
 <body>
   <!-- ===== NAVIGATION ===== -->
@@ -246,15 +246,21 @@
           </div>
           <div class="about-stats">
             <div class="stat-item">
-              <span class="stat-number" data-count="10">0</span><span class="stat-plus">+</span>
+              <div class="stat-value-wrap">
+                <span class="stat-number" data-count="10">10</span><span class="stat-plus">+</span>
+              </div>
               <span class="stat-label">Projects Completed</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number" data-count="5">0</span><span class="stat-plus">+</span>
+              <div class="stat-value-wrap">
+                <span class="stat-number" data-count="6">6</span><span class="stat-plus">+</span>
+              </div>
               <span class="stat-label">Certifications</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number" data-count="3">0</span><span class="stat-plus">+</span>
+              <div class="stat-value-wrap">
+                <span class="stat-number" data-count="3">3</span><span class="stat-plus">+</span>
+              </div>
               <span class="stat-label">Years Experience</span>
             </div>
           </div>
@@ -991,8 +997,29 @@
           </div>
         </div>
 
-        <!-- CARD 1: Cyber Awareness -->
+        <!-- CARD 0: TESDA National Certificate II (CSS NC II) -->
         <article class="cert-elena-card" data-index="0" onclick="openCertModal(0)">
+          <div class="cert-card-header">
+            <span class="cert-card-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">NATIONAL CERTIFICATE II</span>
+            <button class="cert-circle-btn" aria-label="View Certificate" type="button">
+              <span class="circle-btn-arrow">&nearr;</span>
+            </button>
+          </div>
+          <div class="cert-card-preview">
+            <img src="Profile/cert/NC_page-0001.jpg" alt="TESDA National Certificate II in Computer Systems Servicing" style="object-position: top center;" loading="lazy" />
+          </div>
+          <div class="cert-card-body">
+            <h3 class="cert-card-title">Computer Systems Servicing NC II</h3>
+            <ul class="cert-card-bullets">
+              <li>Hardware Assembly &amp; Server Configuration</li>
+              <li>Network Setup &amp; Structured Cabling</li>
+              <li>TESDA Reg No: 23131602004782</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- CARD 1: Cyber Awareness -->
+        <article class="cert-elena-card" data-index="1" onclick="openCertModal(1)">
           <div class="cert-card-header">
             <span class="cert-card-tag">CYBERSECURITY</span>
             <button class="cert-circle-btn" aria-label="View Certificate" type="button">
@@ -1013,7 +1040,7 @@
         </article>
 
         <!-- CARD 2: Web Dev 101 -->
-        <article class="cert-elena-card" data-index="1" onclick="openCertModal(1)">
+        <article class="cert-elena-card" data-index="2" onclick="openCertModal(2)">
           <div class="cert-card-header">
             <span class="cert-card-tag">SYSTEM INTEGRATION</span>
             <button class="cert-circle-btn" aria-label="View Certificate" type="button">
@@ -1034,7 +1061,7 @@
         </article>
 
         <!-- CARD 3: QA 101 -->
-        <article class="cert-elena-card" data-index="2" onclick="openCertModal(2)">
+        <article class="cert-elena-card" data-index="3" onclick="openCertModal(3)">
           <div class="cert-card-header">
             <span class="cert-card-tag">QUALITY ASSURANCE</span>
             <button class="cert-circle-btn" aria-label="View Certificate" type="button">
@@ -1055,7 +1082,7 @@
         </article>
 
         <!-- CARD 4: Arduino 101 -->
-        <article class="cert-elena-card" data-index="3" onclick="openCertModal(3)">
+        <article class="cert-elena-card" data-index="4" onclick="openCertModal(4)">
           <div class="cert-card-header">
             <span class="cert-card-tag">EMBEDDED SYSTEMS</span>
             <button class="cert-circle-btn" aria-label="View Certificate" type="button">
@@ -1076,7 +1103,7 @@
         </article>
 
         <!-- CARD 5: Pro Skills -->
-        <article class="cert-elena-card" data-index="4" onclick="openCertModal(4)">
+        <article class="cert-elena-card" data-index="5" onclick="openCertModal(5)">
           <div class="cert-card-header">
             <span class="cert-card-tag">PROFESSIONAL DEV</span>
             <button class="cert-circle-btn" aria-label="View Certificate" type="button">
@@ -1117,57 +1144,57 @@
             </div>
             <span class="case-badge-pill">Step 17 Rubric • 5 Cases</span>
           </div>
-          <h4 class="case-title">IT Troubleshooting Cases Documented</h4>
-          <p class="case-lead-desc">Structured root-cause diagnostic procedures with command-line outputs, root-cause analyses, and preventative solutions.</p>
+          <h4 class="case-title">Hardware &amp; IT Troubleshooting Cases</h4>
+          <p class="case-lead-desc">Hands-on hardware troubleshooting procedures covering dead power supplies, black screen RAM faults, CPU overheating, failing storage drives, and network cabling.</p>
           
           <div class="troubleshooting-cases-mini-list">
             <div class="case-mini-item" onclick="openTroubleshootingModal(0)">
               <span class="case-mini-num">01</span>
               <div class="case-mini-info">
-                <strong>IP Conflict &amp; DHCP Scope Exhaustion</strong>
-                <span>Layer 3 • <code>ipconfig /all</code> &bull; <code>arp -a</code></span>
+                <strong>Dead PC / System Won't Power On</strong>
+                <span>Power Supply (PSU) &bull; <code>Multimeter Test</code> &bull; Front Switch Header</span>
               </div>
-              <span class="case-mini-arrow">Terminal ↗</span>
+              <span class="case-mini-arrow">Inspect ↗</span>
             </div>
             <div class="case-mini-item" onclick="openTroubleshootingModal(1)">
               <span class="case-mini-num">02</span>
               <div class="case-mini-info">
-                <strong>DNS Resolution Failure &amp; Stale Records</strong>
-                <span>Layer 7 • <code>nslookup</code> &bull; <code>ipconfig /flushdns</code></span>
+                <strong>No Display / Black Screen &amp; Beep Codes</strong>
+                <span>RAM DIMM Contacts &bull; <code>POST Beep Codes</code> &bull; GPU Reseating</span>
               </div>
-              <span class="case-mini-arrow">Terminal ↗</span>
+              <span class="case-mini-arrow">Inspect ↗</span>
             </div>
             <div class="case-mini-item" onclick="openTroubleshootingModal(2)">
               <span class="case-mini-num">03</span>
               <div class="case-mini-info">
-                <strong>High Latency, Packet Drops &amp; Duplex Mismatch</strong>
-                <span>Layer 1/2 • <code>ping -t</code> &bull; <code>show interfaces</code></span>
+                <strong>CPU Overheating &amp; Thermal Shutdown</strong>
+                <span>Cooling Heatsink &bull; <code>Thermal Paste Replacement</code> &bull; Fan Sensor</span>
               </div>
-              <span class="case-mini-arrow">Terminal ↗</span>
+              <span class="case-mini-arrow">Inspect ↗</span>
             </div>
             <div class="case-mini-item" onclick="openTroubleshootingModal(3)">
               <span class="case-mini-num">04</span>
               <div class="case-mini-info">
-                <strong>Switch Port Failure &amp; VLAN Tagging Mismatch</strong>
-                <span>Layer 2 • <code>show vlan brief</code> &bull; Trunk isolation</span>
+                <strong>Slow Boot &amp; Failing Storage Drive</strong>
+                <span>Hard Drive Bad Sectors &bull; <code>SATA Cable &amp; S.M.A.R.T.</code> &bull; SSD Upgrade</span>
               </div>
-              <span class="case-mini-arrow">Terminal ↗</span>
+              <span class="case-mini-arrow">Inspect ↗</span>
             </div>
             <div class="case-mini-item" onclick="openTroubleshootingModal(4)">
               <span class="case-mini-num">05</span>
               <div class="case-mini-info">
-                <strong>Default Gateway Unreachable &amp; Routing Loop</strong>
-                <span>Layer 3 • <code>route print</code> &bull; <code>tracert</code></span>
+                <strong>No Internet Connection / Broken Cable Clip</strong>
+                <span>Cat6 Patch Cable &bull; <code>RJ-45 Re-crimping</code> &bull; Cable Wire Tester</span>
               </div>
-              <span class="case-mini-arrow">Terminal ↗</span>
+              <span class="case-mini-arrow">Inspect ↗</span>
             </div>
           </div>
 
           <button type="button" class="btn btn-outline case-action-btn" onclick="openTroubleshootingModal(0)">
             <span class="btn-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
             </span>
-            Launch Terminal Inspector (All 5 Cases)
+            Launch Hardware Diagnostics Inspector (All 5 Cases)
           </button>
         </div>
 
@@ -1179,21 +1206,21 @@
             </div>
             <span class="case-badge-pill">Step 18 Rubric • Security Audit</span>
           </div>
-          <h4 class="case-title">Cybersecurity Case Study</h4>
-          <p class="case-lead-desc">In-depth vulnerability assessment analyzing authentication bypass vectors, risk taxonomy, and defensive coding implementations.</p>
+          <h4 class="case-title">Hardware &amp; Physical Security Case Study</h4>
+          <p class="case-lead-desc">Practical physical endpoint security audit analyzing rogue USB devices, unauthorized hardware tampering, and BIOS-level defense.</p>
           
           <div class="cyber-summary-box">
             <div class="cyber-point">
-              <span class="cyber-label">VULNERABILITY TOPIC</span>
-              <p class="cyber-val">SQL Injection (SQLi) in Authentication &amp; Ticketing Systems</p>
+              <span class="cyber-label">SECURITY TOPIC</span>
+              <p class="cyber-val">Rogue USB Devices &amp; Physical Port Tampering (BadUSB / Rubber Ducky)</p>
             </div>
             <div class="cyber-point">
-              <span class="cyber-label">ATTACK ANATOMY</span>
-              <p class="cyber-val">Tainted query concatenation: <code>admin' OR '1'='1' --</code></p>
+              <span class="cyber-label">HOW THE ATTACK WORKS</span>
+              <p class="cyber-val">Malicious USB disguised as a normal flash drive auto-types keystroke payloads in seconds</p>
             </div>
             <div class="cyber-point">
-              <span class="cyber-label">DEFENSIVE REMEDIATION</span>
-              <p class="cyber-val">Parameterized queries (Prepared Statements), Principle of Least Privilege, Input Validation &amp; WAF</p>
+              <span class="cyber-label">HARDWARE DEFENSE &amp; REMEDIATION</span>
+              <p class="cyber-val">Disable unused USB ports in BIOS, set BIOS Admin Password, enforce Hardware USB Whitelisting, and lock PC chassis</p>
             </div>
           </div>
 
@@ -1201,7 +1228,7 @@
             <span class="btn-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </span>
-            Inspect Full Cybersecurity Case Study
+            Inspect Hardware Security &amp; USB Case Study
           </button>
         </div>
 
@@ -1216,16 +1243,16 @@
       <h3 class="section-title">Professional Readiness Evidence</h3>
       <div class="employability-grid">
         
-        <!-- Card 1: Interviews & Defense -->
+        <!-- Card 1: Mock Job Interview -->
         <div class="case-card employability-card">
           <div class="case-card-top-header">
             <div class="case-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
-            <span class="case-badge-pill">Steps 21 &amp; 22 • 75 Pts Total</span>
+            <span class="case-badge-pill">Step 21 Rubric • 20 Points</span>
           </div>
-          <h4 class="case-title">Interviews &amp; Project Defense</h4>
-          <p class="case-lead-desc">Demonstrated competency in professional communication, live technical articulation, and capstone architectural defense.</p>
+          <h4 class="case-title">Mock Job Interview</h4>
+          <p class="case-lead-desc">Recorded video interview session and comprehensive Q&amp;A transcript demonstrating professional communication, career motivation, and technical problem-solving.</p>
           
           <div class="employability-actions-list">
             <button type="button" class="emp-item-btn" onclick="openMockInterviewModal()">
@@ -1233,34 +1260,19 @@
                 <span class="emp-play-icon">▶</span>
                 <div>
                   <strong>Mock Job Interview</strong>
-                  <span class="emp-sub">Video Player Placeholder + 12-Question Transcript</span>
+                  <span class="emp-sub">Full Recorded Video Session &amp; Q&amp;A Transcript</span>
                 </div>
               </div>
               <span class="emp-badge">Watch &bull; Read</span>
             </button>
-
-            <button type="button" class="emp-item-btn" onclick="openTechnicalInterviewModal()">
-              <div class="emp-item-left">
-                <span class="emp-tech-icon">⚡</span>
-                <div>
-                  <strong>Technical Interview</strong>
-                  <span class="emp-sub">OSI Model, TCP/UDP, Subnetting, SQL, Zero-Trust</span>
-                </div>
-              </div>
-              <span class="emp-badge">6 Q&amp;As</span>
-            </button>
-
-            <button type="button" class="emp-item-btn" onclick="openProjectDefenseModal()">
-              <div class="emp-item-left">
-                <span class="emp-defense-icon">📊</span>
-                <div>
-                  <strong>Capstone Project Defense</strong>
-                  <span class="emp-sub">Interactive 11-Step Slide Presentation</span>
-                </div>
-              </div>
-              <span class="emp-badge">11 Slides</span>
-            </button>
           </div>
+
+          <button type="button" class="btn btn-primary case-action-btn" onclick="openMockInterviewModal()" style="margin-top: auto;">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
+            Watch Video &amp; Read Transcript
+          </button>
         </div>
 
         <!-- Card 2: AI Literacy Evidence -->
@@ -1272,7 +1284,7 @@
             <span class="case-badge-pill">Step 19 Rubric • Page 10</span>
           </div>
           <h4 class="case-title">AI Literacy Evidence</h4>
-          <p class="case-lead-desc">Audited evidence of responsible AI collaboration across 4 capstone development milestones, paired with critical reflection.</p>
+          <p class="case-lead-desc">Audited evidence of responsible AI collaboration across 4 project development milestones, paired with critical reflection.</p>
           
           <div class="ai-preview-metrics">
             <div class="ai-metric-row">
@@ -1358,7 +1370,7 @@
   <section id="reflection" class="section reflection-section">
     <div class="container">
       <h2 class="section-label">MY JOURNEY &amp; EVOLUTION</h2>
-      <h3 class="section-title">Final BSIT Capstone Reflection</h3>
+      <h3 class="section-title">Final BSIT Portfolio Reflection</h3>
       
       <div class="reflection-meta-bar">
         <span class="reflection-pill">
@@ -1430,13 +1442,13 @@
           </div>
         </div>
 
-        <!-- Card 3: Capstone Experience & Overcoming Challenges (Q3 & Q4) -->
+        <!-- Card 3: Project Experience & Overcoming Challenges (Q3 & Q4) -->
         <div class="reflection-card">
           <div class="reflection-card-header">
             <div class="reflection-card-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             </div>
-            <h4 class="reflection-card-title">Capstone Projects &amp; Technical Adversity</h4>
+            <h4 class="reflection-card-title">Major Projects &amp; Technical Adversity</h4>
           </div>
 
           <div class="reflection-prompt-item">
@@ -1495,7 +1507,7 @@
               <span class="reflection-prompt-label">Why I Am Ready to Begin My IT Career</span>
             </div>
             <p class="reflection-text">
-              I am prepared to launch my career in Information Technology because my knowledge is anchored by verifiable evidence: <em>&ldquo;I learned this. I built this. Here is the evidence. Here is my source code. Here is the live system.&rdquo;</em> Armed with an NC II credential, real-world project leadership, functional capstone systems, and a passion for network engineering, I am equipped to contribute immediate, measurable value to an enterprise network operations center (NOC) or IT infrastructure team from day one.
+              I am prepared to launch my career in Information Technology because my knowledge is anchored by verifiable evidence: <em>&ldquo;I learned this. I built this. Here is the evidence. Here is my source code. Here is the live system.&rdquo;</em> Armed with an NC II credential, hands-on project leadership, functional software and network systems, and a passion for network engineering, I am equipped to contribute immediate, measurable value to an enterprise network operations center (NOC) or IT infrastructure team from day one.
             </p>
           </div>
         </div>
@@ -1522,7 +1534,7 @@
             <span class="logo-bold">JHAY</span><span class="logo-light">CASTRO</span>
           </div>
           <div class="contact-card-cta">
-            <h2 class="contact-card-heading">Ready to Bring Your Vision to Life?</h2>
+            <h2 class="contact-card-heading">Ready to Strengthen Your Systems &amp; Connectivity?</h2>
             <a href="mailto:castrojhay.va@gmail.com" class="contact-pill-btn">
               <span class="pill-dot"></span>
               Get in Touch
@@ -1571,7 +1583,7 @@
     </div>
   </section>
 
-  <script src="script.js?v=20"></script>
+  <script src="script.js?v=30"></script>
 
 
   <!-- ===== PROJECT QUICK MODAL ===== -->

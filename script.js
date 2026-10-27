@@ -176,21 +176,48 @@ function initSkillBars() {
 
 /* ---------- Stat Counter Animation ---------- */
 function initStatCounter() {
+  const statsContainer = document.querySelector('.about-stats');
+  if (!statsContainer) return;
+
+  let hasAnimated = false;
+
+  const triggerStats = () => {
+    if (hasAnimated) return;
+    hasAnimated = true;
+    const numbers = statsContainer.querySelectorAll('.stat-number');
+    numbers.forEach(num => {
+      const target = parseInt(num.getAttribute('data-count')) || parseInt(num.textContent) || 0;
+      if (target > 0) {
+        animateCount(num, 0, target, 1400);
+      }
+    });
+  };
+
+  // 1. Observe .about-stats directly with a low threshold
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const numbers = entry.target.querySelectorAll('.stat-number');
-        numbers.forEach(num => {
-          const target = parseInt(num.getAttribute('data-count'));
-          animateCount(num, 0, target, 1500);
-        });
+        triggerStats();
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.1 });
 
-  const aboutSection = document.getElementById('about');
-  if (aboutSection) observer.observe(aboutSection);
+  observer.observe(statsContainer);
+
+  // 2. Also listen for the staged scroll in initAboutScrollAnimation
+  window.addEventListener('scroll', () => {
+    const textProgress = parseFloat(document.querySelector('.scroll-animation-section')?.style.getPropertyValue('--text-progress') || 0);
+    if (textProgress > 0.15) {
+      triggerStats();
+    }
+  }, { passive: true });
+
+  // 3. Fallback check on load
+  const rect = statsContainer.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    triggerStats();
+  }
 }
 
 function animateCount(element, start, end, duration) {
@@ -207,6 +234,8 @@ function animateCount(element, start, end, duration) {
 
     if (progress < 1) {
       requestAnimationFrame(update);
+    } else {
+      element.textContent = end;
     }
   }
 
@@ -269,6 +298,15 @@ function initContactForm() {
    ======================================================== */
 const certificateData = [
   {
+    title: "National Certificate II (NC II): Computer Systems Servicing",
+    category: "Government Technical Qualification",
+    issuer: "Technical Education and Skills Development Authority (TESDA)",
+    date: "May 2023 - May 2028",
+    id: "Cert No. 23131602004782",
+    img: "Profile/cert/NC_page-0001.jpg",
+    desc: "Official Philippine National Qualification in installing and configuring computer systems, setting up enterprise computer networks and servers, and diagnosing, maintaining, and repairing hardware infrastructure (TESDA Cert No. 23131602004782, ULI-CJL-04-470-04021-001)."
+  },
+  {
     title: "Cyber Awareness: Cyber Threats in 2026 and How to Stay Safe",
     category: "Cybersecurity & Perimeter Defense",
     issuer: "UpSkillTechPH Training Services",
@@ -321,8 +359,8 @@ window.openCertModal = function(index) {
 
   const contentHtml = `
     <div style="display: flex; flex-direction: column; gap: 22px;">
-      <div style="width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 20px 50px rgba(0,0,0,0.7); background: #000;">
-        <img src="${cert.img}" alt="${cert.title}" style="width: 100%; height: auto; display: block;" />
+      <div style="width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 20px 50px rgba(0,0,0,0.7); background: #000; text-align: center;">
+        <img src="${cert.img}" alt="${cert.title}" style="max-width: 100%; max-height: 70vh; width: auto; height: auto; object-fit: contain; display: inline-block; vertical-align: middle;" />
       </div>
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
@@ -389,7 +427,7 @@ function initCertificatesScrollAnimation() {
     track.style.setProperty('--cert-scroll-x', `${trackX.toFixed(2)}px`);
 
     // Individual Multi-Plane Parallax Depth for each card
-    const speedFactors = [0.92, 1.12, 0.94, 1.14, 1.0];
+    const speedFactors = [0.92, 1.12, 0.94, 1.14, 1.0, 1.08];
     cards.forEach((card, idx) => {
       const factor = speedFactors[idx % speedFactors.length];
       const cardProgress = progress * (factor - 1.0) * 110;
@@ -775,154 +813,134 @@ document.addEventListener('click', (e) => {
 const TROUBLESHOOTING_CASES_DATA = [
   {
     id: 1,
-    title: "IP Address Conflict & DHCP Scope Exhaustion",
-    layer: "Layer 3 (Network Layer)",
-    problem: "Multiple workstations in Computer Lab 2 intermittently dropped LAN connectivity, displaying Windows notification 'There is an IP address conflict with another system on the network'. Systems were unable to ping the default gateway (192.168.20.1) or reach shared campus servers.",
+    title: "Dead PC / System Won't Power On (No Lights, No Fans)",
+    layer: "Hardware: Power Supply (PSU) & Motherboard Rails",
+    problem: "A laboratory computer was completely unresponsive. Pressing the front power button showed zero signs of life: no chassis LED, no power supply fan spin, no CPU fan spin, and no motherboard standby lights.",
     causes: [
-      "Static IP address (192.168.20.105) manually assigned to a legacy network printer overlapped with the dynamic DHCP address pool range (192.168.20.100 - 192.168.20.200).",
-      "DHCP lease duration was set to 8 days, causing rapid exhaustion of available IP leases as high-volume student laptops connected to the subnet.",
-      "A rogue consumer wireless router connected to Wall Port #14 was broadcasting unauthorized DHCP ACK responses on VLAN 20."
+      "The front panel power switch connector (POWER SW) slipped off the motherboard header pins.",
+      "The ATX power supply unit (PSU) failed or its internal surge protection fuse blew after a voltage spike.",
+      "The 24-pin ATX main power harness or 8-pin 12V CPU power connector was loose."
     ],
-    cliTitle: "Command Prompt & Cisco IOS Diagnostic Terminal",
-    cliOutput: `<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">ipconfig /all</span>
-<span class="term-output">Ethernet adapter Local Area Connection:
-   Connection-specific DNS Suffix  . : lab2.datamex.local
-   Link-local IPv6 Address . . . . . : fe80::4a52:62ff:fe33:28a1%12
-   IPv4 Address. . . . . . . . . . . : 192.168.20.105 <span class="term-error">(Duplicate)</span>
-   Subnet Mask . . . . . . . . . . . : 255.255.255.0
-   Autoconfiguration IPv4 Address. . : 169.254.82.11
-   Default Gateway . . . . . . . . . : 192.168.20.1
-   DHCP Server . . . . . . . . . . . : 192.168.20.254</span>
+    cliTitle: "Digital Multimeter DC Voltage Rail & Paperclip Jump Test",
+    cliOutput: `<span class="term-prompt">Step 1: AC Mains &amp; Power Cable Verification</span>
+<span class="term-output">AC Mains Wall Voltage: 228.4V AC <span class="term-success">(Normal &amp; Stable)</span>
+IEC Power Cable Continuity: 0.1 &Omega; <span class="term-success">(Pass)</span></span>
 
-<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">arp -a 192.168.20.105</span>
-<span class="term-output">Internet Address      Physical Address      Type
-192.168.20.105        d4-6d-6d-12-34-56     dynamic   <span class="term-highlight">&lt;-- Workstation NIC</span>
-192.168.20.105        00-1a-2b-3c-4d-5e     dynamic   <span class="term-error">&lt;-- Conflict Detected (Printer MAC)</span></span>
+<span class="term-prompt">Step 2: ATX Power Supply Paperclip Jump Test</span>
+<span class="term-output">Bridging Pin 16 (Green / PS_ON) to Pin 17 (Black / Ground)...
+PSU Internal Fan: <span class="term-error">NOT SPINNING (PSU Failed to Turn On)</span></span>
 
-<span class="term-prompt">Switch-Catalyst-2960#</span> <span class="term-cmd">show ip dhcp snooping binding</span>
-<span class="term-output">MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface
-------------------  ---------------  ----------  -------------  ----  --------------------
-00:1A:2B:3C:4D:5E   192.168.20.105   N/A         <span class="term-error">STATIC_UNAUTH</span>  20    FastEthernet0/14</span>`,
-    solution: "1. Isolated the printer on FastEthernet0/14 and re-assigned it a dedicated static IP outside the dynamic scope (192.168.20.250/24).\n2. Configured DHCP Snooping on Cisco Catalyst 2960 ('ip dhcp snooping', 'ip dhcp snooping vlan 20', 'ip dhcp snooping trust' on uplink Gi0/1) to block rogue DHCP offers.\n3. Reduced DHCP lease duration to 4 hours in Windows Server DHCP Scope Options to facilitate rapid address recycling.\n4. Flushed network stack with 'ipconfig /release' and 'ipconfig /renew' across affected lab workstations.",
-    lesson: "Never assign static IP addresses inside an active dynamic DHCP pool. Enforce strict Layer 2 DHCP Snooping and create dedicated infrastructure management subnets for all shared peripherals."
+<span class="term-prompt">Step 3: Digital Multimeter DC Voltage Rail Diagnostic</span>
+<span class="term-output">+12V Rail (Yellow wires):  0.00V DC  <span class="term-error">[FAILED - Standard: 11.4V ~ 12.6V]</span>
++5V Rail (Red wires):      0.00V DC  <span class="term-error">[FAILED - Standard: 4.75V ~ 5.25V]</span>
++3.3V Rail (Orange wires): 0.00V DC  <span class="term-error">[FAILED - Standard: 3.14V ~ 3.47V]</span>
++5VSB Standby (Purple):    0.82V DC  <span class="term-error">[FAILED - Blown 5V Standby Circuit]</span>
+
+Diagnostic Finding: Internal switching regulator blown due to power surge.</span>`,
+    solution: "1. Replaced the defective power supply with a certified 550W 80-Plus Bronze power supply.\n2. Firmly connected the 24-pin ATX motherboard harness and 8-pin CPU 12V EPS connector until the plastic retention tabs locked in place.\n3. Verified the front panel POWER SW lead was properly connected across Motherboard Header Pins 6 & 8.\n4. Tested system: Power LED turned on immediately, CPU cooler spun quietly, and the PC booted into Windows without issue.",
+    lesson: "Always diagnose power issues from the wall outlet inward. Using a simple paperclip jump test or digital multimeter isolates power supply failure in minutes before unnecessarily replacing motherboards."
   },
   {
     id: 2,
-    title: "Domain Name System (DNS) Resolution Failure & Stale Records",
-    layer: "Layer 7 (Application Layer)",
-    problem: "Staff could access web applications using raw IPv4 addresses (http://192.168.10.25:8080), but all internal domain lookups (portal.datamex.edu.ph) failed with 'DNS_PROBE_FINISHED_NXDOMAIN', halting campus administrative workflows.",
+    title: "No Display / Black Screen & Beep Codes (RAM Contacts)",
+    layer: "Hardware: RAM Modules & BIOS POST",
+    problem: "When the computer power button was pressed, all cooling fans spun at full speed, but the monitor showed 'No Signal' (black screen). The internal motherboard speaker emitted 3 long repeating beeps, preventing POST boot.",
     causes: [
-      "The secondary DNS forwarder configured in Windows Server DNS manager was pointing to a decommissioned ISP recursive resolver (203.177.54.1).",
-      "Local workstation DNS cache held stale negative response records with aggressive TTL settings.",
-      "The local DNS Server daemon service hung following an automatic operating system security patch."
+      "Dust and copper oxidation accumulated on the gold contact pins of the DDR4 memory stick.",
+      "The RAM module came loose or was unlatched when the computer case was relocated.",
+      "Static electricity buildup on the memory slot causing memory initialization failure."
     ],
-    cliTitle: "Network Diagnostics & Resolver Inspection",
-    cliOutput: `<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">nslookup portal.datamex.edu.ph</span>
-<span class="term-output">Server:  UnKnown
-Address:  192.168.10.2
+    cliTitle: "Motherboard POST Beep Code & Hardware Sensor Audit",
+    cliOutput: `<span class="term-prompt">Motherboard:</span> <span class="term-cmd">ASUS Prime B450M-A II (AMI UEFI BIOS)</span>
+<span class="term-output">Power-On Self-Test (POST) Status: <span class="term-error">FAILED</span>
+Chassis Speaker Diagnostic: <span class="term-error">3 Long Beeps (Repeating continuously)</span>
+BIOS Beep Code Reference: 3 Long Beeps = <span class="term-error">Memory (RAM) Initialization Error</span>
+Motherboard EZ Debug LED: [DRAM LED solid ORANGE]</span>
 
-*** UnKnown can't find portal.datamex.edu.ph: <span class="term-error">Server failed</span></span>
-
-<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">nslookup portal.datamex.edu.ph 1.1.1.1</span>
-<span class="term-output">Server:  one.one.one.one
-Address:  1.1.1.1
-
-Non-authoritative answer:
-Name:    portal.datamex.edu.ph
-Address:  <span class="term-success">192.168.10.25</span>   <span class="term-highlight">&lt;-- Public resolver succeeds, isolating internal server issue</span></span>
-
-<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">ipconfig /displaydns</span>
-<span class="term-output">portal.datamex.edu.ph
-----------------------------------------
-Record Name . . . . . : portal.datamex.edu.ph
-Record Type . . . . . : 1
-Time To Live  . . . . : 3594
-Data Length . . . . . : 4
-Section . . . . . . . : Answer
-A (IPv4) Record . . . : <span class="term-error">10.0.0.12 (Obsolete Staging IP)</span></span>`,
-    solution: "1. Remoted into DNS Server (192.168.10.2) and restarted Windows DNS Service via 'Restart-Service DNS' in PowerShell.\n2. Replaced dead upstream ISP forwarders with redundant enterprise DNS resolvers (1.1.1.1 and 8.8.8.8).\n3. Cleared local DNS Server cache ('dnscmd /clearcache') and published authoritative A record for 'portal.datamex.edu.ph -> 192.168.10.25'.\n4. Issued 'ipconfig /flushdns' and verified resolution latency under 2ms.",
-    lesson: "Ensure mission-critical DNS servers have active service heartbeats, maintain dual diverse forwarders, and configure monitoring alarms for expired forwarder latency."
+<span class="term-prompt">Physical DIMM Slot Inspection:</span>
+<span class="term-output">Slot DIMM_A1: Empty
+Slot DIMM_A2: 8GB DDR4 2666MHz (Installed)
+- Retention latch: Lower latch partially unclipped <span class="term-error">(Loose contact)</span>
+- Gold contact pins: Surface dust and oxidation buildup detected</span>`,
+    solution: "1. Disconnected the AC power cable and held the power button down for 10 seconds to discharge residual capacitor flea power.\n2. Opened both retention clips and carefully removed the 8GB DDR4 RAM stick.\n3. Cleaned the gold contact pins on both sides using a soft pencil eraser followed by a 99% Isopropyl Alcohol (IPA) wipe to remove oxidation.\n4. Blew out the motherboard DIMM_A2 slot with compressed air.\n5. Firmly reseated the RAM stick until both side latches clicked into place.\n6. Powered on the computer: Orange DRAM LED cleared, one short beep confirmed successful POST, and the display turned on instantly.",
+    lesson: "Over 70% of 'black screen with spinning fans' problems are caused by dirty or unseated RAM. Cleaning gold contact pins with isopropyl alcohol and reseating them is the most reliable first step."
   },
   {
     id: 3,
-    title: "High Latency, Packet Drops & Duplex Mismatch",
-    layer: "Layer 1 & Layer 2 (Physical & Data Link)",
-    problem: "Accounting department VoIP phones experienced audio stutter and SQL ERP queries timed out intermittently with round-trip delays spiking to 480ms and 24% dropped packets over a 100-meter backbone link.",
+    title: "CPU Overheating & Sudden Thermal Shutdown",
+    layer: "Hardware: CPU Cooling & Thermal Management",
+    problem: "A laboratory workstation turned on normally, but after 5 to 10 minutes of light use, the CPU cooling fan started screaming at maximum speed. Shortly after, the computer completely froze and abruptly shut down with no blue screen or warning.",
     causes: [
-      "Duplex mismatch: The distribution switch port was hard-coded to 100Mbps Full Duplex, while the client managed switch was left on IEEE Auto-Negotiation, defaulting to Half Duplex.",
-      "Physical Layer 1 cable degradation: A damaged RJ-45 boot on Patch Cable #3 introduced high return loss and near-end crosstalk (NEXT).",
-      "Late collision storms triggered by unmonitored half-duplex transmission under heavy traffic loads."
+      "Original factory thermal paste had dried out, hardened, and cracked, losing its ability to transfer heat.",
+      "The CPU cooler heatsink mounting bracket was loose, creating an air gap over the CPU heat spreader.",
+      "The heatsink aluminum cooling fins were clogged with thick dust, choking airflow."
     ],
-    cliTitle: "Cisco Catalyst Port Telemetry & Ping Diagnostic",
-    cliOutput: `<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">ping -n 20 192.168.10.1</span>
-<span class="term-output">Reply from 192.168.10.1: bytes=32 time=420ms TTL=64
-Reply from 192.168.10.1: bytes=32 time=3ms TTL=64
-<span class="term-error">Request timed out.</span>
-Reply from 192.168.10.1: bytes=32 time=485ms TTL=64
-<span class="term-error">Request timed out.</span>
-Packets: Sent = 20, Received = 15, Lost = 5 <span class="term-error">(25% loss)</span>, Average = 285ms</span>
+    cliTitle: "CPU Temperature Telemetry & Thermal Throttle Log",
+    cliOutput: `<span class="term-prompt">Sensor Log:</span> <span class="term-cmd">Intel Core i5-10400 (6 Cores / 12 Threads)</span>
+<span class="term-output">Baseline Idle Temp: 68.2&deg;C <span class="term-error">(Abnormally High - Normal Idle: 32&deg;C - 42&deg;C)</span></span>
 
-<span class="term-prompt">Core-Switch-3750#</span> <span class="term-cmd">show interfaces GigabitEthernet1/0/24</span>
-<span class="term-output">GigabitEthernet1/0/24 is up, line protocol is up (connected)
-  Full-duplex, 100Mb/s, link type is auto, media type is 10/100/1000BaseTX
-  <span class="term-error">14820 input errors, 8910 CRC, 0 frame, 5910 overrun, 0 ignored</span>
-  <span class="term-error">12340 late collision, 2341 deferred, 15 lost carrier</span>   <span class="term-highlight">&lt;-- Classic Duplex Mismatch Symptom</span></span>`,
-    solution: "1. Verified cable pinout with Fluke MicroScanner2; identified intermittent continuity on pin 3 (Tx+); replaced cable with certified Cat6 STP patch lead.\n2. Reconfigured both connecting switch interfaces to standard IEEE auto-negotiation ('speed auto', 'duplex auto').\n3. Cleared interface counters ('clear counters Gi1/0/24') and verified 0 CRC errors, 0 late collisions, and sub-1ms ping latency over 500 consecutive ICMP packets.",
-    lesson: "Never set one end of an Ethernet link to manual speed/duplex while leaving the other end on auto-negotiation. Under IEEE 802.3u, an auto-negotiating device defaults to Half Duplex if partner pulses are undetected."
+<span class="term-prompt">Workload Test: Starting Application Tasks</span>
+<span class="term-output">00m 30s: Core 0: 84&deg;C | Core 1: 87&deg;C | CPU Fan: 2200 RPM (100% Max)
+01m 15s: Core 0: 97&deg;C | Core 1: 99&deg;C | <span class="term-highlight">THERMAL THROTTLING ACTIVATED (Frequency dropped 4.0GHz -&gt; 1.6GHz)</span>
+02m 00s: CPU Package Temp: <span class="term-error">100&deg;C [TJMax SAFETY LIMIT HIT]</span>
+Hardware Protection: PROCHOT# Signal Tripped -&gt; <span class="term-error">EMERGENCY HARDWARE THERMAL SHUTDOWN</span></span>`,
+    solution: "1. Unlatched and removed the CPU cooler heatsink assembly.\n2. Inspected the CPU lid and found the original thermal paste completely dry and chalky.\n3. Cleaned both the CPU heat spreader and copper heatsink base using 99% Isopropyl Alcohol and microfiber wipes until bare shiny metal.\n4. Used compressed air and an anti-static brush to blow all accumulated dust out of the heatsink fins.\n5. Applied a pea-sized dot of high-performance Arctic MX-4 thermal paste onto the center of the CPU.\n6. Re-installed the cooler using cross-pattern screw tightening for even surface pressure.\n7. Test Results: Idle temperature dropped to 34°C, and maximum load temperature under full stress never exceeded 66°C.",
+    lesson: "Sudden shutdowns without blue screens are almost always hardware thermal protection kicking in. Regularly repasting CPU coolers every 2-3 years prevents premature hardware death."
   },
   {
     id: 4,
-    title: "Switch Port Failure & VLAN Tagging Mismatch",
-    layer: "Layer 2 (Data Link Layer)",
-    problem: "A newly provisioned workstation in Registrar Office received an IP address on VLAN 30, but could not reach Registrar database servers (192.168.30.10) or any other host on the campus network.",
+    title: "Slow Boot, Freezing Windows & Failing Storage Drive",
+    layer: "Hardware: Storage Drive (HDD/SSD) & SATA Interface",
+    problem: "An administrative computer took over 8 minutes to boot into Windows. Programs frequently froze with '(Not Responding)', Task Manager showed constant 100% disk activity, and a faint repetitive clicking noise could be heard from inside the hard drive bay.",
     causes: [
-      "Access switch port Fa0/18 was accidentally assigned to Default VLAN 1 instead of Registrar VLAN 30.",
-      "The 802.1Q trunk link between the Access Switch and Core Switch had an explicit 'switchport trunk allowed vlan' list that omitted VLAN 30.",
-      "Native VLAN mismatch between switches causing Spanning Tree Protocol (PVST+) to block the uplink."
+      "The mechanical hard disk drive (HDD) developed physical bad magnetic sectors and unreadable blocks.",
+      "The SATA data cable connector had degraded or loose locking pins, resulting in high CRC interface errors.",
+      "The mechanical read/write arm was failing, signaling imminent mechanical drive death."
     ],
-    cliTitle: "Cisco Catalyst VLAN & Trunking Audit",
-    cliOutput: `<span class="term-prompt">SW-Floor2-Access#</span> <span class="term-cmd">show vlan brief</span>
-<span class="term-output">VLAN Name                             Status    Ports
----- -------------------------------- --------- -------------------------------
-1    default                          active    Fa0/1, Fa0/2, <span class="term-error">Fa0/18</span> <span class="term-highlight">&lt;-- Incorrect VLAN</span>
-10   Students                         active    Fa0/3, Fa0/4, Fa0/5
-20   Faculty                          active    Fa0/6, Fa0/7, Fa0/8
-30   Registrar                        active    Fa0/9, Fa0/10</span>
+    cliTitle: "Hard Drive S.M.A.R.T. Health Telemetry & Sector Diagnostic",
+    cliOutput: `<span class="term-prompt">PS C:\\Users\\jcastro&gt;</span> <span class="term-cmd">Get-PhysicalDisk | Select DeviceId, FriendlyName, MediaType, HealthStatus</span>
+<span class="term-output">DeviceId  FriendlyName           MediaType  HealthStatus
+--------  ------------           ---------  ------------
+0         WDC WD10EZEX-08WN4A0   HDD        <span class="term-error">Warning (Unhealthy)</span></span>
 
-<span class="term-prompt">SW-Floor2-Access#</span> <span class="term-cmd">show interfaces trunk</span>
-<span class="term-output">Port        Mode             Encapsulation  Status        Native vlan
-Gi0/1       on               802.1q         trunking      1
+<span class="term-prompt">S.M.A.R.T. Hardware Attribute Telemetry:</span>
+<span class="term-output">ID  Attribute Name               Current  Worst  Threshold  Raw Value
+05  Reallocated Sectors Count    120      120    140        <span class="term-error">488 [CRITICAL BAD SECTORS]</span>
+C5  Current Pending Sector Count 88       88     0          <span class="term-error">152 [UNREADABLE SECTORS]</span>
+C6  Offline Uncorrectable Count  85       85     0          <span class="term-error">94 [CORRUPT BLOCKS]</span>
+C7  UltraDMA CRC Error Count     200      200    0          <span class="term-highlight">22 [Loose SATA Cable]</span>
 
-Port        Vlans allowed on trunk
-Gi0/1       1-10,20 <span class="term-error">(VLAN 30 MISSING FROM TRUNK LIST)</span></span>`,
-    solution: "1. Reassigned the access port to VLAN 30:\n   'interface FastEthernet0/18' -> 'switchport mode access' -> 'switchport access vlan 30'.\n2. Updated the trunk uplink on Gi0/1 on both Access and Core switches:\n   'interface GigabitEthernet0/1' -> 'switchport trunk allowed vlan add 30'.\n3. Verified trunking status and connectivity using 'ping 192.168.30.10' with 0% loss.",
-    lesson: "Maintain centralized VLAN allocation tables and establish standardized trunking templates ('switchport trunk allowed vlan all' or strictly documented pruning policies) to prevent blackholing newly provisioned subnets."
+Drive S.M.A.R.T. Status: <span class="term-error">CAUTION / IMMINENT DRIVE FAILURE</span></span>`,
+    solution: "1. Immediately performed an emergency file backup of all user documents to an external drive before total drive failure.\n2. Replaced the dying mechanical HDD with a high-speed 500GB 2.5\" SATA Solid State Drive (SSD).\n3. Replaced the worn SATA data cable with a brand-new latching SATA 6Gb/s cable.\n4. Clean-installed Windows 11 and migrated the restored user files onto the SSD.\n5. Test Results: Boot time dropped from over 8 minutes to just 12 seconds, and disk usage idle dropped to 0-1%.",
+    lesson: "Never ignore 100% disk usage and drive clicking sounds. Checking S.M.A.R.T. health early lets you rescue critical files before a mechanical drive crashes completely."
   },
   {
     id: 5,
-    title: "Default Gateway Unreachable & Routing Loop",
-    layer: "Layer 3 (Network Layer)",
-    problem: "Workstations in Administration could communicate with local subnet peers (192.168.50.0/24), but all internet traffic and inter-VLAN access timed out with 'Destination host unreachable'.",
+    title: "No Internet Connection / Broken Cable Clip (RJ-45 Crimping)",
+    layer: "Hardware: Physical Cabling (Layer 1) & RJ-45 Terminations",
+    problem: "A laboratory computer constantly lost its internet connection whenever someone touched or bumped the work desk. Windows displayed 'Network cable unplugged', and the Ethernet port indicator lights on the computer remained completely off.",
     causes: [
-      "A technician manually added a persistent static route (0.0.0.0 mask 0.0.0.0 192.168.50.254) with a lower metric (10), overriding the true gateway (192.168.50.1).",
-      "A routing loop occurred on the multi-homed workstation with both active Wi-Fi and wired Ethernet adapters configured with conflicting default gateways.",
-      "Corrupted ARP table cache mapping the gateway IP to an unresolved broadcast MAC address."
+      "The plastic retention snap clip on the RJ-45 connector was broken off, allowing the cable to slip loose.",
+      "Pin 3 and Pin 6 twisted copper conductors inside the cable were broken due to repeated pulling and bending.",
+      "Poor contact between oxidized copper pins and the motherboard Ethernet jack."
     ],
-    cliTitle: "Windows Route Print & Traceroute Trace",
-    cliOutput: `<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">route print -4</span>
-<span class="term-output">===========================================================================
-Active Routes:
-Network Destination        Netmask          Gateway       Interface  Metric
-          0.0.0.0          0.0.0.0   192.168.50.254   192.168.50.45      <span class="term-error">10 (Dead Next-Hop)</span>
-          0.0.0.0          0.0.0.0     192.168.50.1   192.168.50.45      25 (Valid Gateway)
-===========================================================================</span>
+    cliTitle: "RJ-45 Hardware Cable Continuity Tester & Link Telemetry",
+    cliOutput: `<span class="term-prompt">Physical Cable Inspection:</span>
+<span class="term-output">Cable Standard: Cat6 UTP 4-Pair Patch Lead
+Connector State: <span class="term-error">Plastic Retention Tab BROKEN OFF (No lock engagement)</span></span>
 
-<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">tracert -d 8.8.8.8</span>
-<span class="term-output">Tracing route to 8.8.8.8 over a maximum of 30 hops
-  1  192.168.50.254  reports: <span class="term-error">Destination host unreachable.</span>
-Trace complete.</span>`,
-    solution: "1. Deleted the invalid static route via 'route delete 0.0.0.0 192.168.50.254'.\n2. Set explicit metric priorities on the network interface properties, giving priority (metric 10) to the wired Ethernet connection.\n3. Flushed ARP table with 'arp -d *' and verified default gateway connectivity with 'ping 192.168.50.1' and successful internet traversal through 'tracert 8.8.8.8'.",
-    lesson: "Audit workstation routing tables when multiple network interfaces (Ethernet + Wi-Fi) are active, and lock down local administrator privileges to prevent unauthorized persistent route additions."
+<span class="term-prompt">Hardware Cable Continuity Tester (Wire Tracker):</span>
+<span class="term-output">Pin 1 (White-Orange): <span class="term-success">[PASS]</span>    Pin 5 (White-Blue):  <span class="term-success">[PASS]</span>
+Pin 2 (Orange):       <span class="term-success">[PASS]</span>    Pin 6 (Green):       <span class="term-error">[OPEN / BROKEN WIRE]</span>
+Pin 3 (White-Green):  <span class="term-error">[INTERMITTENT]</span> Pin 7 (White-Brown): <span class="term-success">[PASS]</span>
+Pin 4 (Blue):         <span class="term-success">[PASS]</span>    Pin 8 (Brown):       <span class="term-success">[PASS]</span></span>
+
+<span class="term-prompt">C:\\Users\\jcastro&gt;</span> <span class="term-cmd">netsh interface show interface</span>
+<span class="term-output">Admin State    State          Type             Interface Name
+-------------------------------------------------------------------------
+Enabled        <span class="term-error">Disconnected</span>   Dedicated        Ethernet (Link Speed: 0 Mbps)</span>`,
+    solution: "1. Cut off the broken RJ-45 connector and stripped back 1 inch of the outer cable jacket with a wire stripper.\n2. Untwisted and straightened the 8 colored wires into standard TIA/EIA-568B order:\n   (1: White-Orange, 2: Orange, 3: White-Green, 4: Blue, 5: White-Blue, 6: Green, 7: White-Brown, 8: Brown).\n3. Trimmed the wires cleanly to 1/2 inch and firmly pushed them into a new modular RJ-45 pass-through plug with a snagless rubber protective boot.\n4. Crimped the plug with a heavy-duty RJ-45 crimping tool and cut off excess wire ends.\n5. Tested the new cable with the hardware wire tester: all 8 LEDs lit sequentially.\n6. Plugged into the PC: the clip clicked locked, the green Gigabit link light turned on, and speed negotiated at 1000 Mbps full duplex.",
+    lesson: "A broken $0.10 plastic clip on an Ethernet cable can cause hours of intermittent network issues. Always check the physical cable and crimp a new connector before troubleshooting switch or router settings."
   }
 ];
 
@@ -952,7 +970,7 @@ function renderTroubleshootingCase(caseIndex) {
   const contentHtml = `
     ${tabsHtml}
     
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: gap: 12px; margin-bottom: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
       <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: #ffffff; margin: 0;">
         Case ${currentCase.id}: ${currentCase.title}
       </h3>
@@ -1028,68 +1046,72 @@ function renderTroubleshootingCase(caseIndex) {
 }
 
 /* ========================================================
-   STEP 18: CYBERSECURITY CASE STUDY (SQL INJECTION)
+   STEP 18: CYBERSECURITY CASE STUDY (HARDWARE & PHYSICAL SECURITY)
    ======================================================== */
 
 window.openCybersecurityModal = function() {
   const contentHtml = `
     <div style="margin-bottom: 24px;">
-      <div style="display: inline-block; padding: 4px 12px; border-radius: 9999px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
-        Vulnerability Audit • OWASP Top 10 A03:2021
+      <div style="display: inline-block; padding: 4px 12px; border-radius: 9999px; background: rgba(243, 112, 30, 0.15); border: 1px solid rgba(243, 112, 30, 0.35); color: #f3701e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
+        Physical &amp; Hardware Security Audit • Step 18 Rubric
       </div>
       <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff; line-height: 1.3; margin-bottom: 10px;">
-        Anatomy of SQL Injection (SQLi) &amp; Defensive Prepared Statements
+        Rogue USB Devices (BadUSB) &amp; Physical Hardware Port Security
       </h3>
       <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.92rem; line-height: 1.6;">
-        A comprehensive security analysis evaluating authentication bypass vectors in IT helpdesk ticketing software, contrasting vulnerable string concatenation with parameterized defense.
+        A practical physical endpoint security evaluation demonstrating how malicious USB hardware can bypass standard operating system defenses, and how technicians defend hardware using BIOS locks, port blockers, and device whitelisting.
       </p>
     </div>
 
     <!-- Prompt 1: What is the vulnerability? -->
     <div class="modal-detail-card">
       <div class="modal-detail-title">
-        1. What is the Vulnerability?
+        1. What is the Hardware Vulnerability?
       </div>
       <div class="modal-detail-body">
-        <strong>SQL Injection (SQLi)</strong> is an application-layer injection vulnerability that occurs when untrusted user input is directly concatenated or interpolated into a dynamic database query without proper sanitization, escaping, or parameterization. It violates the fundamental security boundary between executable SQL code and data input, allowing attackers to manipulate the database interpreter's syntax structure.
+        <strong>Rogue USB &amp; Keystroke Injection (BadUSB / USB Rubber Ducky):</strong> A malicious physical hardware device disguised as an ordinary USB flash drive. Inside, it contains a programmable microcontroller that emulates a Human Interface Device (HID keyboard). Because computers are designed to automatically trust connected keyboards without requiring administrative drivers, the rogue USB can silently inject hundreds of keystrokes per second, opening PowerShell and downloading malware in less than 3 seconds.
       </div>
     </div>
 
-    <!-- Prompt 2: How can it happen? Code Comparison -->
+    <!-- Prompt 2: How can it happen? Code/Hardware Comparison -->
     <div class="modal-detail-card">
       <div class="modal-detail-title">
-        2. How Can It Happen? (Attack Vector &amp; Code Contrast)
+        2. How Can It Happen? (Hardware Attack Vector vs. Physical Defense)
       </div>
       <div class="modal-detail-body">
-        When a web backend constructs SQL queries via string concatenation, an attacker inputting characters such as single quotes (<code>'</code>), double hyphens (<code>--</code>), or logical operators (<code>OR 1=1</code>) can alter the boolean evaluation of the SQL command, completely bypassing authentication.
+        When desktop workstations have exposed, unprotected USB ports and unsecured BIOS settings, anyone walking past an unattended computer can insert a rogue USB stick or hardware keylogger in under 3 seconds.
       </div>
 
       <div class="code-compare-wrap">
         <div class="code-compare-card vulnerable">
           <div class="code-compare-header">
-            <span>❌ Vulnerable Code (String Concatenation)</span>
+            <span>❌ Unsecured Hardware Setup (Vulnerable to Tampering)</span>
           </div>
-          <div class="code-compare-snippet">// User Input: username = "admin' OR '1'='1"
-// Resulting Query:
-SELECT * FROM technicians 
-WHERE username = 'admin' OR '1'='1' 
-  AND password_hash = '...';
+          <div class="code-compare-snippet">// Physical Vulnerabilities:
+- Open front USB ports easily reachable by visitors
+- BIOS/UEFI has NO Administrator Password set
+- USB Boot is ENABLED (Attacker boots into live Linux to bypass Windows password)
+- Unlocked computer case chassis (Anyone can open panel and steal drive)
+- Windows screen left unlocked when staff steps away
 
-<span style="color: #ef4444;">// Result: '1'='1' always evaluates to TRUE.
-// Attacker logs in as ADMIN without password!</span></div>
+<span style="color: #ef4444;">// Result: Attacker plugs in BadUSB; script executes PowerShell
+// payload in 2.5 seconds before user notices!</span></div>
         </div>
 
         <div class="code-compare-card secure">
           <div class="code-compare-header">
-            <span>✅ Secure Code (Parameterized Query / Prepared Statement)</span>
+            <span>✅ Hardened Hardware &amp; BIOS Configuration (Secure)</span>
           </div>
-          <div class="code-compare-snippet">// Input is treated strictly as literal data:
-const query = "SELECT * FROM technicians WHERE username = $1 AND password_hash = $2";
-const values = [usernameInput, hashedPassword];
-const result = await db.query(query, values);
+          <div class="code-compare-snippet">// Hardware Defenses Applied:
+- Set Strong BIOS/UEFI Administrator Password
+- Disabled USB Booting &amp; enabled Secure Boot
+- Unused front USB header cables disconnected from motherboard
+- Physical USB Port Blocker locks inserted into open rear ports
+- Kensington cable lock / padlock on PC case chassis
+- GPO Device Whitelisting: Only authorized keyboards allowed
 
-<span style="color: #22c55e;">// Result: Database engine treats input as raw string literal.
-// Quote characters cannot alter SQL grammar!</span></div>
+<span style="color: #22c55e;">// Result: Rogue USB devices cannot execute commands;
+// unauthorized physical access is completely blocked!</span></div>
         </div>
       </div>
     </div>
@@ -1097,28 +1119,30 @@ const result = await db.query(query, values);
     <!-- Prompt 3: What are the risks? -->
     <div class="modal-detail-card">
       <div class="modal-detail-title">
-        3. What Are the Critical Risks to the Organization?
+        3. What Are the Critical Risks of Physical Hardware Attacks?
       </div>
       <div class="modal-detail-body">
         <ul>
-          <li><strong>Confidentiality Breach:</strong> Exfiltration of sensitive customer records, technician passwords, and proprietary hardware schematics.</li>
-          <li><strong>Authentication &amp; Privilege Escalation:</strong> Bypassing login credentials to gain full administrative or superuser privileges on the database.</li>
-          <li><strong>Data Tampering &amp; Deletion:</strong> Execution of malicious DDL/DML statements such as <code>DROP TABLE tickets;</code> or unauthorized alterations to financial invoice records.</li>
-          <li><strong>Operating System Compromise:</strong> Under database engines with privileged procedural extensions (e.g., MSSQL <code>xp_cmdshell</code> or Postgres <code>COPY TO PROGRAM</code>), SQLi can escalate to Remote Code Execution (RCE) on the underlying host.</li>
+          <li><strong>Instant Data Theft:</strong> An unauthorized USB drive can copy sensitive databases, customer spreadsheets, and private files in seconds without touching the internet.</li>
+          <li><strong>Hardware Keylogging:</strong> A tiny covert hardware adapter plugged between the keyboard and PC records every single typed keystroke, password, and credit card number in internal flash memory.</li>
+          <li><strong>BIOS / Firmware Corruption:</strong> An attacker with physical access can flash corrupted or backdoored firmware directly to the motherboard ROM chip.</li>
+          <li><strong>Physical Electrical Destruction (USB Killer):</strong> A malicious capacitor-based USB device that dumps a 220-volt electrical shock into data lines, instantly frying the motherboard, CPU, and RAM.</li>
         </ul>
       </div>
     </div>
 
-    <!-- Prompt 4: How can developers prevent it? -->
+    <!-- Prompt 4: How can technicians prevent it? -->
     <div class="modal-detail-card">
       <div class="modal-detail-title">
-        4. How Can Developers Prevent It?
+        4. Practical Hardware Remediation &amp; Lockdown Steps
       </div>
       <div class="modal-detail-body">
         <ul>
-          <li><strong>Parameterized Queries (Prepared Statements):</strong> Ensure the database engine compiles the SQL statement template before binding parameter values, preventing data from being interpreted as code.</li>
-          <li><strong>Object-Relational Mapping (ORM):</strong> Utilize secure query builder abstractions (e.g., Prisma, Supabase PostgREST, Sequelize) that enforce parameterization natively.</li>
-          <li><strong>Strict Input Type Validation &amp; Allowlisting:</strong> Enforce strong type validations (e.g., Zod, regex schema checks) rejecting unexpected characters before they reach the database interface.</li>
+          <li><strong>Set a Strong BIOS/UEFI Administrator Password:</strong> Prevents unauthorized users from changing the boot order, disabling security features, or loading an external OS.</li>
+          <li><strong>Disable USB Booting in BIOS:</strong> Guarantees the computer will only boot from the internal encrypted SSD/HDD.</li>
+          <li><strong>Disconnect Unused Motherboard USB Headers:</strong> For public workstations, unplug the internal USB cables connecting front-panel ports to the motherboard.</li>
+          <li><strong>Install Physical USB Port Blocker Locks:</strong> Insert physical snap-on plastic/metal port blockers into exposed USB jacks that require a physical key to extract.</li>
+          <li><strong>Lock the Computer Chassis:</strong> Use padlocks or Kensington security cables on computer cases so internal drives and RAM cannot be removed or swapped.</li>
         </ul>
       </div>
     </div>
@@ -1126,21 +1150,21 @@ const result = await db.query(query, values);
     <!-- Prompt 5: Security practices -->
     <div class="modal-detail-card">
       <div class="modal-detail-title">
-        5. Enterprise Security Best Practices to Implement
+        5. Organizational Security Policies for Hardware
       </div>
       <div class="modal-detail-body">
         <ul>
-          <li><strong>Principle of Least Privilege:</strong> Configure the application's database connection user with minimal permissions (only SELECT, INSERT, UPDATE on necessary tables; revoke DROP, ALTER, and administrative privileges).</li>
-          <li><strong>Web Application Firewall (WAF):</strong> Deploy Cloudflare or AWS WAF to inspect incoming HTTP payloads and block known SQL injection attack signatures at the network edge.</li>
-          <li><strong>Automated Security Auditing (SAST &amp; DAST):</strong> Integrate tools like SonarQube, Snyk, and OWASP ZAP into CI/CD build pipelines to continuously detect injection vectors.</li>
+          <li><strong>USB Hardware Whitelisting via Group Policy (GPO):</strong> Configure Windows to only recognize pre-approved Vendor IDs (VID) and Product IDs (PID) for official organization hardware.</li>
+          <li><strong>Clean Desk &amp; Auto-Lock Policy:</strong> Train employees to press <code>Windows + L</code> whenever leaving their desks, and enforce a mandatory 3-minute automatic screen lock timeout.</li>
+          <li><strong>Physical Server Room &amp; Rack Security:</strong> Keep network switches, servers, and backup hard drives locked in dedicated server racks accessible only via RFID badges or physical keys.</li>
         </ul>
       </div>
     </div>
   `;
 
   openPortfolioModal(
-    "Cybersecurity Case Study (SQLi Audit)",
-    "Step 18 Rubric • 5-Prompt Framework",
+    "Hardware & Physical Security Audit (USB & Endpoint)",
+    "Step 18 Rubric • Physical Defense Framework",
     contentHtml
   );
 };
@@ -1159,7 +1183,7 @@ window.openAiUsageLogModal = function() {
         AI Literacy Evidence &amp; Verification Audit Log
       </h3>
       <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.92rem; line-height: 1.6;">
-        Complete documented record demonstrating ethical, responsible, and verifiable utilization of Artificial Intelligence tools throughout capstone system development.
+        Complete documented record demonstrating ethical, responsible, and verifiable utilization of Artificial Intelligence tools throughout project development.
       </p>
     </div>
 
@@ -1277,57 +1301,33 @@ window.openAiUsageLogModal = function() {
 };
 
 /* ========================================================
-   STEP 21: MOCK JOB INTERVIEW (VIDEO PLACEHOLDER & 12 Q&AS)
+   STEP 21: MOCK JOB INTERVIEW (VIDEO & 6 Q&AS)
    ======================================================== */
 
 const MOCK_INTERVIEW_QUESTIONS = [
   {
     q: "Tell me about yourself.",
-    a: "I am Jhay L. Castro, a graduating BSIT student from Datamex College of Saint Adeline specializing in Network Engineering and Systems Administration. I hold an NC II Certification in Computer Systems Servicing, which gave me hands-on proficiency in hardware diagnostics, structured cabling, and client-server configurations. During my academic career, I served as Technical Lead for our capstone project, architecting an AI-Assisted Repair Shop Management System that unified cloud databases with automated diagnostic telemetry. I am passionate about enterprise network resilience, zero-trust security backbones, and structured problem-solving."
+    a: "I am Jhay L. Castro, a graduating BSIT student from Datamex College of Saint Adeline specializing in Network Engineering and Systems Support. I hold an NC II Certification in Computer Systems Servicing from TESDA, giving me strong hands-on proficiency in PC assembly, hardware diagnostics, electrical safety, and structured network cabling. During my academic career, I served as Technical Lead for our major course project—an AI-Assisted Repair Shop Management System—where I architected diagnostic intake workflows and database synchronization. I am disciplined, eager to learn, and passionate about maintaining resilient IT infrastructure."
   },
   {
-    q: "Why did you choose BSIT at Datamex College of Saint Adeline?",
-    a: "I chose BSIT at Datamex because of its rigorous balance between theoretical computer science and hands-on laboratory application. The curriculum directly emphasized real-world networking equipment, physical hardware maintenance, and modern full-stack development, giving me practical technical competencies that prepare me to contribute to enterprise IT operations from day one."
+    q: "Why did you choose BSIT?",
+    a: "I chose BSIT because I have always had a strong passion for understanding how computer systems and networks function from the inside out. Datamex College of Saint Adeline provided a balanced curriculum that combined practical hardware laboratory training with enterprise networking principles. Information Technology is a vital, rapidly growing industry that powers all modern businesses, and studying BSIT gives me the practical foundation to solve real-world problems and pursue a lifelong career in technical infrastructure."
   },
   {
-    q: "What are your greatest technical strengths?",
-    a: "My greatest strength is structured root-cause diagnostic methodology across the OSI model. Rather than guessing, I isolate network and systems issues systematically from Layer 1 physical connectivity up through Layer 7 application protocols. Additionally, I have strong competencies in Cisco routing/switching (VLANs, trunking, DHCP, subnetting) and full-stack database state synchronization."
+    q: "What are your strongest IT skills?",
+    a: "My strongest technical skills are in computer hardware troubleshooting, component-level diagnostics, and networking fundamentals. Through my TESDA NC II training and college laboratory experience, I excel at isolating hardware issues—such as testing power supply voltage rails using digital multimeters, resolving RAM and BIOS POST beep code errors, CPU thermal management and heatsink repasting, and diagnosing storage drive S.M.A.R.T. health. On the networking side, I am skilled in Cat6 Ethernet cable termination (TIA/EIA-568B), Cisco switch and router configuration (VLANs, trunking, DHCP scopes), and Layer 1 to Layer 3 troubleshooting."
   },
   {
-    q: "What is a technical weakness you are currently working to improve?",
-    a: "Historically, my focus has been heavily concentrated on manual CLI configuration and physical hardware diagnostics. Recognizing that modern enterprise networks require programmatic scalability, I have been actively training in Network Automation using Python (Netmiko/NAPALM) and Infrastructure as Code using Terraform to automate multi-device provisioning."
+    q: "What is your weakest skill?",
+    a: "Early in my studies, my experience was predominantly hands-on and hardware-focused, concentrating on physical repairs and manual CLI configurations on individual devices. While I am very comfortable with physical hardware and hands-on setups, I recognized that enterprise environments increasingly require automation. To address this, I have been actively dedicating time to learning Python scripting and PowerShell automation for routine network backups and workstation health audits. I treat every skill gap as an opportunity for continuous improvement."
   },
   {
-    q: "How do you handle strict deadlines and high-pressure situations?",
-    a: "I prioritize tasks through systematic triage: identifying critical path dependencies first, breaking deliverables into time-boxed milestones, and maintaining transparent communication with stakeholders. During our capstone deployment when we encountered unexpected database latency 48 hours before review, I maintained composure, isolated the bottleneck to unindexed foreign keys, and deployed the fix calmly."
+    q: "Tell us about your major project.",
+    a: "My major course project is the AI-Assisted Repair Shop Management System. As Technical Lead, I led the development of a unified platform that eliminates disorganization in computer repair shops by digitizing repair tracking, customer ticketing, and parts inventory. I specifically architected the diagnostic intake module, which uses an AI-assisted recommendation engine to guide technicians through step-by-step hardware troubleshooting based on observed symptoms. The project bridged my hands-on hardware knowledge with modern cloud database technologies."
   },
   {
-    q: "Describe a time you resolved a conflict or disagreement within a technical project team.",
-    a: "During our capstone system design, our team was divided between using a complex multi-tier microservices architecture versus a streamlined cloud-native architecture. As Technical Lead, I facilitated an objective decision matrix evaluating our development timeline, hosting cost, and maintenance overhead. By grounding our discussion in measurable constraints rather than personal preference, the team reached unanimous alignment."
-  },
-  {
-    q: "How do you stay updated with rapidly changing IT technologies?",
-    a: "I actively follow Cisco Learning Network publications, enterprise engineering blogs (Cloudflare, AWS Architecture), and participate in GitHub developer communities. I also maintain a home lab environment where I experiment with packet captures in Wireshark and configure virtual routing topologies in Cisco Packet Tracer."
-  },
-  {
-    q: "Where do you see yourself in 3 to 5 years in the IT industry?",
-    a: "In 3 years, I plan to have achieved my Cisco CCNA and CompTIA Network+ certifications, operating as an established Network Administrator or NOC Specialist leading VLAN segmentation and firewall migrations. In 5 years, I aim to attain CCNP Enterprise credentials and step into a Senior Infrastructure Architect role designing fault-tolerant multi-cloud networks."
-  },
-  {
-    q: "Why are you specifically interested in becoming a Network Engineer?",
-    a: "Networking is the foundational backbone of every digital service on the planet—without high-availability routing, switching, and security policies, no application, database, or AI model can function. I find immense satisfaction in understanding how millions of packets traverse complex topologies seamlessly and ensuring zero-downtime reliability."
-  },
-  {
-    q: "Describe how you troubleshoot an issue when you have never encountered it before.",
-    a: "I apply a disciplined scientific approach: First, I document the exact symptoms and examine system logs for error codes. Second, I isolate the failure domain using binary elimination across the OSI model. Third, I consult authoritative documentation and RFC standards. Fourth, I formulate a hypothesis and test changes incrementally in an isolated environment before applying fixes to production."
-  },
-  {
-    q: "How has your NC II in Computer Systems Servicing prepared you for professional IT support?",
-    a: "The TESDA NC II credential rigorously validated my skills in physical assembly, Cat6 patch cable termination, punch-down blocks, BIOS configuration, OS deployment, and peripheral bench testing. It ensured that before I ever touch logical enterprise configurations, I possess master-level physical craftsmanship and electrical safety discipline."
-  },
-  {
-    q: "Why should our organization hire you over other BSIT graduates?",
-    a: "You should hire me because my skills are backed by verifiable evidence, not just classroom grades. I come with hands-on NC II certified craftsmanship, proven leadership as a Capstone Technical Project Lead, real experience deploying full-stack systems and cloud topologies, and an unrelenting work ethic dedicated to continuous technical excellence."
+    q: "What was your biggest technical problem?",
+    a: "Our biggest technical challenge occurred during the deployment of our major project when our diagnostic logging and customer ticketing system suffered severe data latency and intermittent connection dropouts across test workstations. To resolve it, I applied a structured diagnostic methodology: first, I verified the physical network cables and switch ports using a hardware wire tester; next, I inspected the network traffic and identified an IP address conflict with an unreserved static device. After reconfiguring the DHCP scope reservations and optimizing our database query indexing, latency dropped immediately and the system ran with zero downtime."
   }
 ];
 
@@ -1349,39 +1349,23 @@ window.openMockInterviewModal = function() {
 
   const contentHtml = `
     <!-- Mock Video Player Frame -->
-    <div class="video-mock-frame">
-      <div class="video-mock-overlay">
-        <div class="video-play-ring" title="Play Mock Interview Recording">
-          ▶
-        </div>
-        <div>
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">
-            Jhay Castro &mdash; Professional Mock Job Interview
-          </h4>
-          <p class="video-mock-notice">
-            📁 Video Placeholder Frame &bull; Ready for upload to <code>assets/mock-interview.mp4</code> or YouTube embed.
-          </p>
-        </div>
-      </div>
-      <div class="video-mock-controls">
-        <span>Session Duration: 14:32</span>
-        <span>Resolution: 1080p HD &bull; Stereo Audio</span>
-      </div>
-      <div class="video-progress-bar">
-        <div class="video-progress-fill"></div>
-      </div>
+    <div class="video-mock-frame" style="position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 400px; background: #000; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);">
+      <video controls playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: contain; display: block; outline: none; background: #000000;">
+        <source src="mock/jhay.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
 
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div>
         <h4 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-          Full 12-Question Interview Q&amp;A Transcript
+          Interview Q&amp;A Transcript
         </h4>
         <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin: 0;">
-          Transcribed responses to the official Step 21 IT Employment Readiness Rubric.
+          Transcribed responses to the official IT Employment Readiness Rubric.
         </p>
       </div>
-      <span class="emp-badge">12 Complete Questions</span>
+      <span class="emp-badge">Official Responses</span>
     </div>
 
     <div class="interview-accordion-container">
@@ -1449,7 +1433,7 @@ This leaves subnets 5 through 8 (128 addresses) available for future growth.`
   <li><strong>2NF (Second Normal Form):</strong> Meets 1NF AND removes partial functional dependencies (all non-key attributes must depend on the entire primary key, not a subset of a composite key).</li>
   <li><strong>3NF (Third Normal Form):</strong> Meets 2NF AND removes transitive dependencies (non-key columns must depend strictly on the primary key and nothing else; 'the key, the whole key, and nothing but the key').</li>
 </ul>
-In our Capstone Repair System, normalizing tickets, parts inventory, and technicians into distinct 3NF tables ensured that changing a technician's phone number never created inconsistent historical records across 1,000 work orders.`
+In our Repair Shop Management System, normalizing tickets, parts inventory, and technicians into distinct 3NF tables ensured that changing a technician's phone number never created inconsistent historical records across 1,000 work orders.`
   },
   {
     q: "Explain RESTful API architecture principles and standard HTTP status code taxonomy.",
@@ -1534,7 +1518,7 @@ window.toggleTechAccordion = function(idx) {
 };
 
 /* ========================================================
-   STEP 22: 11-STEP CAPSTONE PROJECT DEFENSE SLIDESHOW
+   STEP 22: 11-STEP MAJOR PROJECT PRESENTATION SLIDESHOW
    ======================================================== */
 
 const PROJECT_DEFENSE_SLIDES = [
@@ -1544,7 +1528,7 @@ const PROJECT_DEFENSE_SLIDES = [
     badge: "Step 01 • Introduction",
     bullets: [
       "<strong>Project Title:</strong> AI-Assisted Computer Repair Shop Management System",
-      "<strong>Institution:</strong> Datamex College of Saint Adeline &mdash; BSIT Capstone 2026",
+      "<strong>Institution:</strong> Datamex College of Saint Adeline &mdash; BSIT 2026",
       "<strong>Lead Developer &amp; Technical Architect:</strong> Jhay L. Castro (NC II CSS Certified)",
       "<strong>Executive Summary:</strong> An enterprise full-stack ticket tracking and hardware diagnostic suite modernizing traditional manual repair shop workflows through automated cloud synchronization and AI-driven troubleshooting telemetry."
     ]
@@ -1714,7 +1698,7 @@ function renderDefenseSlide(slideIndex) {
   `;
 
   openPortfolioModal(
-    "Capstone Project Defense Presentation",
+    "Major Project Presentation",
     "Step 22 Rubric • 30 Points Evidence (11 Slides)",
     contentHtml
   );
